@@ -1,0 +1,831 @@
+<%- include('./layouts/header') %>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="py-3 mb-4">Products List</h4>
+    <% if (typeof message !== 'undefined') { %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+    <!-- Add  Button -->
+    <div class="d-flex justify-content-end mb-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
+            Add Products
+        </button>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Products List</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Image</th>
+                        <th>Name</th>
+                        <th>Price</th>
+                        <th>category</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    <% product.forEach((product,index) => {%>
+
+
+                    <tr>
+                        <td>
+                            <span class="fw-medium">
+                                <%= index+1 %>
+                            </span>
+                        </td>
+                        <td>
+                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                <span>
+                                    <span><img src="<%= `/uploads/${product.mainImage}` %>" width="100" height="100"></span>
+                                </span>
+                            </ul>
+                        </td>
+                        <td style="max-width: 150px; word-wrap: break-word;white-space: normal;">
+                            <div>
+                                <%= product.name %>
+                            </div>
+                        </td>
+                        <td>
+                            <span>
+                                <%= product.price %>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <%= product.category.name %>
+                            </span>
+                        </td>
+                        <td>
+                            <span>
+                                <div class="d-flex justify-content-center mb-2">
+                                    <% if (product.isPublish===true) { %>
+                                    <a href="#" onclick="blockProduct('<%- product._id %>')"
+                                        class="btn btn-success">Publish</a>
+                                    <%  } else { %>
+                                    <a href="#" onclick="unblockProduct('<%- product._id %>')"
+                                        class="btn btn-danger">Unpublish</a>
+                                    <%  }  %>
+                                </div>
+                            </span>
+                        </td>
+                        <td>
+                            <div class="d-inline-block justify-content-center">
+
+                                <div class="d-flex justify-content-center">
+                                    <button class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#editCategoryModal<%= product._id %>">Edit</button>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+
+                    <!-- Edit Product Modal -->
+                    <!-- Edit Product Modal -->
+                    <div class="modal fade" id="editCategoryModal<%= product._id %>" tabindex="-1"
+                        aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Product</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Display error message if it exists -->
+                                    <% if (typeof message !== 'undefined') { %>
+                                    <div class="alert alert-danger alert-dismissible" role="alert">
+                                        <%= message %>
+                                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                            aria-label="Close"></button>
+                                    </div>
+                                    <% } %>
+                                    <!-- Your form content for editing a Product goes here -->
+
+                                    <form action="/admin/product/edit/<%= product._id %>" method="post" enctype="multipart/form-data" onsubmit=" return formValidationEdit() ">
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="text" name="name" class="form-control" id="editName"
+                                                    value="<%= product.name %>" required />
+                                                <label for="name">Product Name</label>
+                                               
+                                                <div id="nameErrorEdit" class="form-text">
+                                                    Edit the Name of the Product
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <textarea name="description" class="form-control" id="editDescription"
+                                                    required><%= product.description %></textarea>
+                                                <label for="description">Product Description</label>
+                                                <div id="descriptionErrorEdit" class="form-text">
+                                                    Edit the Description of the Product
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="number" name="price" class="form-control"
+                                                    value="<%= product.price %>" required  id="editPrice"/>
+                                                <label for="price">Product Price</label>
+                                                <div id="priceErrorEdit" class="form-text">
+                                                    Edit the Price of the Product
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="number" name="discount" class="form-control" id="editDiscount"
+                                                value="<%= product.discount %>"  placeholder="Product Discount" aria-describedby="floatingInputHelp" required />
+                                                <label for="floatingInput">Product Discount</label>
+                                                <div id="discountErrorEdit" class="form-text">
+                                                    Edit the Discount of the Product
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+
+
+                                                                    
+                                        <div class="mb-0">
+                                        <select class="form-select" name="category" required id="editCategory">
+                                            <option selected value="<%= product.category._id %>" ><%= product.category.name %></option>
+                                            <% category.forEach((categories) => { %>
+                                                <% if(categories._id.toString() !== product.category._id.toString()) { %>
+                                                    <option value="<%= categories._id %>"><%= categories.name %></option>
+                                                <% } %>
+                                            <% }); %> 
+                                        </select>
+                                        <div id="categoryErrorEdit" class="form-text">
+                                            Select the Category of the Product
+                                        </div>
+                                        
+                                        </div>
+
+
+
+
+
+
+
+
+                                        <div class="mb-4">
+                                            <h5 class="card-header" style="margin-left: -25px;">Stock Per Size </h5>
+                                        
+                                            <!-- Size XS -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeXS" class="col-md-2 col-form-label">Size XS:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>XS</label>
+                                                    <input class="form-control" type="number" name="totalStockXS" id="editXS" value="<%= product.totalStock.XS %>"/>
+                                                    <div id="XSerrorEdit" class="form-text">
+                                                        Edit the Stock of XS
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Size S -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeS" class="col-md-2 col-form-label">Size S:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>S</label>
+                                                    <input class="form-control" type="number" name="totalStockS" id="editS" value="<%= product.totalStock.S %>"/>
+                                                    <div id="SerrorEdit" class="form-text">
+                                                        Edit the Stock of S
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Size M -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeM" class="col-md-2 col-form-label">Size M:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>M</label>
+                                                    <input class="form-control" type="number" name="totalStockM" id="editM" value="<%= product.totalStock.M %>"/>
+                                                    <div id="MerrorEdit" class="form-text">
+                                                        Edit the Stock of M
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Size L -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeL" class="col-md-2 col-form-label">Size L:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>L</label>
+                                                    <input class="form-control" type="number" name="totalStockL" id="editL" value="<%= product.totalStock.L %>"/>
+                                                    <div id="LerrorEdit" class="form-text">
+                                                        Edit the Stock of L
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Size XL -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeXL" class="col-md-2 col-form-label">Size XL:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>XL</label>
+                                                    <input class="form-control" type="number" name="totalStockXL" id="editXL" value="<%= product.totalStock.XL %>"/>
+                                                    <div id="XlerrorEdit" class="form-text">
+                                                        Edit the Stock of XL
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        
+                                            <!-- Size XXL -->
+                                            <div class="mb-3 row mt-3">
+                                                <label for="sizeXXL" class="col-md-2 col-form-label">Size XXL:</label>
+                                                <div class="col-md-10">
+                                                    <label class="form-control" hidden>XXL</label>
+                                                    <input class="form-control" type="number" name="totalStockXXL" id="editXXL" value="<%= product.totalStock.XXL %>"/>
+                                                    <div id="XXlerrorEdit" class="form-text">
+                                                        Edit the Stock of XXL
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+
+                                        <div class="mb-3 d-flex justify-content-between" >
+                                            <div>
+                                                <span><img src="/uploads/<%= product.mainImage %>" width="200" height="200" class="m-4 ms-2"></span>
+                                            </div>
+                                        <div class="mb-3">
+                                            <label for="mainImage" class="form-label">Edit Main Image</label>
+                                            <input class="form-control" name="mainImage" accept="image/*" type="file" value="<%= product.mainImage %>"/>
+                                        </div>
+                                        </div>
+
+                                        <div class="mb-3 d-flex justify-content-between" >
+                                            <div>
+                                                <span><img src="/uploads/<%= product.hoverImage %>" width="200" height="200" class="m-4 ms-2"></span>
+                                            </div>
+                                            <div>
+                                                <div class="mb-3">
+                                            <label for="formFile" class="form-label">Upload Hover image</label>
+                                            <input class="form-control" name="hoverImage" accept="image/*" type="file"  value="<%= product.hoverImage %>"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        
+
+                                        <div class="mb-3" >
+                                            <div class="d-block">
+                                                <div class="mb-3">
+                                            <label for="image" class="form-label">Edit Images (up to 4)</label>
+                                            <input class="form-control" name="image" accept="image/*" value="<%= product.image %>" type="file"
+                                                multiple />
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-6">
+                                                    <span><img src="/uploads/<%= product.image[0] %>" width="200" height="200" class="m-4 ms-2"></span>
+                                                </div>
+                                                <% if (product.image[1]) { %>
+                                                    <div class="col-6">
+                                                        <span><img src="/uploads/<%= product.image[1] %>" width="200" height="200" class="m-4 ms-2"></span>
+                                                    </div>
+                                                <%   } %>
+                                                <% if (product.image[2]) { %>
+                                                    <div class="col-6">
+                                                        <span><img src="/uploads/<%= product.image[2] %>" width="200" height="200" class="m-4 ms-2"></span>
+                                                    </div>
+                                                <%   } %>
+                                                <% if (product.image[3]) { %>
+                                                    <div class="col-6">
+                                                        <span><img src="/uploads/<%= product.image[3] %>" width="200" height="200" class="m-4 ms-2"></span>
+                                                    </div>
+                                                <%   } %>
+                                            </div>
+                                           
+                                        </div>
+
+
+                                        
+                                        <div class="form-check form-switch mb-2">
+                                            <input name="isComing" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" <%= product.isComing ? 'checked' : '' %> />
+                                            <label class="form-check-label" for="flexSwitchCheckChecked"
+                                              >Up Coming</label>
+                                             
+
+                                            
+                                          </div>
+
+
+
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <% });  %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
+
+<!-- Add Product Modal -->
+<div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addProductModalLabel">Add Product</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display error message if it exists -->
+                <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-danger alert-dismissible" role="alert">
+                    <%= message %>
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                <% } %>
+                <!-- Your form content for adding a Produc goes here -->
+                <form action="/admin/product/add" method="post" enctype="multipart/form-data" onsubmit="return formValidationAdd()">
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="name" class="form-control" id="addName"
+                                placeholder="Product Name" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Product Name</label>
+                            <div id="nameError" class="form-text">
+                                Enter the Name of the Product
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <textarea name="description" class="form-control" placeholder="Product Description" id="addDescription" 
+                                required></textarea>
+                            <label for="floatingTextarea">Product Description</label>
+                            <div id="descriptionError" class="form-text">
+                                Enter the Description of the Product
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="number" name="price" class="form-control" id="addPrice"
+                                placeholder="Product Price" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Product Price</label>
+                            <div id="priceError" class="form-text">
+                                Enter the Price of the Product
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="number" name="discount" class="form-control" id="addDiscount"
+                                placeholder="Product Discount" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Product Discount</label>
+                            <div id="discountError" class="form-text">
+                                Enter the Discount of the Product
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <select class="form-select" name="category" aria-label="Default select example" id="addCategory" required>
+                            <% category.forEach((categories) => { %>
+                            <option><%= categories.name %></option>
+                            <% }); %>
+                        </select>
+                        <div id="categoryError" class="form-text">
+                            Select the Category of the Product
+                        </div>
+                    </div>
+                    <div class="mb-4">
+                        <h5 class="card-header">Stock Per Size </h5>
+                    
+                        <!-- Size XS -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeXS" class="col-md-2 col-form-label">Size XS:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockXS" id="addXS" required/>
+                                <div id="XSerror" class="form-text">
+                                    Enter the Stock of XS
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Size S -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeS" class="col-md-2 col-form-label">Size S:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockS" id="addS" required/>
+                                <div id="Serror" class="form-text">
+                                    Enter the Stock of S
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Size M -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeM" class="col-md-2 col-form-label">Size M:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockM" id="addM" required/>
+                                <div id="Merror" class="form-text">
+                                    Enter the Stock of M
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Size L -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeL" class="col-md-2 col-form-label">Size L:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockL" id="addL" required/>
+                                <div id="Lerror" class="form-text">
+                                    Enter the Stock of L
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Size XL -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeXL" class="col-md-2 col-form-label">Size XL:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockXL" id="addXL" required/>
+                                <div id="Xlerror" class="form-text">
+                                    Enter the Stock of XL
+                                </div>
+                            </div>
+                        </div>
+                    
+                        <!-- Size XXL -->
+                        <div class="mb-3 row mt-3">
+                            <label for="sizeXXL" class="col-md-2 col-form-label">Size XXL:</label>
+                            <div class="col-md-10">
+                                <input class="form-control" type="number" name="totalStockXXL" id="addXXL" required/>
+                                <div id="XXlerror" class="form-text">
+                                    Enter the Stock of XXL
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Main image</label>
+                        <input class="form-control" name="mainImage" accept="image/*" type="file" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Hover image</label>
+                        <input class="form-control" name="hoverImage" accept="image/*" type="file" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload Images (up to 4)</label>
+                        <input class="form-control" name="image" accept="image/*" type="file" multiple required />
+                    </div>
+                    <div class="form-check form-switch mb-2">
+                        <input name="isComing" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{checked ? true:false}} />
+                        <label class="form-check-label" for="flexSwitchCheckChecked"
+                          >Up Coming</label
+                        >
+                      </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Close
+                        </button>
+                        <button type="submit" class="btn btn-primary">Add Product</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<script>
+
+
+
+
+
+
+
+
+function formValidationEdit() {
+    const nameInput = document.getElementById('editName').value.trim();
+    const descriptionInput = document.getElementById('editDescription').value.trim();
+    const priceInput = document.getElementById('editPrice').value.trim();
+    const categoryInput = document.getElementById('editCategory').value.trim();
+    const XSinput = document.getElementById('editXS').value.trim();
+    const Sinput = document.getElementById('editS').value.trim();
+    const Minput = document.getElementById('editM').value.trim();
+    const Linput = document.getElementById('editL').value.trim();
+    const XLinput = document.getElementById('editXL').value.trim();
+    const XXLinput = document.getElementById('editXXL').value.trim();
+
+    // Get all validation messages
+    const nameMessage = document.getElementById('nameErrorEdit');
+    const descriptionMessage = document.getElementById('descriptionErrorEdit');
+    const priceMessage = document.getElementById('priceErrorEdit');
+    const categoryMessage = document.getElementById('categoryErrorEdit');
+    const XSmessage = document.getElementById('XSerrorEdit');
+    const Smessage = document.getElementById('SerrorEdit');
+    const Mmessage = document.getElementById('MerrorEdit');
+    const Lmessage = document.getElementById('LerrorEdit');
+    const XLmessage = document.getElementById('XlerrorEdit');
+    const XXLmessage = document.getElementById('XXlerrorEdit');
+
+    // Clear all validation messages
+    nameMessage.textContent = '';
+    descriptionMessage.textContent = '';
+    priceMessage.textContent = '';
+    categoryMessage.textContent = '';
+    XSmessage.textContent = '';
+    Smessage.textContent = '';
+    Mmessage.textContent = '';
+    Lmessage.textContent = '';
+    XLmessage.textContent = '';
+    XXLmessage.textContent = '';
+
+    // Validation regex patterns
+    const nameCode = /^[A-Z][a-zA-Z0-9\s/\\-]*[^*$]+$/;
+    const descriptionCode = /^[A-Za-z][A-Za-z0-9\s]*$/;
+
+    const priceCode = /^\d+$/;
+    const categoryCode = /^[a-zA-Z0-9\s\(\)\-\_]+$/;
+    const sizeCode = /^\d+$/;
+
+    let isValid = true;
+
+    // Validate Name
+    if (!nameInput.match(nameCode)) {
+        nameMessage.textContent = 'Invalid Name Format';
+        nameMessage.style.color = 'red';
+        isValid = false;
+    }
+
+    // Validate Description
+    if (!descriptionInput.match(descriptionCode)) {
+        descriptionMessage.textContent = 'Invalid Description Format';
+        descriptionMessage.style.color = 'red';
+        isValid = false;
+    }
+
+    // Validate Price
+    if (!priceInput.match(priceCode)) {
+        priceMessage.textContent = 'Invalid Price Format';
+        priceMessage.style.color = 'red';
+        isValid = false;
+    }
+
+    // Validate Category
+    if (!categoryInput.match(categoryCode)) {
+        categoryMessage.textContent = 'Invalid Category Format';
+        categoryMessage.style.color = 'red';
+        isValid = false;
+    }
+
+    // Validate Sizes
+    if (!XSinput.match(sizeCode)) {
+        XSmessage.textContent = 'Invalid XS Size Format';
+        XSmessage.style.color = 'red';
+        isValid = false;
+    }
+
+    if (!Sinput.match(sizeCode)) {
+        Smessage.textContent = 'Invalid S Size Format';
+        Smessage.style.color = 'red';
+        isValid = false;
+    }
+
+    if (!Minput.match(sizeCode)) {
+        Mmessage.textContent = 'Invalid M Size Format';
+        Mmessage.style.color = 'red';
+        isValid = false;
+    }
+
+    if (!Linput.match(sizeCode)) {
+        Lmessage.textContent = 'Invalid L Size Format';
+        Lmessage.style.color = 'red';
+        isValid = false;
+    }
+
+    if (!XLinput.match(sizeCode)) {
+        XLmessage.textContent = 'Invalid XL Size Format';
+        XLmessage.style.color = 'red';
+        isValid = false;
+    }
+
+    if (!XXLinput.match(sizeCode)) {
+        XXLmessage.textContent = 'Invalid XXL Format';
+        XXLmessage.style.color = 'red';
+        isValid = false;
+    }
+
+    return isValid === true;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function formValidationAdd(){
+                
+
+                const nameInput = document.getElementById('addName').value.trim()
+                const descriptionInput = document.getElementById('addDescription').value.trim()
+                const priceInput = document.getElementById('addPrice').value.trim()
+                const categoryInput = document.getElementById('addCategory').value.trim()
+                const XSinput = document.getElementById('addXS').value.trim()
+                const Sinput = document.getElementById('addS').value.trim()
+                const Minput = document.getElementById('addM').value.trim()
+                const Linput = document.getElementById('addL').value.trim()
+                const XLinput = document.getElementById('addXL').value.trim()
+                const XXLinput = document.getElementById('addXXL').value.trim()
+
+
+                // Get all validation messages
+    
+                const nameMessage = document.getElementById('nameError')
+                const descriptionMessage = document.getElementById('descriptionError')
+                const priceMessage = document.getElementById('priceError')
+                const categoryMessage = document.getElementById('categoryError')
+                const XSmessage = document.getElementById('XSerror')
+                const Smessage = document.getElementById('Serror')
+                const Mmessage = document.getElementById('Merror')
+                const Lmessage = document.getElementById('Lerror')
+                const XLmessage = document.getElementById('Xlerror')
+                const XXLmessage = document.getElementById('XXlerror')
+
+                // Clear all validation messages
+    
+                nameMessage.textContent = ''
+                descriptionMessage.textContent = ''
+                priceMessage.textContent = ''
+                categoryMessage.textContent = ''
+                XSmessage.textContent = ''
+                Smessage.textContent = ''
+                Mmessage.textContent = ''
+                Lmessage.textContent = ''
+                XLmessage.textContent = ''
+                XXLmessage.textContent = ''
+
+
+                nameCode = /^[A-Z][a-zA-Z0-9\s/\\-]*[^*$]+$/
+                descriptionCode = /^[A-Za-z][A-Za-z0-9\s]*$/
+                priceCode = /^\d+$/
+                categoryCode = /^[a-zA-Z0-9\s\(\)\-\_]+$/
+                XScode = /^\d+$/
+                Scode =/^\d+$/
+                Mcode = /^\d+$/
+                Lcode= /^\d+$/
+                XLcode= /^\d+$/
+                XXLcode = /^\d+$/
+
+                let isValid = true
+
+                if (!nameInput.match(nameCode)) {
+                    nameMessage.textContent = 'Invalid Name Format'
+                    nameMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!descriptionInput.match(descriptionCode)) {
+                    descriptionMessage.textContent = 'Invalid description Format'
+                    descriptionMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!priceInput.match(priceCode)) {
+                    priceMessage.textContent = 'Invalid Price Format'
+                    priceMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!categoryInput.match(categoryCode)) {
+                    categoryMessage.textContent = 'Select a Category'
+                    categoryMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!XSinput.match(XScode)) {
+                    XSmessage.textContent = 'Invalid XS Size Format'
+                    XSmessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!Sinput.match(Scode)) {
+                    Smessage.textContent = 'Invalid S Size Format'
+                    Smessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!Minput.match(Mcode)) {
+                    Mmessage.textContent = 'Invalid M Size Format'
+                    Mmessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!Linput.match(Lcode)) {
+                    Lmessage.textContent = 'Invalid L Size Format'
+                    Lmessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!XLinput.match(XLcode)) {
+                    XLmessage.textContent = 'Invalid XL Size Format'
+                    XLmessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!XXLinput.match(XXLcode)) {
+                    XXLmessage.textContent = 'Invalid XXL Format'
+                    XXLmessage.style.color = 'red'
+                    isValid = false
+                }
+                
+
+                return isValid === true
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    function blockProduct(id) {
+        window.location.href = '/admin/product/block/' + id;
+        console.log('block:' + window.location.href);
+    }
+
+    function unblockProduct(id) {
+
+        window.location.href = '/admin/product/unblock/' + id;
+        console.log('unblock:' + indow.location.href);
+    }
+</script>
+
+<%- include('./layouts/footer') %>

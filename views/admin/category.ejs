@@ -1,0 +1,314 @@
+<%- include('./layouts/header') %>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="py-3 mb-4">Category List</h4>
+    <% if (typeof message !== 'undefined') { %>
+    <div class="alert alert-danger alert-dismissible" role="alert">
+        <%= message %>
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+    <% } %>
+    <!-- Add Category Button -->
+    <div class="d-flex justify-content-end mb-3">
+        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+            Add Category
+        </button>
+    </div>
+
+    <div class="card">
+        <h5 class="card-header">Category List</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Image</th>
+                        <th>Description</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    <% cate.forEach((category, index) => { %>
+                    <tr>
+                        <td>
+                            <!-- Add category ID or other identifier here -->
+                            <span class="fw-medium"><%= index+1 %></span>
+                        </td>
+                        <td>
+                            <span><%= category.name %></span>
+                        </td>
+                        <td>
+                            <!-- Add category image URL or other content here -->
+                            <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center"> 
+                                <span><img src=<%= category.image %> width="120" height="160"></span>
+                            </ul>
+                        </td>
+                        <td style="max-width: 150px; word-wrap: break-word;white-space: normal;">
+                            <!-- Add category description or other content here -->
+                            <span><%= category.description %></span>
+                        </td>
+                        <td>
+                            <!-- Add category status or other content here -->
+                            <% if (category.isListed===true) { %>
+                                <a class="btn btn-success" href="#" onclick="unListCategory('<%- category._id %>')">Publish</a>
+                            <% } else { %> 
+                                <a class="btn btn-danger" href="#" onclick="listCategory('<%- category._id %>')">Unpublish</a>
+                            <% } %> 
+                        </td>
+                        <td>
+                            <!-- Add your button to trigger the modal here -->
+                            <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                data-bs-target="#editCategoryModal<%= category._id %>">
+                                Edit
+                            </button>
+                        </td>
+                    </tr>
+
+                    <!-- Edit Category Modal -->
+                    <div class="modal fade" id="editCategoryModal<%= category._id %>" tabindex="-1"
+                        aria-labelledby="editCategoryModalLabel" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="editCategoryModalLabel">Edit Category</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <!-- Your form content for editing a category goes here -->
+                                    <form action="/admin/category/edit/<%= category._id %>" method="post"
+                                        enctype="multipart/form-data" onsubmit="return formValidationEdit()">
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="text" name="name" class="form-control" id="editName"
+                                                    value="<%= category.name %>" required />
+                                                <label id="" for="name">Category Name</label>
+                                                <div id="editNameError" class="form-text">
+                                                    Edit the Description of the category
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="text" name="description" class="form-control" id="editDescription"
+                                                    value="<%= category.description %>" required />
+                                                <label id="" for="description">Category Description</label>
+                                                <div id="editDescriptionError" class="form-text">
+                                                    Edit the Description of the category
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="mb-3 d-flex justify-content-between" >
+                                            <div>
+                                                <span><img src="<%= category.image %>" width="200" height="200" class="m-4 ms-2"></span>
+                                            </div>
+                                            <div>
+                                                <label for="formFile" class="form-label">Upload the image</label>
+                                                <input class="form-control" name="image" accept="image/*" type="file"
+                                                    id="formFile" value="<%= category.image %>" />
+                                            </div>
+                                        </div>
+                                        <div class="modal-footer">
+                                            <button type="button" class="btn btn-secondary"
+                                                data-bs-dismiss="modal">Close</button>
+                                            <button type="submit" class="btn btn-primary">Save Changes</button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <% }) %>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Add Category Modal -->
+<div class="modal fade" id="addCategoryModal" tabindex="-1" aria-labelledby="addCategoryModalLabel"
+    aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="addCategoryModalLabel">Add Category</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <!-- Display error message if it exists -->
+                <!-- Your form content for adding a category goes here -->
+                <form action="/admin/category/add" method="post" enctype="multipart/form-data" onsubmit=" return formValidationAdd()">
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input  type="text" name="name" class="form-control" id="addName"
+                                placeholder="Category Name" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Category Name</label>
+                            <div id="nameError" class="form-text">
+                                Enter the Name of the category
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="text" name="description" class="form-control" id="addCategory"
+                                placeholder="Category Name" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Category Description</label>
+                            <div id="descriptionError" class="form-text">
+                                Enter the Description of the category
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Upload the image</label>
+                        <input class="form-control" name="image" accept="image/*" type="file" id="formFile" required/>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Add Category</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Include SweetAlert library -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+    function listCategory(id) {
+        if (!id) {
+            console.log('Invalid ID:', id);
+            return;
+        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to publish this category!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, publish it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/admin/category/list?id=' + id;
+            }
+        });
+    }
+
+    function unListCategory(id) {
+        if (!id) {
+            console.log('Invalid ID:', id);
+            return;
+        }
+        Swal.fire({
+            title: 'Are you sure?',
+            text: 'You are about to unpublish this category!',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Yes, unpublish it!',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                window.location.href = '/admin/category/unlist?id=' + id;
+            }
+        });
+        
+    }
+
+
+
+
+
+
+
+
+
+
+   function formValidationAdd(){
+                
+
+                const nameInput = document.getElementById('addName').value.trim()
+                const descriptionInput = document.getElementById('addCategory').value.trim()
+
+                // Get all validation messages
+    
+                const nameMessage = document.getElementById('nameError')
+                const descriptionMessage = document.getElementById('descriptionError')
+
+                // Clear all validation messages
+    
+                nameMessage.textContent = ''
+                descriptionMessage.textContent = ''
+
+
+                nameCode = /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/
+                descriptionCode = /^(.|\s)*[a-zA-Z]+(.|\s)*$/
+
+                let isValid = true
+
+                if (!nameInput.match(nameCode)) {
+                    nameMessage.textContent = 'Invalid Name Format'
+                    nameMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!descriptionInput.match(descriptionCode)) {
+                    descriptionMessage.textContent = 'Invalid description Format'
+                    descriptionMessage.style.color = 'red'
+                    isValid = false
+                }
+
+                return isValid
+
+
+    }
+
+
+
+
+
+
+
+
+
+
+    function formValidationEdit(){
+                
+
+                const nameInput = document.getElementById('editName').value.trim()
+                const descriptionInput = document.getElementById('editDescription').value.trim()
+
+                // Get all validation messages
+    
+                const nameMessage = document.getElementById('editNameError')
+                const descriptionMessage = document.getElementById('editDescriptionError')
+
+                // Clear all validation messages
+    
+                nameMessage.textContent = ''
+                descriptionMessage.textContent = ''
+
+
+                nameCode = /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/
+                descriptionCode = /^(.|\s)*[a-zA-Z]+(.|\s)*$/
+
+                let isValid = true
+
+                if (!nameInput.match(nameCode)) {
+                    nameMessage.textContent = 'Invalid Name Format'
+                    nameMessage.style.color = 'red'
+                    isValid = false
+                }
+                if (!descriptionInput.match(descriptionCode)) {
+                    descriptionMessage.textContent = 'Invalid description Format'
+                    descriptionMessage.style.color = 'red'
+                    isValid = false
+                }
+
+                return isValid
+
+
+    }
+</script>
+
+<%- include('./layouts/footer') %>

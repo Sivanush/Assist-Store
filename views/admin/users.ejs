@@ -1,0 +1,99 @@
+<%- include('./layouts/header') %>
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="py-3 mb-4">Users List</h4>
+
+    <div class="card">
+        <h5 class="card-header">Users List</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Phone No</th>
+                        <th>Status</th>
+                        <th>Edit</th>
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                    <% users.forEach((user, index) => { %>
+                        <tr>
+                            <td>
+                                <span class="fw-medium"><%= index + 1 %></span>
+                            </td>
+                            <td>
+                                <%= user.firstName %> <%= user.lastName %>
+                            </td>
+                            <td>
+                                <ul class="list-unstyled users-list m-0 avatar-group d-flex align-items-center">
+                                    <li>
+                                        <span>
+                                            <%= user.email %>
+                                        </span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td>
+                                <span>
+                                    <%= user.mobile %>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <span class="badge bg-label-primary me-1"><%= user.isBlocked ? 'Blocked' : 'Active' %></span>
+                                </span>
+                            </td>
+                            <td>
+                                <span>
+                                    <% if(user.isBlocked===true){ %>
+                                        <a class="btn btn-success" href="#" onclick="unblockUser('<%- user._id %>')">Unblock</a>
+                                    <% }
+                                    else{ %>
+                                        <a class="btn btn-danger" href="#" onclick="blockUser('<%- user._id %>')">Block</a>
+                                    <% } %>
+                                </span>
+                            </td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+                </table>
+                </div>
+                </div>
+                </div>
+                
+                <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->
+                
+                <script>
+                function blockUser(userId) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to block this user!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, block it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/admin/block?id=" + userId; // Redirect to the block route
+                        }
+                    });
+                }
+                
+                function unblockUser(userId) {
+                    Swal.fire({
+                        title: 'Are you sure?',
+                        text: 'You are about to unblock this user!',
+                        icon: 'warning',
+                        showCancelButton: true,
+                        confirmButtonText: 'Yes, unblock it!',
+                        cancelButtonText: 'Cancel'
+                    }).then((result) => {
+                        if (result.isConfirmed) {
+                            window.location.href = "/admin/unblock?id=" + userId; // Redirect to the unblock route
+                        }
+                    });
+                }
+                </script>
+<%- include('./layouts/footer') %>
