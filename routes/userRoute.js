@@ -48,5 +48,7 @@ userRoute.post('/resend',userController.resendOtp)
 
 
 userRoute.get('/profile',userController.loadProfile)
+userRoute.get('/profileEdit',userController.loadProfileEdit)
+userRoute.post('/profileEdit/:userId',userController.submitProfileEdit)
 
 module.exports =  userRoute

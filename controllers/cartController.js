@@ -6,7 +6,9 @@ const Product = require('../models/productModel')
 const loadCart = async (req,res)=>{ 
     try {
         const userId = req.session.user._id
-
+        
+        const cartpro = await Cart.findOne({userId})
+        const cartCount = cartpro.products.length
         user = req.session.user
 
         let cart = await Cart.findOne({userId:userId}).populate('products.productId')
@@ -23,7 +25,11 @@ const loadCart = async (req,res)=>{
         
             
                 
-            res.render('user/cart',{cart:cart,user})
+            res.render('user/cart',{
+                cart:cart,
+                user,
+                cartCount:cartCount
+            })
 
     } catch (error) {
         console.log(error.message);
@@ -38,7 +44,7 @@ const addToCart = async (req,res)=>{
     
         const { productId } = req.params
         const {quantity,size} = req.body
-        console.log('quantity,size',quantity,size);
+        
 
         const userId = req.session.user._id
 

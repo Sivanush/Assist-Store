@@ -1,0 +1,163 @@
+
+<%- include('./layouts/header') %>
+
+<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+    <div class="container">
+        <h1 class="page-title">My Account<span>Shop</span></h1>
+    </div><!-- End .container -->
+</div><!-- End .page-header -->
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= message %> 
+                </div>
+            <% } %>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+
+
+<div class="page-content">
+    <div class="dashboard">
+        <div class="container">
+            <div class="row">
+                <aside class="col-md-4 col-lg-3">
+                    <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profile">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" id="tab-account-link" href="/profileEdit" role="tab" aria-controls="tab-account" aria-selected="true">Edit Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profileOrders">Orders</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profileAddress">Addresses</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="#tab-address">Dummy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/logout">Sign Out</a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <div class="col-md-8 col-lg-9">
+                    <div class="tab-content">
+                        <div class="tab-pane fade show active" id="tab-account" role="tabpanel" aria-labelledby="tab-account-link">
+                            <form action="/profileEdit/<%= user._id %>" method="post" onsubmit="return formValidation()">
+                                <div class="row">
+                                    <div class="col-sm-6">
+                                        <label>First Name *</label>
+                                        <input name="firstName" id="firstName" type="text" class="form-control" required value="<%= user.firstName %>">
+                                        <span class="text-danger" id="firstNameError"></span>
+                                    </div><!-- End .col-sm-6 -->
+
+                                    <div class="col-sm-6">
+                                        <label>Last Name *</label>
+                                        <input name="lastName" id="lastName" type="text" class="form-control" required value="<%= user.lastName %>">
+                                        <span class="text-danger" id="lastNameError"></span>
+                                    </div><!-- End .col-sm-6 -->
+                                </div><!-- End .row -->
+
+                                <label>Email address *</label>
+                                <input name="email" type="email" id="email" class="form-control" required value="<%= user.email %>">
+                                <span class="text-danger" id="emailError"></span>
+
+                                <label>Phone NO</label>
+                                <input name="mobile" type="tel" id="phone" class="form-control" required value="<%= user.mobile %>">
+                                <span class="text-danger" id="phoneError"></span>
+
+                                <button type="submit" class="btn btn-outline-primary-2 mt-2">
+                                    <span>SAVE CHANGES</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </form>
+                        </div>
+                        <!-- Other tab content goes here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main><!-- End .main -->
+
+
+<script>
+
+
+function formValidation(){
+                console.log("Function executed");
+                 // Get all input fields
+    
+                const firstNameInput = document.getElementById('firstName').value.trim()
+                const lastNameInput = document.getElementById('lastName').value.trim()
+                const emailInput = document.getElementById('email').value.trim()
+                const phoneInput = document.getElementById('phone').value.trim()
+                
+    
+                // Get all validation messages
+    
+                const firstNameMessage = document.getElementById('firstNameError')
+                const lastNameMessage = document.getElementById('lastNameError')
+                const emailMessage = document.getElementById('emailError')
+                const phoneMessage = document.getElementById('phoneError')
+               
+    
+                // Clear all validation messages
+    
+                firstNameMessage.textContent = ''
+                lastNameMessage.textContent = ''
+                emailMessage.textContent = ''
+                phoneMessage.textContent = ''
+          
+    
+                // regex code
+                
+                const nameCode = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
+                const emailCode = /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/
+                const phoneCode = /^[0-9]{10}$/
+             
+                
+                //checking the data
+                let isValid = true
+    
+                if (!firstNameInput.match(nameCode)) {
+                    firstNameMessage.textContent = 'Invalid First Name'
+                    isValid = false
+                }
+                if (!lastNameInput.match(nameCode)) {
+                    lastNameMessage.textContent = 'Invalid Last Name'
+                    isValid = false
+    
+                }
+                if (!emailInput.match(emailCode)) {
+                    emailMessage.textContent = 'Invalid Email Format'
+                    isValid = false
+    
+                }
+                if (!phoneInput.match(phoneCode)) {
+                    phoneMessage.textContent = 'Invalid Phone No Format'
+                    isValid = false
+    
+                }
+                
+    
+                return isValid
+                
+    
+            }
+
+</script>
+
+
+<%- include('./layouts/footer') %>

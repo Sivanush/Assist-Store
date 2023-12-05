@@ -10,7 +10,7 @@ require('dotenv').config();
 
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModal')
-
+const Cart = require('../models/cartModel')
 
 // To load the home page
 
@@ -278,12 +278,17 @@ const VerifyLogin = async(req,res)=>{
 
 const loadShop = async(req,res)=>{
     try {
-        user=req.session.user
+        const user=req.session.user
+        const userId = req.session.user._id
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
         const product = await Product.find({isPublish:true,isComing:false}).populate('category','name')
         res.render('user/shop',{
             product:product,
-            user:user
+            user:user,
+            cartCount:cartCount
         })
+        console.log(cart);
     } catch (error) {
         console.log(error.message);
     }
@@ -298,14 +303,18 @@ const loadDetailView = async(req,res)=>{
     try {
        
         const id = req.params.id
-        user=req.session.user
+        const user=req.session.user
+        const userId = req.session.user._id
         const productData = await Product.findById(id).populate('category','name')
         const products = await Product.find({isPublish:true,isComing:false}).limit(6)
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
 
         res.render('user/productDetail',{
             productDetail:productData,
             products:products,
-            user:user
+            user:user,
+            cartCount:cartCount
         })
     } catch (error) {
         console.log(error.message);
@@ -414,11 +423,14 @@ const passwordInput = async(req,res)=>{
 const loadProfile = async(req,res)=>{
     try {
         const userId = req.session.user._id
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
 
         const userData = await User.findById(userId)
 
-        res.render('user/profile',{
-            user:userData
+        res.render('user/profileDashboard',{
+            user:userData,
+            cartCount:cartCount
         })
     } catch (error) {
         console.log(error.message);
@@ -426,10 +438,44 @@ const loadProfile = async(req,res)=>{
 }
 
 
+const loadProfileEdit = async(req,res)=>{
+    try {
+        
+        const userId = req.session.user._id
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
+
+        const userData = await User.findById(userId)
+        res.render('user/profileEdit',{
+            user:userData,
+            cartCount:cartCount
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
+const submitProfileEdit = async(req,res)=>{
+    try {
+        const {userId} = req.params
+        const {firstName,lastName,email,mobile} = req.body
 
+        const userData = await User.findByIdAndUpdate(userId,{
+            $set:{
+                firstName:firstName,
+                lastName:lastName,
+                email:email,
+                mobile:mobile
+            }
+        })
 
+        await userData.save()
+        res.redirect('/profileEdit')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
@@ -454,7 +500,8 @@ module.exports = {
     passwordInput,
     loadPasswordInput,
     resendOtp,
-    loadProfile
-
+    loadProfile,
+    loadProfileEdit,
+    submitProfileEdit
 
 }
