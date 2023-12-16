@@ -1,0 +1,139 @@
+
+<%- include('./layouts/header') %>
+
+<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+    <div class="container">
+        <h1 class="page-title">My Account<span>Order Details</span></h1>
+    </div><!-- End .container -->
+</div><!-- End .page-header -->
+
+
+            <div class="page-content" style="padding-bottom: 0px;">
+                <div class="dashboard">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-8 col-lg-9">
+                                <div class="tab-content">
+                                    <div class="row">
+                                        <div class="col-lg-12">
+
+                                            
+
+
+
+
+
+                                            
+                                        </div>
+                                    </div> 
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="invoice-container">
+                            <div class="row mb-4">
+                              
+                            </div>
+                            <div class="row mb-4 text-center">
+                              <div class="col-sm-6 ">
+                                <strong>Assist Store</strong><br>
+                                Address: 7 Main Street, Madrid, Spain<br>
+                                Phone: 555-555-5555<br>
+                                Email: assiststore@gmail.com
+                              </div>
+                              <div class="col-sm-6 ">
+                                <strong>Bill to:</strong><br>
+                                Customer Name: <%= orderDetail.address[0].name  %> <br>
+                                Shipping City: <%= orderDetail.address[0].city  %><br>
+                                Status: <%= orderDetail.orderStatus %>
+                              </div>
+                            </div>
+                            <div class="row mb-4 text-center mb-9">
+                              <div class="col-sm-6">
+                                <strong>Order ID:</strong> <%= orderDetail.orderId %><br>
+                                <strong>Order Date:</strong> <%= orderDetail.createdAt.toLocaleDateString('en-IN') %>
+                              </div>
+                              <div class="col-sm-6 text-end">
+                                <strong>Payment Method:</strong> <%= orderDetail.paymentMethod %><br>
+                                <strong>Delivery Address:</strong><br>
+                                <%= orderDetail.address[0].address %><br>
+                                <%= orderDetail.address[0].city %><br>
+                                <%= orderDetail.address[0].street %><br>
+                                Pin Code: <%= orderDetail.address[0].pincode  %> <br>
+                                Phone No: <%= orderDetail.address[0].mobile %><br>
+                              </div>
+                            </div>
+
+
+                            
+
+                            <table class="table table-summary mb-9 table-responsive-sm">
+                              <thead>
+                                <tr>
+                                  <th class="text-center">Product Image</th>
+                                  <th class="text-center">Product Name</th>
+                                  <th class="text-center">Price</th>
+                                  <th class="text-center">Quantity</th>
+                                  <th class="text-center">Total</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                
+                                  <% orderDetail.products.forEach((order) => { %>
+                                    <tr>
+                                    <td class="text-center">
+                                        <div class="d-flex justify-content-center">
+                                            <img  src="/uploads/<%= order.product.mainImage %>" alt="" height="75px" width="75px">
+                                        </div>
+                                    </td>
+                                    <td class="text-center"><%= order.product.name %></td>
+                                    <td class="text-center"><span>$</span><%= order.product.price %></td>
+                                    <td class="text-center"><%= order.quantity %></td>
+                                    <td class="text-center"><span>$</span><%= order.product.price*order.quantity%></td>
+                                </tr>
+                                 <% }); %>
+
+                                
+                              </tbody>
+                              <tfoot>
+                                <tr>
+                                  <th class="text-center"  colspan="3"></th>
+                                  <td class="text-center"><strong>Grand Total: </strong></td>
+                                  <td class="text-center"><span>$</span><%= orderDetail.cart.total %></td>
+                                </tr>
+                              </tfoot>
+                            </table>
+                            <!-- <div class="text-end">
+                                <a href="#" class="btn btn-primary">Download Invoice</a>
+                              </div> -->
+
+
+                              
+                          </div>
+
+                          <td>
+                            <% if (orderDetail.orderStatus !== 'delivered') { %>
+                                <div class="mb-3 d-flex justify-content-end">
+                                    <a href="/orderDetail/<%= orderDetail.orderId %>" class="btn btn-primary">Cancel Order</a>
+                                </div>
+                            <% } else { %>
+                                <!-- <div>
+                                    <button type="button" class="btn btn-secondary" disabled>Cancel Order</button>
+                                </div> -->
+                            <% } %>
+                        </td>
+                        
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main><!-- End .main -->
+
+
+
+
+
+<%- include('./layouts/footer') %>

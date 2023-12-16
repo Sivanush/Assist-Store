@@ -36,7 +36,8 @@ userRoute.get('/cart',auth.isLogin,cartController.loadCart)
 userRoute.post('/addToCart/:productId',cartController.addToCart)
 userRoute.post('/removeCart/:productId',cartController.removeProduct)
 userRoute.post('/changeQuantity/:productId',cartController.productQuantity)
-
+userRoute.get('/checkout',auth.isLogin,cartController.loadCheckout)
+userRoute.post('/checkout',cartController.orderConfirm)
 
 userRoute.get('/forgetPassword',userController.LoadForgetPassword)
 userRoute.post('/forgetPassword',userController.forgetPassword)
@@ -47,8 +48,14 @@ userRoute.post('/password/:token',userController.passwordInput)
 userRoute.post('/resend',userController.resendOtp)
 
 
-userRoute.get('/profile',userController.loadProfile)
-userRoute.get('/profileEdit',userController.loadProfileEdit)
+userRoute.get('/profile',auth.isLogin,userController.loadProfile)
+userRoute.get('/profileEdit',auth.isLogin,userController.loadProfileEdit)
 userRoute.post('/profileEdit/:userId',userController.submitProfileEdit)
+userRoute.get('/profileAddress',auth.isLogin,userController.loadProfileAddress)
+userRoute.post('/profileAddressAdd/:userId',userController.addAddress)
+userRoute.post('/profileAddressEdit/:addressId',userController.editAddress)
+userRoute.get('/profileOrder',auth.isLogin,userController.loadProfileOrder)
+userRoute.get('/orderDetail/:orderId',auth.isLogin,cartController.orderDetail)
+userRoute.post('/orderDetail/:orderId',userController.cancelOrder)
 
 module.exports =  userRoute

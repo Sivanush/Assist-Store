@@ -51,7 +51,7 @@
                                     <li><a href="contact.html">Contact Us</a></li>
                                     <% if (user) {%>
                                         <li></li><a href="/profile" ><i class="icon-user"></i>Profile</a></li>
-                                  <%   } else { %>
+                                  <%   } else if(!user) { %>
                                         <li></li><a href="/login" ><i class="icon-user"></i>Login</a></li>
                                    <% } %>
                                     
@@ -114,8 +114,13 @@
                         <div class="dropdown cart-dropdown">
                             <a href="/cart" class="dropdown-toggle">
                                 <i class="icon-shopping-cart"></i>
-                                <span style="position: absolute;margin-bottom: 20px;margin-left: 20px;" class="cart-count text-light"><%= cartCount %></span>
-                            </a>
+                                <span style="position: absolute;margin-bottom: 20px;margin-left: 20px;" class="cart-count text-light">
+                                <% if (cartCount) { %>
+                                    <%= cartCount %>
+                               <% }else{ %>
+                                    0
+                                <% } %>
+                            </span></a>
 
                             
                         </div><!-- End .cart-dropdown -->

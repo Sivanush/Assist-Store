@@ -1,0 +1,365 @@
+
+<%- include('./layouts/header') %>
+
+<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+    <div class="container">
+        <h1 class="page-title">My Account<span>Shop</span></h1>
+    </div><!-- End .container -->
+</div><!-- End .page-header -->
+<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+    <div class="container">
+        <ol class="breadcrumb">
+
+            <li class="breadcrumb-item active" aria-current="page">My Account</li>
+            <% if (typeof message !== 'undefined') { %>
+                <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                    <%= message %> 
+                </div>
+            <% } %>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+
+
+<div class="page-content" style="padding-bottom: 0px;">
+    <div class="dashboard">
+        <div class="container">
+            <div class="row">
+                <aside class="col-md-4 col-lg-3">
+                    <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profile">Dashboard</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profileEdit"  >Edit Profile</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link active" role="tab" id="tab-address-link" data-toggle="tab" aria-controls="tab-address" aria-selected="true" href="/profileAddress">Address</a>
+                            
+
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/profileOrder">Order</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="#tab-address">Dummy</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" role="tab" href="/logout">Sign Out</a>
+                        </li>
+                    </ul>
+                </aside>
+
+                <div class="col-md-8 col-lg-9">
+                    <div class="tab-content">
+
+                    
+
+
+
+                        <div class="tab-pane fade show active" id="tab-address" role="tabpanel" aria-labelledby="tab-address-link">
+                            <% if (address && address.length > 0) { %>
+                            <p>This are the following addresses available in your account</p>
+                            <% } %>
+                            
+                            <div class="row">
+                                <% if (address && address.length > 0) { %>
+                                    <% address.forEach((address, index) => { %>
+                                        <div class="col-lg-6">
+                                            <div class="card card-dashboard">
+                                                <div class="card-body">
+                                                    <h3 class="card-title">Address NO.<%= index + 1 %></h3><!-- End .card-title -->
+                                                    <p>
+                                                        <%= address.name %><br>
+                                                        <%= address.address %><br>
+                                                        <%= address.city %><br>
+                                                        <%= address.pincode %><br>
+                                                        <%= address.mobile %><br>
+                                                        <a data-toggle="modal" href="#editAddressModal">Edit <i class="icon-edit"></i></a>
+                                                    </p>
+                                                </div><!-- End .card-body -->
+                                            </div><!-- End .card-dashboard -->
+                                        </div><!-- End .col-lg-6 -->
+                                    <% }); %>
+                                <% } else { %>
+                                    <div class="col-12 d-flex justify-content-center align-items-center " style="height: 250px;">
+                                        <div class="text-center">
+                                        <h5>No addresses found.</h5>
+                                    </div>
+                                    </div>
+                                    
+                                    
+                                <% } %>
+
+
+                           
+                                </div> 
+                                
+                                <div>
+                            
+                                    <div class="btn-wrap d-flex justify-content-center align-items-center" ">
+                                        <a href="#addAddressModal" data-toggle="modal" class="btn btn-primary btn-rounded w-50 d-block justify-content-between">Add Address</a>
+                                    </div><!-- End .btn-wrap -->
+
+                            </div>
+                            </div><!-- End .row -->
+                        </div><!-- .End .tab-pane -->
+
+
+
+
+
+
+                        <!-- add address -->
+
+                        <div class="modal fade" id="addAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="icon-close"></i></span>
+                                        </button>
+                        
+                                        <div class="form-box">
+                                            <div class="form-tab">
+                                                <ul class="nav nav-pills nav-fill" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Add Address</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content" id="tab-content-5">
+                                                    <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                                        <form action="/profileAddressAdd/<%= user._id %>" method="post" onsubmit="return formValidation()">
+                                                            <div class="form-group">
+                                                                <label for="singin-email">Full Name *</label>
+                                                                <input type="text" class="form-control" id="name" name="name" required>
+                                                                <span id="nameError"></span>
+                                                            </div><!-- End .form-group -->
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Phone No *</label>
+                                                                <input type="tel" class="form-control" id="mobile" name="mobile" required>
+                                                                <span id="mobileError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Address *</label>
+                                                                <input type="text" class="form-control" id="address" name="address" required>
+                                                                <span id="addressError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">City *</label>
+                                                                <input type="text" class="form-control" id="city" name="city" required>
+                                                                <span id="cityError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Street *</label>
+                                                                <input type="text" class="form-control" id="street" name="street" required>
+                                                                <span id="streetError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group mb-3">
+                                                                <label for="singin-password">Pincode *</label>
+                                                                <input type="tel" class="form-control" id="pincode" name="pincode" required>
+                                                                <span id="pincodeError"></span>
+                                                            </div><!-- End .form-group -->
+
+                        
+                                                            <div class="form-footer">
+                                                                <button type="submit" class="btn btn-outline-primary-2 w-100 " style="margin-right: 0px;">
+                                                                    <span>ADD ADDRESS</span>
+                                                                    <i class="icon-long-arrow-right"></i>
+                                                                </button>
+                                                            </div><!-- End .form-footer -->
+                                                        </form>
+                                                    </div><!-- .End .tab-pane -->
+                                                </div><!-- End .tab-content -->
+                                            </div><!-- End .form-tab -->
+                                        </div><!-- End .form-box -->
+                                    </div><!-- End .modal-body -->
+                                </div><!-- End .modal-content -->
+                            </div><!-- End .modal-dialog -->
+                        </div><!-- End .modal -->
+
+
+
+
+                        <!-- edit address -->
+
+                        <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-body">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true"><i class="icon-close"></i></span>
+                                        </button>
+                        
+                                        <div class="form-box">
+                                            <div class="form-tab">
+                                                <ul class="nav nav-pills nav-fill" role="tablist">
+                                                    <li class="nav-item">
+                                                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Add Address</a>
+                                                    </li>
+                                                </ul>
+                                                <div class="tab-content" id="tab-content-5">
+                                                    <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                                        <form action="/profileAddressAdd/<%= address._id %>" method="post" onsubmit="return formValidation()">
+                                                            <div class="form-group">
+                                                                <label for="singin-email">Full Name *</label>
+                                                                <input type="text" class="form-control" id="name" name="name" required value="<%= address.name %>">
+                                                                <span id="nameError"></span>
+                                                            </div><!-- End .form-group -->
+                                                            
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Phone No *</label>
+                                                                <input type="tel" class="form-control" id="mobile" name="mobile" value="<%= address.mobile %>" required >
+                                                                <span id="mobileError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Address *</label>
+                                                                <input type="text" class="form-control" id="address" name="address" required>
+                                                                <span id="addressError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">City *</label>
+                                                                <input type="text" class="form-control" id="city" name="city" required>
+                                                                <span id="cityError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group">
+                                                                <label for="singin-password">Street *</label>
+                                                                <input type="text" class="form-control" id="street" name="street" required>
+                                                                <span id="streetError"></span>
+                                                            </div><!-- End .form-group -->
+
+                                                            <div class="form-group mb-3">
+                                                                <label for="singin-password">Pincode *</label>
+                                                                <input type="tel" class="form-control" id="pincode" name="pincode" required>
+                                                                <span id="pincodeError"></span>
+                                                            </div><!-- End .form-group -->
+
+                        
+                                                            <div class="form-footer">
+                                                                <button type="submit" class="btn btn-outline-primary-2 w-100 " style="margin-right: 0px;">
+                                                                    <span>LOG IN</span>
+                                                                    <i class="icon-long-arrow-right"></i>
+                                                                </button>
+                                                            </div><!-- End .form-footer -->
+                                                        </form>
+                                                    </div><!-- .End .tab-pane -->
+                                                </div><!-- End .tab-content -->
+                                            </div><!-- End .form-tab -->
+                                        </div><!-- End .form-box -->
+                                    </div><!-- End .modal-body -->
+                                </div><!-- End .modal-content -->
+                            </div><!-- End .modal-dialog -->
+                        </div><!-- End .modal -->
+
+
+                        <!-- Other tab content goes here -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+</main><!-- End .main -->
+
+
+<script>
+
+
+function formValidation() {
+    
+
+    const nameInput = document.getElementById('name').value.trim()
+    const mobileInput = document.getElementById('mobile').value.trim()
+    const addressInput = document.getElementById('address').value.trim()
+    const cityInput = document.getElementById('city').value.trim()
+    const streetInput = document.getElementById('street').value.trim()
+    const pincodeInput = document.getElementById('pincode').value.trim()
+
+    // Get all validation messages
+        
+    const nameMessage = document.getElementById('nameError')
+    const mobileMessage = document.getElementById('mobileError')
+    const addressMessage = document.getElementById('addressError')
+    const cityMessage = document.getElementById('cityError')
+    const streetMessage = document.getElementById('streetError')   
+    const pincodeMessage = document.getElementById('pincodeError')  
+
+
+    nameMessage.textContent = ''
+    mobileMessage.textContent = ''
+    addressMessage.textContent = ''
+    cityMessage.textContent = ''
+    streetMessage.textContent = ''
+    pincodeMessage.textContent = ''
+
+
+
+
+    const nameCode = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
+    const mobileCode = /^[0-9]{10}$/
+    const addressCode = /^[a-zA-Z0-9\s,'-]*$/
+    const cityCode = /^[a-zA-Z\s'-]+$/
+    const streetCode = /^[a-zA-Z0-9\s',-]+$/
+    const pincodeCode = /^\d{6}$/
+
+
+    let isValid = true
+
+        if (!nameInput.match(nameCode)) {
+            nameMessage.textContent = 'Invalid Name'
+            nameMessage.style.color = 'red'
+            isValid = false
+        }
+
+        if (!mobileInput.match(mobileCode)) {
+            mobileMessage.textContent = 'Invalid Phone Number'
+            mobileMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!addressInput.match(addressCode)) {
+            addressMessage.textContent = 'Invalid Address'
+            addressMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!cityInput.match(cityCode)) {
+            cityMessage.textContent = 'Invalid City Name'
+            cityMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!streetInput.match(streetCode)) {
+            streetMessage.textContent = 'Invalid Street Name'
+            streetMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!pincodeInput.match(pincodeCode)) {
+            pincodeMessage.textContent = 'Invalid Pincode'
+            pincodeMessage.style.color = 'red'
+            isValid = false
+        }
+
+
+        return isValid
+
+
+
+
+}
+
+
+
+
+
+</script>
+
+
+<%- include('./layouts/footer') %>

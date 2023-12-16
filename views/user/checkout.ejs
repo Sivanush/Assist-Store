@@ -1,0 +1,227 @@
+<%- include('./layouts/header') %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Checkout<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+                <li class="breadcrumb-item"><a href="#">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <div class="page-content">
+        <div class="checkout">
+            <div class="container">
+                
+                
+<!--                 
+                <div class="checkout-discount mb-3">
+                    <form action="#">
+                        <input type="text" class="form-control" required id="checkout-discount-input">
+                        <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
+                    </form>
+                </div> -->
+
+
+
+                <form action="/checkout" method="post" >
+                    <div class="row">
+                        <div class="col-lg-6">
+                            
+
+                        <% address.forEach((userAddress,index) => { %>
+                            
+                      
+                            
+                            <div class="col-lg-12">
+                                <div class="card card-dashboard">
+                                    <div class="card-body ">
+                                        <div class="d-inline">
+                                        <span class="d-flex justify-content-end">
+                                            <input required style="height: 20px;width: 20px;" class="form-check-input" type="radio" value="<%= userAddress._id %>"  name="addressInput" <%= userAddress.isDefault===true?'checked':'' %> > 
+                                        </span>                       
+                                            <h3 class="card-title ">
+                                            Address No. <%= index+1 %>
+                                        </h3>
+                                        </div>
+                                        <p><%= userAddress.name %><br>
+                                        <%= userAddress.mobile %><br>
+                                        <%= userAddress.street %><br>
+                                        <%= userAddress.city %><br>
+                                        <%= userAddress.address %><br>
+                                        <%= userAddress.pincode %><br>
+                                        <!-- <a href="#">Edit <i class="icon-edit"></i></a></p> -->
+
+                                    </div><!-- End .card-body -->
+                                </div><!-- End .card-dashboard -->
+                            </div><!-- End .col-lg-6 -->
+
+
+                            <% }); %>
+
+                        </div><!-- End .col-lg-9 -->
+                        <aside class="col-lg-6">
+                            <div class="summary">
+                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+
+                                <table class="table table-summary">
+                                    <thead>
+                                        <tr>
+                                            <th>Image</th>
+                                            <th>Product</th>
+                                            <th>Total</th>
+                                        </tr>
+                                    </thead>
+
+                                    <tbody>
+                                        <% cartItems.forEach((items) => { %>
+                                            
+                                       
+                                        <tr>
+                                            <td><img src="/uploads/<%= items.productId.mainImage %>" alt="" height="50px" width="50px" style="border: 1px solid grey;"></td>
+                                            <td><a href=""><%= items.productId.name %></a></td>
+                                            <td><span>$</span><%= items.productId.price*items.quantity %></td>
+                                        </tr>
+
+                                       <% }); %>
+                                        
+
+                                       
+                                        <tr class="summary-subtotal">
+                                            <td>Subtotal:</td>
+                                            <td></td>
+                                            <td><span>$</span><%= cart.total %></td>
+                                        </tr><!-- End .summary-subtotal -->
+
+                                        
+
+                                        <tr>
+                                            <td>Shipping:</td>
+                                            <td></td>
+                                            <td>Free shipping</td>
+                                        </tr>
+                                        <tr class="summary-total">
+                                            <td>Total:</td>
+                                            <td></td>
+                                            <td><span>$</span><%= cart.total %></td>
+                                        </tr><!-- End .summary-total -->
+                                    </tbody>
+                                </table><!-- End .table table-summary -->
+
+                                <div class="accordion-summary" id="accordion-payment">
+                                    <div class="card">
+                                        <div class="card-header" id="heading-1">
+                                            <h2 class="card-title">
+                                                <label>
+                                                    <input type="radio" name="paymentMethod" value="cod"  required>
+                                                    Cash on Delivery (COD)
+                                                </label>
+                                            </h2>
+                                        </div><!-- End .card-header -->
+                                    </div><!-- End .card -->
+
+
+
+
+
+
+
+
+
+
+                                    <!-- <div class="card">
+                                        <div class="card-header" id="heading-2">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                                                    Online Payment
+                                                </a>
+                                            </h2>
+                                        </div>
+                                        <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
+                                            <div class="card-body">
+                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="card">
+                                        <div class="card-header" id="heading-3">
+                                            <h2 class="card-title">
+                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
+                                                    Wallet
+                                                </a>
+                                            </h2>
+                                        </div>
+                                        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
+                                            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
+                                            </div>
+                                        </div>
+                                    </div> -->
+
+
+
+
+
+                                </div><!-- End .accordion -->
+
+                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                    <span class="btn-text">Place Order</span>
+                                    <span class="btn-hover-text">Proceed to Checkout</span>
+                                </button>
+                            </div><!-- End .summary -->
+                        </aside><!-- End .col-lg-3 -->
+                    </div><!-- End .row -->
+                </form>
+            </div><!-- End .container -->
+        </div><!-- End .checkout -->
+    </div><!-- End .page-content -->
+</main><!-- End .main -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<%- include('./layouts/footer') %>

@@ -61,6 +61,80 @@
                 </table>
                 </div>
                 </div>
+
+
+
+
+
+
+
+
+
+
+
+                
+
+<div class="d-flex justify-content-center mt-4">
+    
+    <ul class="pagination pagination-m">
+
+
+        <% if (currentPage>1) { %>
+            
+        
+        <li class="page-item prev">
+          <a class="page-link" href="/admin/users?page=<%= currentPage-1 %>"
+            ><i class="tf-icon bx bx-chevrons-left"></i
+          ></a>
+        </li>
+
+        <% } %>
+        
+       <%  for(let i=1;i<=totalPage;i++){ %>
+            
+
+            
+             <li class="<%= currentPage == i ? 'active':''  %>">
+          <a class="page-link" href="/admin/users?page=<%= i %>"><%= i %></a>
+            </li>
+
+
+        <% }%>
+
+
+
+
+       <% if (currentPage<totalPage) { %>
+        
+        <li class="page-item next">
+            <a class="page-link" href="/admin/users?page=<%= parseInt(currentPage)+1 %>"
+              ><i class="tf-icon bx bx-chevrons-right"></i
+            ></a>
+          </li>
+
+        <% } %>
+        
+      </ul>
+
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
                 </div>
                 
                 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->

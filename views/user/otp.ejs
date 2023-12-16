@@ -318,31 +318,10 @@ button.resend i {
 
 
 
-//             let countDown = 60
-//             document.getElementById('timer').innerText = 'Resend OTP in ' + countDown + ' seconds'
-//             const timer = setInterval(() => {
-//                 if (countDown === 0) {
-//                     document.getElementById('resendOtp').disabled = false
-//                     document.getElementById('resendOtp').hidden = false
-//                     document.getElementById('timer').innerText = '';
-//                     clearInterval(timer)
-//                 } else {
-//                     countDown--
-//                     document.getElementById('timer').innerText = 'Resend OTP in ' + countDown + ' seconds'
-//                 }
-//             }, 1000);
 
 
 
-
-//   document.getElementById('resendOtp').addEventListener('click',()=>{
-//     fetch('/resend',{method:'POST'})
-//     .then(Response => Response.json())
-//     .then(data=>console.log(data))
-//     .catch(err => console.log(err))
-//   })
-
-                let countDown = 5 ;
+               let countDown = 60 ;
                 document.getElementById('timer').innerText = 'Resend OTP in ' + countDown + ' seconds';
                 const timer = setInterval(() => {
                     console.log('Countdown:', countDown); // New console log

@@ -14,12 +14,12 @@ const cartModel = mongoose.Schema({
         },
         size:{
             type:String,
-            // required:true
+             required:true
         },
         quantity:{
-        type:Number,
-        required:true,
-        default:1
+                type:Number,
+                required:true,
+                default:1
         }
     }],
     total:{

@@ -48,8 +48,24 @@ const insertLogin = async(req,res)=>{
 
 const loadUsers = async(req,res)=>{
     try {
+        const page = req.query.page || 1
+        const perPage = 5
+
         const users = await User.find()
-        res.render('admin/users',{users:users})
+        .skip((page-1)*perPage)
+        .limit(perPage)
+
+
+        const totalUser = await User.countDocuments()
+
+        const totalPage = Math.ceil(totalUser/perPage)
+
+        res.render('admin/users',{
+            users:users,
+            totalPage,
+            currentPage:page
+
+        })
     } catch (error) {
         console.log(error.message);
     }

@@ -1,0 +1,137 @@
+<%- include('./layouts/header') %>
+
+
+
+
+
+
+
+<div class="container-xxl flex-grow-1 container-p-y">
+    <h4 class="py-3 mb-4">Order Detail</h4>
+
+
+
+    <div class="row mb-1">
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">Customer Information</div>
+                <div class="card-body">
+                <p class="card-text">
+                    Username: <%= orderDetail.address[0].name %> <br>
+                    Shipping To: <%= orderDetail.address[0].city %>
+                </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">Order Details</div>
+                <div class="card-body">
+                <p class="card-text">
+                    Order ID: <%= orderDetail.orderId %> <br>
+                    Payment Methods: <%= orderDetail.paymentMethod %>
+                </p>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-md-6 col-lg-4">
+            <div class="card mb-4">
+                <div class="card-header">Shipping Details</div>
+                <div class="card-body">
+                <p class="card-text">
+                    <%= orderDetail.address[0].address %><br>
+                    <%= orderDetail.address[0].city %><br>
+                    <%= orderDetail.address[0].street %><br>
+                    Pin Code: <%= orderDetail.address[0].pincode  %> <br>
+                    Phone No: <%= orderDetail.address[0].mobile %><br>
+                </p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+
+
+
+
+
+    <form id="orderStatusForm" action="/admin/orderDetail/<%= orderDetail._id %>" method="post">
+
+        <div class="d-flex justify-content-end">
+            <div class="mt-2 mb-3">
+                <label for="orderStatusSelect" class="form-label">Select the Order Status</label>
+                <select name="status" id="orderStatusSelect" class="form-select form-select-lg" onchange="document.getElementById('orderStatusForm').submit()">
+                    <option value="pending" <% if (orderDetail.orderStatus === 'pending') { %> selected <% } %>>Pending</option>
+                    <option value="shipped" <% if (orderDetail.orderStatus === 'shipped') { %> selected <% } %>>Shipping</option>
+                    <option value="delivered" <% if (orderDetail.orderStatus === 'delivered') { %> selected <% } %>>Delivered</option>
+                    <option value="cancelled" <% if (orderDetail.orderStatus === 'cancelled') { %> selected <% } %>>Cancelled</option>
+                </select>
+            </div>
+        </div>
+        
+    </form>
+    
+
+
+
+    <div class="card mb-4">
+        <h5 class="card-header">Order List</h5>
+        <div class="table-responsive text-nowrap">
+            <table class="table table-hover">
+                <thead>
+                    <tr>
+                        <th>No.</th>
+                        <th>Product Image</th>
+                        <th>Product Name</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                       
+                    </tr>
+                </thead>
+                <tbody class="table-border-bottom-0">
+                   <% orderDetail.products.forEach((orders,index) => { %>
+                    
+                
+                        <tr>
+                            <td>
+                                <%= index+1 %>
+                            </td>
+                            <td>
+                               <img height="100px" width="100px" src="/uploads/<%= orders.product.mainImage %>" alt="">
+                            </td>
+                            <td>
+                                <%= orders.product.name %>
+                            </td>
+                            <td>
+                              <span>$</span><%= orders.product.price %>
+                            </td>
+                            <td>
+                                    <%= orders.quantity %> 
+                            </td>
+                            <td>
+                              <span>$</span><%= orders.product.price*orders.quantity %>
+                            </td>
+                        </tr>
+                        <%   }); %>
+                </tbody>
+                </table>
+                </div>
+                </div>
+
+
+
+
+
+
+
+
+
+
+
+            
+
+
+<%- include('./layouts/footer') %>

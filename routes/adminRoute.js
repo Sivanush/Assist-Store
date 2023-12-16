@@ -7,6 +7,7 @@ const auth = require('../middleware/adminAuth')
 const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
+const orderController = require('../controllers/orderController')
 
 //admin@gmail.com
 //admin494
@@ -48,6 +49,10 @@ adminRoute.get('/product/unblock/:id',auth.isLogin,productController.unblockProd
 adminRoute.post('/product/edit/:id',multer.multiupload,productController.editProduct)
 
 
+
+adminRoute.get('/order',orderController.loadOrder)
+adminRoute.get('/orderDetail/:orderId',orderController.loadOrderDetail)
+adminRoute.post('/orderDetail/:orderId',orderController.statusChange)
 
 
 

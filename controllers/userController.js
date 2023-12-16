@@ -11,6 +11,8 @@ require('dotenv').config();
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModal')
 const Cart = require('../models/cartModel')
+const Address = require('../models/addressModel')
+const Order = require('../models/orderModel')
 
 // To load the home page
 
@@ -278,17 +280,44 @@ const VerifyLogin = async(req,res)=>{
 
 const loadShop = async(req,res)=>{
     try {
+        
+        const page = req.query.page || 1
+        const perPage = 12
+
+        const {sort} = req.query   
+      
         const user=req.session.user
         const userId = req.session.user._id
         const cart = await Cart.findOne({userId})
         const cartCount = cart.products.length
-        const product = await Product.find({isPublish:true,isComing:false}).populate('category','name')
+
+        let productSort = Product.find({isPublish: true, isComing: false }).populate('category', 'name')
+        
+
+        if (sort === 'lowToHigh') {
+            productSort = productSort.sort({price:1})
+        }else if(sort === 'highToLow'){
+            productSort = productSort.sort({price:-1})
+        }
+
+        const product = await productSort
+        .skip((page-1)*perPage)
+        .limit(perPage)
+        
+        
+        
+        const totalProducts = await Product.countDocuments()
+
+        const totalPage = Math.ceil(totalProducts/perPage)
         res.render('user/shop',{
             product:product,
             user:user,
-            cartCount:cartCount
+            cartCount:cartCount,
+            totalPage,
+            currentPage:page,
+            sort
         })
-        console.log(cart);
+        
     } catch (error) {
         console.log(error.message);
     }
@@ -451,7 +480,7 @@ const loadProfileEdit = async(req,res)=>{
             cartCount:cartCount
         })
     } catch (error) {
-        console.log(error.message);
+        console.log(error);
     }
 }
 
@@ -473,7 +502,97 @@ const submitProfileEdit = async(req,res)=>{
         await userData.save()
         res.redirect('/profileEdit')
     } catch (error) {
+        console.log(error);
+    }
+}
+
+
+
+const loadProfileAddress = async(req,res)=>{
+    try {
+
+        const userId = req.session.user._id
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
+
+        const userData = await User.findById(userId)
+
+        const userAddress = await Address.findOne({userId:userId})
+
+        const address = userAddress ? userAddress.address : [];
+
+        res.render('user/profileAddress',{
+            user:userData,
+            cartCount:cartCount,
+            address:address
+        })
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+
+const addAddress = async(req,res)=>{
+    try {
+        const {name,pincode,street,city,address,mobile} = req.body
+        const {userId} = req.params
+        
+        let newAddress = {
+            name:name,
+            mobile:mobile,
+            address:address,
+            city:city,
+            street:street,
+            pincode:pincode
+
+        }
+
+
+        let userAddress = await Address.findOne({userId:userId})
+
+        if (!userAddress) {
+            newAddress.isDefault = true
+            userAddress  = new Address({userId:userId,address:[newAddress]}) 
+        }else{
+            userAddress.address.push(newAddress)
+
+            if (userAddress.address.length === 1) {
+                userAddress.address[0].isDefault = true
+            }
+        }
+
+        await userAddress.save()
+            res.redirect('/profileAddress')
+
+        
+    } catch (error) {
         console.log(error.message);
+    }
+}
+
+
+
+const editAddress = async(req,res)=>{
+    try {
+        const userId = req.session.user._id
+        const {addressId} = req.params
+        const {name,mobile,address,city,street,pincode} = req.body
+
+        const updateAddress = await Address.findByIdAndUpdate({userId:userId,'address._id':addressId},{
+            $set:{
+                name:name,
+                mobile:mobile,
+                address:address,
+                city:city,
+                street:street,
+                pincode:pincode
+            }
+        },{new:true})
+
+        res.redirect('/profileAddress')
+
+    } catch (error) {
+        console.log(error);
     }
 }
 
@@ -481,8 +600,52 @@ const submitProfileEdit = async(req,res)=>{
 
 
 
+const loadProfileOrder = async(req,res)=>{
+    try {
+        const userId = req.session.user._id
+        const cart = await Cart.findOne({userId})
+        const cartCount = cart.products.length
+        const userData = await User.findById(userId)
+
+        const order = await Order.find({userId:userId}).populate({
+            path: 'products.product',
+            model: 'product' 
+        });
+        const orderCount = await Order.countDocuments()
 
 
+        res.render('user/profileOrder',{
+            user:userData,
+            cartCount:cartCount,
+            order:order,
+            orderCount:orderCount
+        })
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
+const cancelOrder = async(req,res)=>{
+    try {
+        const {orderId} = req.params
+console.log('/////////////////////////////////////');
+        console.log(orderId);
+
+        const orderData = await Order.findOneAndUpdate({
+            orderId: orderId },{ $set: { orderStatus: 'cancelled' } }, 
+            { new: true } 
+        );
+        if (orderData) {
+            await orderData.save()
+        }
+        res.redirect('back')
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 module.exports = {
     homePage,
@@ -502,6 +665,10 @@ module.exports = {
     resendOtp,
     loadProfile,
     loadProfileEdit,
-    submitProfileEdit
-
+    submitProfileEdit,
+    loadProfileAddress,
+    addAddress,
+    editAddress,
+    loadProfileOrder,
+    cancelOrder
 }

@@ -51,7 +51,7 @@
                                     </div><!-- End .product-price -->
 
 
-                                    <form action="/addToCart/<%= productDetail._id %>" method="post">
+                                    <form id="addToCartForm" action="/addToCart/<%= productDetail._id %>" method="post">
 
                                     <div class="details-filter-row details-row-size">
                                         <label for="size">Size:</label>
@@ -76,7 +76,7 @@
 
                                     <div class="product-details-action">
 
-                                        <button  type="submit" class="btn-product btn-cart"><span>add to cart</span></button>
+                                        <button id="addToCartBtn"  type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></button>
 
                                         </form>
                                         <div class="details-action-wrapper">
@@ -293,12 +293,46 @@
         </div>
         
     
+        <script>
+            document.getElementById('addToCartBtn').addEventListener('click', function () {
+
+                Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#c96; font-size: 24px;">Product Added!</span>',
+                    html: '<p style="color:#333; font-size: 16px;">Your selected product has been successfully added to the cart.</p>',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                });          
+            });
+            </script>
+            
+      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->
+   
 
 
-
-
-
-
+      <style>
+        .custom-swal-title {
+            font-family: 'Arial', sans-serif;
+            font-weight: bold;
+            text-align: center;
+        }
+    
+        .custom-swal-html-container {
+            text-align: center;
+        }
+    
+        .custom-swal-popup {
+            border-radius: 10px;
+        }
+    </style>
+    
+    
 
 
 

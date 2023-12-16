@@ -6,11 +6,30 @@ const Category = require('../models/categoryModal')
 
 const loadProduct = async (req, res) => {
     try {
+
+        
+        const page = req.query.page || 1
+        const perPage = 10 
+
+
         const product = await Product.find().populate('category','name')
+        .skip((page-1)*perPage)
+        .limit(perPage)
+        .exec()
+        
+
+        const totalProduct = await Product.countDocuments()
+        
+        const totalPage = Math.ceil(totalProduct/perPage)
+      
         const category = await Category.find()
 
-
-        res.render('admin/product', { product ,category})
+        res.render('admin/product', {
+             product,
+             category,
+             currentPage:page,
+             totalPage
+        })
     } catch (error) {
         console.log(error.message);
     }

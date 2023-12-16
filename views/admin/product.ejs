@@ -86,6 +86,11 @@
                         </td>
                     </tr>
 
+
+
+
+
+
                     <!-- Edit Product Modal -->
                     <!-- Edit Product Modal -->
                     <div class="modal fade" id="editCategoryModal<%= product._id %>" tabindex="-1"
@@ -345,6 +350,53 @@
 
 
 
+<div class="d-flex justify-content-center mt-4">
+    
+    <ul class="pagination pagination-m">
+
+
+        <% if (currentPage>1) { %>
+            
+        
+        <li class="page-item prev">
+          <a class="page-link" href="/admin/product?page=<%= currentPage-1 %>"
+            ><i class="tf-icon bx bx-chevrons-left"></i
+          ></a>
+        </li>
+
+        <% } %>
+        
+       <%  for(let i=1;i<=totalPage;i++){ %>
+            
+
+            
+             <li class="<%= currentPage == i ? 'active':''  %>">
+          <a class="page-link" href="/admin/product?page=<%= i %>"><%= i %></a>
+            </li>
+
+
+        <% }%>
+
+
+
+
+       <% if (currentPage<totalPage) { %>
+        
+        <li class="page-item next">
+            <a class="page-link" href="/admin/product?page=<%= parseInt(currentPage)+1 %>"
+              ><i class="tf-icon bx bx-chevrons-right"></i
+            ></a>
+          </li>
+
+        <% } %>
+        
+      </ul>
+
+</div>
+
+
+
+
 
 
 
@@ -507,11 +559,13 @@
                     
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Upload Main image</label>
-                        <input class="form-control" name="mainImage" accept="image/*" type="file" required />
+                        <input id="mainImage" class="form-control" name="mainImage" accept=".jpg, .jpeg, .png, .webp" type="file" required />
+                        <div id="mainImageError" class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Upload Hover image</label>
-                        <input class="form-control" name="hoverImage" accept="image/*" type="file" required />
+                        <input id="hoverImage" class="form-control" name="hoverImage" accept="image/*" type="file" required />
+                        <div id="hoverImageError" class="form-text"></div>
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Upload Images (up to 4)</label>
@@ -520,8 +574,7 @@
                     <div class="form-check form-switch mb-2">
                         <input name="isComing" class="form-check-input" type="checkbox" id="flexSwitchCheckChecked" {{checked ? true:false}} />
                         <label class="form-check-label" for="flexSwitchCheckChecked"
-                          >Up Coming</label
-                        >
+                          >Up Coming</label>
                       </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
@@ -694,6 +747,9 @@ function formValidationAdd(){
                 const Linput = document.getElementById('addL').value.trim()
                 const XLinput = document.getElementById('addXL').value.trim()
                 const XXLinput = document.getElementById('addXXL').value.trim()
+                const mainImageInput = document.getElementById('mainImage');
+                const hoverImageInput = document.getElementById('hoverImage');
+             
 
 
                 // Get all validation messages
@@ -708,6 +764,8 @@ function formValidationAdd(){
                 const Lmessage = document.getElementById('Lerror')
                 const XLmessage = document.getElementById('Xlerror')
                 const XXLmessage = document.getElementById('XXlerror')
+                const mainImageMessage = document.getElementById('mainImageError');
+                const hoverImageMessage = document.getElementById('hoverImageError');
 
                 // Clear all validation messages
     
@@ -721,6 +779,8 @@ function formValidationAdd(){
                 Lmessage.textContent = ''
                 XLmessage.textContent = ''
                 XXLmessage.textContent = ''
+                mainImageMessage.textContent = '';
+                hoverImageMessage.textContent = ''; 
 
 
                 nameCode = /^[A-Z][a-zA-Z0-9\s/\\-]*[^*$]+$/
@@ -733,6 +793,13 @@ function formValidationAdd(){
                 Lcode= /^\d+$/
                 XLcode= /^\d+$/
                 XXLcode = /^\d+$/
+                const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
+
+                const isValidFileType = (file, allowedTypes) => {
+                    const fileType = file.type;
+                    return allowedTypes.some(type => fileType.includes(type));
+                };
+
 
                 let isValid = true
 
@@ -785,6 +852,17 @@ function formValidationAdd(){
                     XXLmessage.textContent = 'Invalid XXL Format'
                     XXLmessage.style.color = 'red'
                     isValid = false
+                }
+                if (!isValidFileType(mainImageInput.files[0], allowedImageTypes)) {
+                    mainImageMessage.textContent = 'Invalid main image file type. Allowed types: jpg, png, webp';
+                    mainImageMessage.style.color = 'red';
+                    isValid = false;
+                }
+
+                if (!isValidFileType(hoverImageInput.files[0], allowedImageTypes)) {
+                    hoverImageMessage.textContent = 'Invalid hover image file type. Allowed types: jpg, png, webp';
+                    hoverImageMessage.style.color = 'red';
+                    isValid = false;
                 }
                 
 

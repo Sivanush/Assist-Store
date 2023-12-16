@@ -187,7 +187,7 @@
                                         
                 
                                         <div class="mb-4">
-                                            <button type="submit" class="btn btn-primary w-100"> Login </button>
+                                            <button type="submit" class="btn btn-primary w-100"> SignUp </button>
                                         </div> <!-- form-group// -->
                                     </form>
 							    	<!-- <div class="form-choice">
@@ -664,28 +664,26 @@
                 let isValid = true
     
                 if (!firstNameInput.match(nameCode)) {
-                    firstNameMessage.textContent = 'Invalid'
+                    firstNameMessage.textContent = 'Invalid First Name'
                     isValid = false
                 }
                 if (!lastNameInput.match(nameCode)) {
-                    lastNameMessage.textContent = 'Invalid'
+                    lastNameMessage.textContent = 'Invalid Last Name'
                     isValid = false
     
-                }else{
-                    console.log("hello");
                 }
                 if (!emailInput.match(emailCode)) {
-                    emailMessage.textContent = 'Invalid'
+                    emailMessage.textContent = 'Invalid Email'
                     isValid = false
     
                 }
                 if (!phoneInput.match(phoneCode)) {
-                    phoneMessage.textContent = 'Invalid'
+                    phoneMessage.textContent = 'Invalid Phone No'
                     isValid = false
     
                 }
                 if (!passwordInput.match(passwordCode)) {
-                    passwordMessage.textContent = 'Invalid'
+                    passwordMessage.textContent = 'Weak Password'
                     isValid = false
     
                 }

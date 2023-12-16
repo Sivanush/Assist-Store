@@ -9,13 +9,25 @@
 
 
 
-
+<% if (cart.products==0) { %>
+	<div class="d-flex justify-content-center align-items-center my-auto flex-column" style="height: 60vh;">
+		
+		<div>
+			<img src="/userAssets/NewImage/cart.jpg" alt="" height="300px" width="300px">
+		</div>
+		<h5 class="mt-1">
+			The Cart is Empty
+		</h5>
+		<div class="mt-2">
+			<a href="/shop" class="btn btn-outline-dark-2 btn-block mb-3 d-block " style="width: 700px;"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+		</div>
+	</div> 
+	<%	} else { %>
             <div class="page-content">
             	<div class="cart">
 	                <div class="container">
 	                	<div class="row">
 	                		<div class="col-lg-9">
-	                			
 								<table class="table table-cart table-mobile">
 									<thead>
 									<tr>
@@ -23,25 +35,18 @@
 										<th>Price</th>
 										<th>Size</th>
 										<th>Quantity</th>
-										<th>Total</th>
+										<th>Total Price</th>
+										<th>Action</th>
 									</tr>
 									</thead>
-									<% if (cart.products==0) { %>
-										
-							
-									
-										<div class="d-flex justify-content-center my-auto">
-											The Cart is Empty
-										</div>
-											
-										
+									<tbody>
+								
+								
 
-								<%	} else { %>
-										
-								<% cart.products.forEach((product) => { %>
+								<% cart.products.forEach((product,index) => { %>
 
 									
-										<tbody>
+										
 											<tr>
 												
 													<td class="product-col">
@@ -59,15 +64,22 @@
 													</td>
 													<td class="price-col"><%= product.productId.price %></td>
 													<td class="total-col"><%= product.size %></td>
-													<form id="myForm" action="/changeQuantity/<%= product.productId._id  %>" method="post">
+													<form id="myForm<%= index %>" action="/changeQuantity/<%= product.productId._id  %>" method="post">
 													<td class="quantity-col">
 														<div class="cart-product-quantity">
-															<input id="myInput" type="number" class="form-control" name="quantity" value="<%= product.quantity %>" min="1" max="10" step="1" data-decimals="0" required>
+															<input id="myInput<%= index %>" type="number" class="form-control" name="quantity" value="<%= product.quantity %>" min="1" max="10" step="1" data-decimals="0" required>
 															<!-- <button type="submit">Update</button> -->
 														</div><!-- End .cart-product-quantity -->
 													</td>
 													</form>
 													
+													<td >
+														<div>
+															<div>
+																<span>$</span><%= product.productId.price*product.quantity %>
+															</div>
+														</div>
+													</td>
 													
 													<form action="/removeCart/<%= product.productId._id %>" method="post">
 														<td class="remove-col"><button type="submit" class="btn-remove"><i class="icon-close"></i></button></td>
@@ -76,23 +88,24 @@
 												
 												
 											</tr>
-										</tbody>
+											
 										<% }) %>
 									
-								<%	} %>
+								
+							</tbody>
 								</table><!-- End .table table-wishlist -->
 
 	                			<div class="cart-bottom">
-			            			<div class="cart-discount">
+			            			<!-- <div class="cart-discount">
 			            				<form action="#">
 			            					<div class="input-group">
 				        						<input type="text" class="form-control" required placeholder="coupon code">
 				        						<div class="input-group-append">
 													<button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
-												</div><!-- .End .input-group-append -->
-			        						</div><!-- End .input-group -->
+												</div>
+			        						</div>
 			            				</form>
-			            			</div><!-- End .cart-discount -->
+			            			</div> -->
 
 			            			<a href="/cart" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
 								
@@ -123,22 +136,11 @@
 	                							<td>$0.00</td>
 	                						</tr><!-- End .summary-shipping-row -->
 
-	                						<tr class="summary-shipping-row">
-	                							<td>
-	                								<div class="">
-														
-														<label class="custom-control-label" for="standart-shipping">Discount</label>
-													</div><!-- End .custom-control -->
-	                							</td>
-	                							<td>$10.00</td>
-	                						</tr><!-- End .summary-shipping-row -->
+	                						
 
 
 
-	                						<tr class="summary-shipping-estimate">
-	                							<td> <a href="dashboard.html">Change address</a></td>
-	                							<td>&nbsp;</td>
-	                						</tr><!-- End .summary-shipping-estimate -->
+	                						
 
 	                						<tr class="summary-total">
 	                							<td>Total:</td>
@@ -147,25 +149,33 @@
 	                					</tbody>
 	                				</table><!-- End .table table-summary -->
 
-	                				<a href="checkout.html" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
+	                				<a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
 
 		            			<a href="/shop" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
-	                		</aside><!-- End .col-lg-3 -->
+	                		
+							
+							</aside><!-- End .col-lg-3 -->
 	                	</div><!-- End .row -->
 	                </div><!-- End .container -->
                 </div><!-- End .cart -->
             </div><!-- End .page-content -->
         </main><!-- End .main -->
 
-        
+        <%	} %>
+		
+		
+		<% cart.products.forEach((product, index) => { %>
+			<script>
+				document.getElementById('myInput<%= index %>').onchange = function() {
+				document.getElementById('myForm<%= index %>').submit();
+			};
+			</script>
+			
+		<% }) %>
+		
 
-
-		<script>
-			 document.getElementById('myInput').onchange = function() {
-        document.getElementById('myForm').submit();
-    };
-		</script>
+	   
 
 
 
