@@ -34,6 +34,10 @@
     <link rel="stylesheet" href="/adminAssets/vendor/css/theme-default.css" class="template-customizer-theme-css" />
     <link rel="stylesheet" href="/adminAssets/css/demo.css" />
 
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.css">
+
+
     <!-- Vendors CSS -->
     <link rel="stylesheet" href="/adminAssets/vendor/libs/perfect-scrollbar/perfect-scrollbar.css" />
     <link rel="stylesheet" href="/adminAssets/vendor/libs/apex-charts/apex-charts.css" />
@@ -42,6 +46,8 @@
     <!--! Template customizer & Theme config files MUST be included after core stylesheets and helpers.js in the <head> section -->
     <!--? Config:  Mandatory theme config file contain global vars & default theme options, Set your preferred theme option in this file.  -->
     <script src="/adminAssets/js/config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.11/cropper.min.js"></script>
+
   </head>
 
   <body>
@@ -144,6 +150,14 @@
                 class="menu-link">
                 <i class="menu-icon tf-icons bx bx-grid"></i>
                 <div data-i18n="Kanban">Order</div>
+              </a>
+            </li>
+            <li class="menu-item">
+              <a
+                href="/admin/coupon"
+                class="menu-link">
+                <i class="menu-icon tf-icons bx bx-grid"></i>
+                <div data-i18n="Kanban">Coupon</div>
               </a>
             </li>
             <!-- Pages -->
@@ -459,15 +473,8 @@
 
             <div class="navbar-nav-right d-flex align-items-center" id="navbar-collapse">
               <!-- Search -->
-              <div class="navbar-nav align-items-center">
-                <div class="nav-item d-flex align-items-center">
-                  <i class="bx bx-search fs-4 lh-0"></i>
-                  <input
-                    type="text"
-                    class="form-control border-0 shadow-none ps-1 ps-sm-2"
-                    placeholder="Search..."
-                    aria-label="Search..." />
-                </div>
+              <div class="text-center mt-3">
+                <p>Admin Panel</p>
               </div>
               <!-- /Search -->
 

@@ -43,7 +43,7 @@
                             <a class="nav-link" role="tab" href="/profileOrder">Order</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="#tab-address">Dummy</a>
+                            <a class="nav-link" role="tab" href="/profileWallet">Wallet</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" role="tab" href="/logout">Sign Out</a>
@@ -76,7 +76,10 @@
                                                         <%= address.city %><br>
                                                         <%= address.pincode %><br>
                                                         <%= address.mobile %><br>
-                                                        <a data-toggle="modal" href="#editAddressModal">Edit <i class="icon-edit"></i></a>
+                                                        <div class="d-flex justify-content-between">
+                                                            <a data-toggle="modal" href="#editAddressModal<%= address._id %>">Edit <i class="icon-edit"></i></a>
+                                                            <a class="delete-address" href="/profileAddress/delete/<%= address._id %>">Delete</a>
+                                                        </div>
                                                     </p>
                                                 </div><!-- End .card-body -->
                                             </div><!-- End .card-dashboard -->
@@ -130,7 +133,7 @@
                                                 </ul>
                                                 <div class="tab-content" id="tab-content-5">
                                                     <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                                        <form action="/profileAddressAdd/<%= user._id %>" method="post" onsubmit="return formValidation()">
+                                                        <form id="addAddressForm" action="/profileAddressAdd/<%= user._id %>" method="post" onsubmit="return formValidation()">
                                                             <div class="form-group">
                                                                 <label for="singin-email">Full Name *</label>
                                                                 <input type="text" class="form-control" id="name" name="name" required>
@@ -169,7 +172,7 @@
 
                         
                                                             <div class="form-footer">
-                                                                <button type="submit" class="btn btn-outline-primary-2 w-100 " style="margin-right: 0px;">
+                                                                <button type="submit" id="addAddressButton" class="btn btn-outline-primary-2 w-100 " style="margin-right: 0px;">
                                                                     <span>ADD ADDRESS</span>
                                                                     <i class="icon-long-arrow-right"></i>
                                                                 </button>
@@ -186,10 +189,12 @@
 
 
 
-
+                        <% address.forEach((address) => { %>
+                            
+                       
                         <!-- edit address -->
 
-                        <div class="modal fade" id="editAddressModal" tabindex="-1" role="dialog" aria-hidden="true">
+                        <div class="modal fade" id="editAddressModal<%= address._id %>" tabindex="-1" role="dialog" aria-hidden="true">
                             <div class="modal-dialog modal-dialog-centered" role="document">
                                 <div class="modal-content">
                                     <div class="modal-body">
@@ -201,12 +206,12 @@
                                             <div class="form-tab">
                                                 <ul class="nav nav-pills nav-fill" role="tablist">
                                                     <li class="nav-item">
-                                                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Add Address</a>
+                                                        <a class="nav-link active" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Edit Address</a>
                                                     </li>
                                                 </ul>
                                                 <div class="tab-content" id="tab-content-5">
                                                     <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
-                                                        <form action="/profileAddressAdd/<%= address._id %>" method="post" onsubmit="return formValidation()">
+                                                        <form action="/profileAddressEdit/<%= address._id %>" method="post" onsubmit="">
                                                             <div class="form-group">
                                                                 <label for="singin-email">Full Name *</label>
                                                                 <input type="text" class="form-control" id="name" name="name" required value="<%= address.name %>">
@@ -221,32 +226,32 @@
 
                                                             <div class="form-group">
                                                                 <label for="singin-password">Address *</label>
-                                                                <input type="text" class="form-control" id="address" name="address" required>
+                                                                <input type="text" class="form-control" id="address" name="address" value="<%= address.address %>" required>
                                                                 <span id="addressError"></span>
                                                             </div><!-- End .form-group -->
 
                                                             <div class="form-group">
                                                                 <label for="singin-password">City *</label>
-                                                                <input type="text" class="form-control" id="city" name="city" required>
+                                                                <input type="text" class="form-control" id="city" name="city" value="<%= address.city %>" required>
                                                                 <span id="cityError"></span>
                                                             </div><!-- End .form-group -->
 
                                                             <div class="form-group">
                                                                 <label for="singin-password">Street *</label>
-                                                                <input type="text" class="form-control" id="street" name="street" required>
+                                                                <input type="text" class="form-control" id="street" name="street" value="<%= address.street %>" required>
                                                                 <span id="streetError"></span>
                                                             </div><!-- End .form-group -->
 
                                                             <div class="form-group mb-3">
                                                                 <label for="singin-password">Pincode *</label>
-                                                                <input type="tel" class="form-control" id="pincode" name="pincode" required>
+                                                                <input type="tel" class="form-control" id="pincode" name="pincode" value="<%= address.pincode %>" required>
                                                                 <span id="pincodeError"></span>
                                                             </div><!-- End .form-group -->
 
                         
                                                             <div class="form-footer">
                                                                 <button type="submit" class="btn btn-outline-primary-2 w-100 " style="margin-right: 0px;">
-                                                                    <span>LOG IN</span>
+                                                                    <span>Edit Address</span>
                                                                     <i class="icon-long-arrow-right"></i>
                                                                 </button>
                                                             </div><!-- End .form-footer -->
@@ -260,6 +265,7 @@
                             </div><!-- End .modal-dialog -->
                         </div><!-- End .modal -->
 
+                        <% }); %>
 
                         <!-- Other tab content goes here -->
                     </div>
@@ -275,7 +281,7 @@
 <script>
 
 
-function formValidation() {
+function formValidation(event) {
     
 
     const nameInput = document.getElementById('name').value.trim()
@@ -360,6 +366,92 @@ function formValidation() {
 
 
 </script>
+
+<script>
+
+document.getElementById('addAddressForm').addEventListener('submit', function (event) {
+    // Prevent the default form submission behavior
+    event.preventDefault();
+
+    // Perform form validation
+    if (formValidation()) {
+        // Submit the form manually
+        this.submit();
+
+            Swal.fire({
+                icon: 'success',
+                title: '<span style="color:#c96; font-size: 24px;">Address Added!</span>',
+                html: '<p style="color:#333; font-size: 16px;"></p>',
+                showConfirmButton: false,
+                timer: 1000,
+                background: '#fff',
+                customClass: {
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html-container',
+                    popup: 'custom-swal-popup'
+                },
+                didClose: () => {
+
+                document.getElementById('addAddressForm').submit();
+            }
+            });
+
+
+       
+    }
+});
+
+document.querySelectorAll('.delete-address').forEach(deleteButton => {
+    deleteButton.addEventListener('click', function (event) {
+        event.preventDefault();
+
+        Swal.fire({
+            icon: 'warning',
+            title: '<span style="color:#c96; font-size: 24px;">Delete Address?</span>',
+            html: '<p style="color:#333; font-size: 16px;">Are you sure you want to Delete this Address?</p>',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Delete it!',
+            cancelButtonText: 'No, keep it',
+            customClass: {
+                title: 'custom-swal-title',
+                htmlContainer: 'custom-swal-html-container',
+                popup: 'custom-swal-popup'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                // If the user clicks "Yes, cancel it!", redirect to the delete address route
+                window.location.href = event.target.href;
+            }
+        });
+    });
+});
+
+
+
+
+
+
+</script>
+
+
+
+<style>
+    .custom-swal-title {
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-swal-html-container {
+        text-align: center;
+    }
+
+    .custom-swal-popup {
+        border-radius: 10px;
+    }
+</style>
 
 
 <%- include('./layouts/footer') %>

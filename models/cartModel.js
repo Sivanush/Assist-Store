@@ -25,6 +25,10 @@ const cartModel = mongoose.Schema({
     total:{
         type: Number,
         default: 0
+    },
+    coupon:{
+        type:mongoose.Schema.Types.ObjectId,
+        ref:'coupon'  
     }
     
     

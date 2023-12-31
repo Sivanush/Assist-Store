@@ -8,6 +8,7 @@ const adminController = require('../controllers/adminController')
 const categoryController = require('../controllers/categoryController')
 const productController = require('../controllers/productController')
 const orderController = require('../controllers/orderController')
+const couponController = require('../controllers/couponController')
 
 //admin@gmail.com
 //admin494
@@ -16,6 +17,7 @@ const orderController = require('../controllers/orderController')
 adminRoute.get('/',auth.isLogin,adminController.loadDashboad)
 
 adminRoute.get('/users',auth.isLogin,adminController.loadUsers)
+adminRoute.get('/users/:search',auth.isLogin,adminController.loadUsers)
 
 adminRoute.get('/block',auth.isLogin,adminController.blockUser)
 adminRoute.get('/unblock',auth.isLogin,adminController.unblockUser)
@@ -40,6 +42,7 @@ adminRoute.post('/category/edit/:id',multer.upload.single('image'),categoryContr
 
 
 adminRoute.get('/product',auth.isLogin,productController.loadProduct)
+adminRoute.get('/product/:search',auth.isLogin,productController.loadProduct)
 adminRoute.post('/product/add',multer.multiupload,productController.addProduct)
 
 adminRoute.get('/product/block/:id',auth.isLogin,productController.blockProduct)
@@ -50,14 +53,16 @@ adminRoute.post('/product/edit/:id',multer.multiupload,productController.editPro
 
 
 
-adminRoute.get('/order',orderController.loadOrder)
-adminRoute.get('/orderDetail/:orderId',orderController.loadOrderDetail)
+adminRoute.get('/order',auth.isLogin,orderController.loadOrder)
+adminRoute.get('/orderDetail/:orderId',auth.isLogin,orderController.loadOrderDetail)
 adminRoute.post('/orderDetail/:orderId',orderController.statusChange)
 
 
-
-
-
+adminRoute.get('/coupon',auth.isLogin,couponController.loadCoupon)
+adminRoute.post('/coupon/add',couponController.addCoupon)
+adminRoute.post('/coupon/edit/:id',couponController.editCoupons)
+adminRoute.get('/coupon/publish/:id',auth.isLogin,couponController.publish)
+adminRoute.get('/coupon/upPublish/:id',auth.isLogin,couponController.unPublish)
 
 
 

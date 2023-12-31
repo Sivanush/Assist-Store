@@ -41,7 +41,7 @@
                             <a class="nav-link" role="tab" href="/profileOrder">Orders</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="#tab-address">Dummy</a>
+                            <a class="nav-link" role="tab" href="/profileWallet">Wallet</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link" role="tab" href="/logout">Sign Out</a>
@@ -78,7 +78,7 @@
                                 <input name="mobile" type="tel" id="phone" class="form-control" required value="<%= user.mobile %>">
                                 <span class="text-danger" id="phoneError"></span>
 
-                                <button type="submit" class="btn btn-outline-primary-2 mt-2">
+                                <button id="editFormBtn" type="submit" class="btn btn-outline-primary-2 mt-2">
                                     <span>SAVE CHANGES</span>
                                     <i class="icon-long-arrow-right"></i>
                                 </button>
@@ -161,6 +161,57 @@ function formValidation(){
             }
 
 </script>
+
+
+<script>
+
+
+            document.getElementById('editFormBtn').addEventListener('click', function () {
+
+            Swal.fire({
+                icon: 'success',
+                title: '<span style="color:#c96; font-size: 24px;">Profile Updated!</span>',
+                html: '<p style="color:#333; font-size: 16px;"></p>',
+                showConfirmButton: false,
+                timer: 1000,
+                background: '#fff',
+                customClass: {
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html-container',
+                    popup: 'custom-swal-popup'
+                }
+            });          
+            });
+
+
+
+
+
+
+
+
+
+
+
+</script>
+
+
+<style>
+    .custom-swal-title {
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-swal-html-container {
+        text-align: center;
+    }
+
+    .custom-swal-popup {
+        border-radius: 10px;
+    }
+</style>
+
 
 
 <%- include('./layouts/footer') %>

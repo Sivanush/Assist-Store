@@ -1,0 +1,192 @@
+<%- include('./layouts/header') %>
+
+
+
+
+
+<main class="main">
+    <div class="page-header text-center" style="background-image: url('/UserAssets/assets/images/page-header-bg.jpg')">
+        <div class="container">
+            <h1 class="page-title">Wishlist<span>Shop</span></h1>
+        </div><!-- End .container -->
+    </div><!-- End .page-header -->
+    <nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Wishlist</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
+
+    <% if (products == 0) {%>
+        <div class="d-flex justify-content-center align-items-center my-auto flex-column" style="height: 65vh;">
+		
+            <div>
+                <img src="/userAssets/NewImage/cart.jpg" alt="" height="300px" width="300px">
+            </div>
+            <h5 class="mt-1">
+                The Wishlist is Empty
+            </h5>
+            <div class="mt-2">
+                <a href="/shop" class="btn btn-outline-dark-2 btn-block mb-3 d-block " style="width: 700px;"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
+            </div>
+        </div> 
+   <% } else { %>
+        <div class="page-content">
+        <div class="container">
+            <table class="table table-wishlist table-mobile">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Size</th>
+                        <th>Add to Cart</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    
+                    <% products.forEach((product) => {%>
+                    <tr>
+                        <td class="product-col">
+                            <div class="product">
+                                <figure class="product-media">
+                                    <a href="#">
+                                        <img src="/uploads/<%= product.mainImage %>" alt="Product image">
+                                    </a>
+                                </figure>
+
+                                <h3 class="product-title">
+                                    <a href="#"><%= product.name %></a>
+                                </h3><!-- End .product-title -->
+                            </div><!-- End .product -->
+                        </td>
+                        <td class="price-col">$<%= product.price %></td>
+                      
+                        <% const uniqueSizes = new Set();%>
+                     <% item.products.forEach(item => {%>
+                         <%const size = item.size;%>
+                       <%  if (!uniqueSizes.has(size)) {%>
+                           <td class="price-col"><%= size %></td>
+                        <% uniqueSizes.add(size)}}) %>
+                     
+                        <td class="action-col">
+                        <form action="/addToCartWishlist/<%= product._id %>" method="post">
+                            <% const uniqueSize = new Set();%>
+                            <% item.products.forEach(item => {%>
+                                <%const sizes = item.size;%>
+                              <%  if (!uniqueSize.has(sizes)) {%>
+                                <input type="text" name="size" value="<%- sizes %>" hidden>
+                               <% uniqueSizes.add(sizes)}}) %>
+                          
+                            <button type="submit" class="btn btn-block btn-outline-primary-2"><i class="icon-cart-plus"></i>Add to Cart</button> 
+                        </form>
+                        </td>
+                        <td class="remove-col"><button onclick="removeProduct('/removeWishlist/<%= product._id %>')" class="btn-remove"><i class="icon-close"></i></button></td>
+                    </tr>
+                    <% }); %>
+                </tbody>
+            </table><!-- End .table table-wishlist -->
+        </div><!-- End .container -->
+    </div><!-- End .page-content -->
+   <% } %>
+</main><!-- End .main -->
+
+<script>
+
+
+
+
+</script>
+
+
+<script>
+    function removeProduct(removeUrl) {
+        Swal.fire({
+            icon: 'warning',
+            title: '<span style="color:#c96; font-size: 24px;">Remove Product?</span>',
+            html: '<p style="color:#333; font-size: 16px;">Are you sure you want to Remove this Product?</p>',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#3085d6',
+            confirmButtonText: 'Yes, Remove it!',
+            cancelButtonText: 'No, keep it',
+            customClass: {
+                title: 'custom-swal-title',
+                htmlContainer: 'custom-swal-html-container',
+                popup: 'custom-swal-popup'
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+             
+                window.location.href = removeUrl;
+            }
+        });
+    }
+</script>
+
+
+<script>
+    const message = '<%= message %>'
+    if (message) {
+        Swal.fire({
+        icon: 'error',
+        title: '<span style="color:#333; font-size: 16px;"><%= message %></span>',
+        html: '<p style="color:#333; font-size: 16px;"></p>',
+        showConfirmButton: false,
+        showCancelButton: false,
+        timer: 1000,
+        customClass: {
+            title: 'custom-swal-title',
+            htmlContainer: 'custom-swal-html-container',
+            popup: 'custom-swal-popup'
+        },
+        animation: {
+                show: 'fadeIn', // Use a fadeIn animation
+                hide: 'fadeOut' // Use a fadeOut animation when closing
+            }
+    });
+    }
+</script>
+
+<script>
+    const done = '<%= done %>'
+    if (done) {
+        Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#c96; font-size: 24px;">Product Added!</span>',
+                    html: '<p style="color:#333; font-size: 16px;">Your selected product has been successfully added to the cart.</p>',
+                    showConfirmButton: false,
+                    timer: 2000,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                })
+    }
+
+</script>
+
+
+<style>
+    .custom-swal-title {
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-swal-html-container {
+        text-align: center;
+    }
+
+    .custom-swal-popup {
+        border-radius: 10px;
+    }
+</style>
+
+<%- include('./layouts/footer') %>

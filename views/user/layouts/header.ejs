@@ -11,8 +11,10 @@
     <meta name="keywords" content="Assist">
     <meta name="description" content="Assist Store">
     <meta name="author" content="p-themes">
+    <script src="https://cdn.jsdelivr.net/npm/axios@1.1.2/dist/axios.min.js"></script>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
     <!-- Favicon -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="apple-touch-icon" sizes="180x180" href="/userAssets/assets/images/icons/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/userAssets/assets/images/icons/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/userAssets/assets/images/icons/favicon-16x16.png">
@@ -31,6 +33,7 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="/userAssets/assets/css/style.css">
     <link rel="stylesheet" href="/userAssets/assets/css/plugins/nouislider/nouislider.css">
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 </head>
 
 <body>
@@ -83,7 +86,7 @@
                                     <a href="/shop" class="sf-with-ul">Shop</a>
 
                                 </li>
-                                <li>
+                                <!-- <li>
                                     <a href="product.html" class="sf-with-ul">Product</a>
                                 </li>
                                 <li>
@@ -94,30 +97,45 @@
                                 </li>
                                 <li>
                                     <a href="elements-list.html" class="sf-with-ul">Elements</a>
-                                </li>
+                                </li> -->
                             </ul><!-- End .menu -->
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
 
                     <div class="header-right">
-                        <div class="header-search">
-                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
-                                <div class="header-search-wrapper">
-                                    <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                                </div><!-- End .header-search-wrapper -->
-                            </form>
-                        </div><!-- End .header-search -->
-                        
+                    
+                            <!-- <div class="header-search">
+                                <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                                <form action="#" method="get">
+                                    <div class="header-search-wrapper">
+                                        <label for="q" class="sr-only">Search</label>
+                                        <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                    </div>
+                                </form>
+                            </div> -->
+
+
+
+
+
+                      
+                            <div class="dropdown cart-dropdown">
+                                <a href="/wishlist" class="dropdown-toggle" style="font-size: 28px;">
+                                    <i class="icon-heart-o"></i>
+                                    </a>
+    
+                                
+                            </div>
+
+
 
                         <div class="dropdown cart-dropdown">
                             <a href="/cart" class="dropdown-toggle">
-                                <i class="icon-shopping-cart"></i>
+                                <i class="icon-shopping-cart" ></i>
                                 <span style="position: absolute;margin-bottom: 20px;margin-left: 20px;" class="cart-count text-light">
-                                <% if (cartCount) { %>
+                                <% if (typeof cartCount !== 'undefined') { %>
                                     <%= cartCount %>
-                               <% }else{ %>
+                               <% }else{%>
                                     0
                                 <% } %>
                             </span></a>

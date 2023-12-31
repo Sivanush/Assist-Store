@@ -14,9 +14,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage: storage })
 
 
-  const multiupload = multer({ storage: storage }).fields([
+  const multiupload = upload.fields([
     { name: 'mainImage', maxCount: 1 },
-    { name: 'image', maxCount: 4 },
+    { name: 'image1', maxCount: 1 },
+    { name: 'image2', maxCount: 1 },
+    { name: 'image3', maxCount: 1 },
+    { name: 'image4', maxCount: 1 },
     {name:'hoverImage', maxCount:1 }
   ]);
 module.exports = {

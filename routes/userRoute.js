@@ -1,11 +1,12 @@
 const express = require('express')
 const userRoute = express.Router()
  
-
+const { use } = require('bcrypt/promises')
 const auth = require('../middleware/userAuth')
 const userController = require('../controllers/userController')
 const cartController = require('../controllers/cartController')
-const { use } = require('bcrypt/promises')
+const wishlistController = require('../controllers/wishlistController')
+const walletController = require('../controllers/walletController')
 
 
 
@@ -22,9 +23,9 @@ userRoute.get('/otp',auth.isLogout,userController.loadOtp)
 userRoute.post('/otp',userController.verifyOtp)
 
 
-userRoute.get('/shop',auth.isLogin,userController.loadShop)
+userRoute.get('/shop',userController.loadShop)
 
-userRoute.get('/product-detail/:id',auth.isLogin,userController.loadDetailView)
+userRoute.get('/product-detail/:id',userController.loadDetailView)
 
 userRoute.get('/logout',userController.logout)
 
@@ -32,9 +33,10 @@ userRoute.get('/logout',userController.logout)
 
 
 userRoute.get('/cart',auth.isLogin,cartController.loadCart)
+userRoute.post('/applyCoupon',cartController.applyCoupon)
 
 userRoute.post('/addToCart/:productId',cartController.addToCart)
-userRoute.post('/removeCart/:productId',cartController.removeProduct)
+userRoute.get('/removeCart/:productId',cartController.removeProduct)
 userRoute.post('/changeQuantity/:productId',cartController.productQuantity)
 userRoute.get('/checkout',auth.isLogin,cartController.loadCheckout)
 userRoute.post('/checkout',cartController.orderConfirm)
@@ -52,10 +54,21 @@ userRoute.get('/profile',auth.isLogin,userController.loadProfile)
 userRoute.get('/profileEdit',auth.isLogin,userController.loadProfileEdit)
 userRoute.post('/profileEdit/:userId',userController.submitProfileEdit)
 userRoute.get('/profileAddress',auth.isLogin,userController.loadProfileAddress)
+userRoute.get('/profileAddress/delete/:addressId',userController.deleteAddress)
 userRoute.post('/profileAddressAdd/:userId',userController.addAddress)
 userRoute.post('/profileAddressEdit/:addressId',userController.editAddress)
 userRoute.get('/profileOrder',auth.isLogin,userController.loadProfileOrder)
 userRoute.get('/orderDetail/:orderId',auth.isLogin,cartController.orderDetail)
-userRoute.post('/orderDetail/:orderId',userController.cancelOrder)
+userRoute.post('/orderCancel/:orderId',userController.cancelOrder)
+userRoute.post('/returnOrder/:orderId',userController.returnOrder)
+userRoute.get('/profileWallet',auth.isLogin,walletController.loadWallet)
+userRoute.post('/profileWallet',walletController.addMoney)
+userRoute.post('/profileWalletWithdraw',walletController.debitMoney)
+
+
+userRoute.get('/wishlist',auth.isLogin,wishlistController.loadWishlist)
+userRoute.post('/addToWishlist/:productId',wishlistController.addWishlist)
+userRoute.post('/addToCartWishlist/:productId',wishlistController.addToCartInWishlist)
+userRoute.get('/removeWishlist/:productId',wishlistController.removeProduct)
 
 module.exports =  userRoute

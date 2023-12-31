@@ -46,17 +46,12 @@
             <div class="container">
                 
                 
-<!--                 
-                <div class="checkout-discount mb-3">
-                    <form action="#">
-                        <input type="text" class="form-control" required id="checkout-discount-input">
-                        <label for="checkout-discount-input" class="text-truncate">Have a coupon? <span>Click here to enter your code</span></label>
-                    </form>
-                </div> -->
+               
+                
 
 
 
-                <form action="/checkout" method="post" >
+                <form action="/checkout" method="post" id="paymentForm">
                     <div class="row">
                         <div class="col-lg-6">
                             
@@ -141,62 +136,30 @@
                                 </table><!-- End .table table-summary -->
 
                                 <div class="accordion-summary" id="accordion-payment">
-                                    <div class="card">
+                                    <div class="card mb-1">
                                         <div class="card-header" id="heading-1">
                                             <h2 class="card-title">
                                                 <label>
                                                     <input type="radio" name="paymentMethod" value="cod"  required>
-                                                    Cash on Delivery (COD)
+                                                    Cash on Delivery
                                                 </label>
                                             </h2>
                                         </div><!-- End .card-header -->
                                     </div><!-- End .card -->
 
-
-
-
-
-
-
-
-
-
-                                    <!-- <div class="card">
-                                        <div class="card-header" id="heading-2">
+                                    <div class="card mb-1">
+                                        <div class="card-header" id="heading-1">
                                             <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-2" aria-expanded="false" aria-controls="collapse-2">
+                                                <label>
+                                                    <input type="radio" name="paymentMethod" value="online"  required>
                                                     Online Payment
-                                                </a>
+                                                </label>
                                             </h2>
-                                        </div>
-                                        <div id="collapse-2" class="collapse" aria-labelledby="heading-2" data-parent="#accordion-payment">
-                                            <div class="card-body">
-                                                Make your payment directly into our bank account. Please use your Order ID as the payment reference. Your order will not be shipped until the funds have cleared in our account.
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="card">
-                                        <div class="card-header" id="heading-3">
-                                            <h2 class="card-title">
-                                                <a class="collapsed" role="button" data-toggle="collapse" href="#collapse-3" aria-expanded="false" aria-controls="collapse-3">
-                                                    Wallet
-                                                </a>
-                                            </h2>
-                                        </div>
-                                        <div id="collapse-3" class="collapse" aria-labelledby="heading-3" data-parent="#accordion-payment">
-                                            <div class="card-body">Quisque volutpat mattis eros. Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Donec odio. Quisque volutpat mattis eros. 
-                                            </div>
-                                        </div>
-                                    </div> -->
-
-
-
-
-
+                                        </div><!-- End .card-header -->
+                                    </div><!-- End .card -->
                                 </div><!-- End .accordion -->
 
-                                <button type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
+                                <button id="paymentButton" type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
                                     <span class="btn-text">Place Order</span>
                                     <span class="btn-hover-text">Proceed to Checkout</span>
                                 </button>
@@ -212,11 +175,91 @@
 
 
 
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+
+
+
+<script>
 
 
 
 
 
+
+
+    document.getElementById('paymentForm').addEventListener('submit', function (e) {
+        e.preventDefault();
+    
+        var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
+    
+        if (paymentMethod === 'online') {
+           
+
+            var options = {
+                
+                key: "rzp_test_LFeXM6Qd4jOycy",
+                amount: "<%= cart.total * 100 %>",
+                currency: "INR",
+                name: "Assist Store",
+                order_id: function() {
+                            return  Math.floor(100000 + Math.random() * 900000).toString();
+                        },
+                handler: function (response) {
+                   
+                    if (response.razorpay_payment_id) {
+                        // Payment successful, show success SweetAlert
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Payment Successful!',
+                            text: 'Your payment was successful.',
+                        }).then(() => {
+                            // Submit the form
+                            document.getElementById('paymentForm').submit();
+                        });
+                    } else {
+                        // Payment failed, show error SweetAlert
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Payment Failed',
+                            text: 'Your payment was not successful. Please try again.',
+                        });
+                    }
+                },
+                prefill: {
+                    "contact": "<%= address.mobile %>",
+                    "name": "<%= address.name %>",
+                    "email": "smtwinkle@gmail.com"
+                },
+                
+                theme: {
+                    "color": "#2300a3"
+                }
+                
+            };
+            
+            var razorpayObject = new Razorpay(options);
+    
+            razorpayObject.on('payment.failed', function (response) {
+                console.log(response);
+            });
+    
+            razorpayObject.open();
+            
+        } else {
+            
+            Swal.fire({
+                icon: 'success',
+                title: 'Order Placed!',
+                text: 'Your order has been placed successfully.',
+            }).then(() => {
+                // Submit the form after the SweetAlert is closed
+                document.getElementById('paymentForm').submit();
+            });
+        }
+    });
+    </script>
+    
 
 
 

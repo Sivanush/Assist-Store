@@ -95,23 +95,28 @@
                                  <a href="/logout" class="icon-user">
                                     <span style="font-size: 15px; margin-top: 4px;">Logout</span></a>                                   
                              </div>
+                             
                          <% } %>
                             
                         </div><!-- End .header-search -->
                         
-                        <a href="wishlist.html" class="wishlist-link">
+                        <a href="/wishlist" class="wishlist-link">
                             <i class="icon-heart-o"></i>
-                            <span class="wishlist-count">3</span>
+                           
                         </a>
+                       <% if (user) { %>
                         <div class="dropdown cart-dropdown">
                             <a href="/cart" class="dropdown-toggle" role="button" >
                                 <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">2</span>
+        
                                 
                             </a>
 
                             
                         </div><!-- End .cart-dropdown -->
+                       <%  } else {%>
+                        
+                      <% } %>
                         
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
@@ -368,7 +373,7 @@
         <footer class="footer footer-2">
             <div class="footer-bottom">
                 <div class="container">
-                    <p class="footer-copyright">Copyright © 2023 Assist Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+                    <p class="footer-copyright">Copyright © 2024 Assist Store. All Rights Reserved.</p><!-- End .footer-copyright -->
                     <!-- <ul class="footer-menu">
                         <li><a href="#">Terms Of Use</a></li>
                         <li><a href="#">Privacy Policy</a></li>

@@ -8,6 +8,14 @@
 </div><!-- End .page-header -->
 
 
+<% if (err) { %>
+<div class="text-center alert alert-warning alert-dismissible fade show" role="alert">
+    <%= err %> 
+  </div>
+<%} %>
+
+
+
             <div class="page-content" style="padding-bottom: 0px;">
                 <div class="dashboard">
                     <div class="container">
@@ -46,7 +54,11 @@
                                 <strong>Bill to:</strong><br>
                                 Customer Name: <%= orderDetail.address[0].name  %> <br>
                                 Shipping City: <%= orderDetail.address[0].city  %><br>
-                                Status: <%= orderDetail.orderStatus %>
+                                Status: <%= orderDetail.orderStatus %><br>
+                               <% if (orderDetail.orderStatus !== 'delivered'&& orderDetail.orderStatus !== 'returned') { %>
+                                Expected Date: <%= new Date(orderDetail.createdAt.getTime() + 7 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN') %>
+                             <%  } %>
+
                               </div>
                             </div>
                             <div class="row mb-4 text-center mb-9">
@@ -55,7 +67,11 @@
                                 <strong>Order Date:</strong> <%= orderDetail.createdAt.toLocaleDateString('en-IN') %>
                               </div>
                               <div class="col-sm-6 text-end">
-                                <strong>Payment Method:</strong> <%= orderDetail.paymentMethod %><br>
+                                <% if (orderDetail.paymentMethod === 'online') { %>
+                                  <strong>Payment Method:</strong> Online Payment<br>
+                              <%  }else if(orderDetail.paymentMethod === 'cod'){ %>
+                                  <strong>Payment Method:</strong> Cash on Delivery<br>
+                                <% } %>
                                 <strong>Delivery Address:</strong><br>
                                 <%= orderDetail.address[0].address %><br>
                                 <%= orderDetail.address[0].city %><br>
@@ -68,42 +84,49 @@
 
                             
 
-                            <table class="table table-summary mb-9 table-responsive-sm">
-                              <thead>
-                                <tr>
-                                  <th class="text-center">Product Image</th>
-                                  <th class="text-center">Product Name</th>
-                                  <th class="text-center">Price</th>
-                                  <th class="text-center">Quantity</th>
-                                  <th class="text-center">Total</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                
-                                  <% orderDetail.products.forEach((order) => { %>
-                                    <tr>
-                                    <td class="text-center">
-                                        <div class="d-flex justify-content-center">
-                                            <img  src="/uploads/<%= order.product.mainImage %>" alt="" height="75px" width="75px">
-                                        </div>
-                                    </td>
-                                    <td class="text-center"><%= order.product.name %></td>
-                                    <td class="text-center"><span>$</span><%= order.product.price %></td>
-                                    <td class="text-center"><%= order.quantity %></td>
-                                    <td class="text-center"><span>$</span><%= order.product.price*order.quantity%></td>
-                                </tr>
-                                 <% }); %>
-
-                                
-                              </tbody>
-                              <tfoot>
-                                <tr>
-                                  <th class="text-center"  colspan="3"></th>
-                                  <td class="text-center"><strong>Grand Total: </strong></td>
-                                  <td class="text-center"><span>$</span><%= orderDetail.cart.total %></td>
-                                </tr>
-                              </tfoot>
-                            </table>
+                            <div class="table-responsive">
+                              <table class="table table-summary mb-9">
+                                  <thead>
+                                      <tr>
+                                          <th class="text-center">Product Image</th>
+                                          <th class="text-center">Product Name</th>
+                                          <th class="text-center">Price</th>
+                                          <th class="text-center">Quantity</th>
+                                          <th class="text-center">Total</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                      <% orderDetail.products.forEach((order) => { %>
+                                          <tr>
+                                              <td class="text-center">
+                                                  <div class="d-flex justify-content-center">
+                                                      <img src="/uploads/<%= order.product.mainImage %>" alt="" height="75px" width="75px">
+                                                  </div>
+                                              </td>
+                                              <td class="text-center"><%= order.product.name %></td>
+                                              <td class="text-center"><span>$</span><%= order.product.price %></td>
+                                              <td class="text-center"><%= order.quantity %></td>
+                                              <td class="text-center"><span>$</span><%= order.product.price * order.quantity %></td>
+                                          </tr>
+                                          <% if (orderDetail.cart.coupon) {%>
+                                            <tr>
+                                            <th class="text-center" colspan="3"></th>
+                                            <td class="text-center"><strong>Coupon Discount: </strong></td>
+                                            <td class="text-center"><span>$</span><%= orderDetail.cart.coupon.discountAmount %></td>
+                                            </tr>
+                                         <%  } %>
+                                      <% }); %>
+                                  </tbody>
+                                  <tfoot>
+                                      <tr>
+                                          <th class="text-center" colspan="3"></th>
+                                          <td class="text-center"><strong>Grand Total: </strong></td>
+                                          <td class="text-center"><span>$</span><%= orderDetail.cart.total %></td>
+                                      </tr>
+                                  </tfoot>
+                              </table>
+                          </div>
+                          
                             <!-- <div class="text-end">
                                 <a href="#" class="btn btn-primary">Download Invoice</a>
                               </div> -->
@@ -113,15 +136,21 @@
                           </div>
 
                           <td>
-                            <% if (orderDetail.orderStatus !== 'delivered') { %>
-                                <div class="mb-3 d-flex justify-content-end">
-                                    <a href="/orderDetail/<%= orderDetail.orderId %>" class="btn btn-primary">Cancel Order</a>
-                                </div>
-                            <% } else { %>
-                                <!-- <div>
-                                    <button type="button" class="btn btn-secondary" disabled>Cancel Order</button>
-                                </div> -->
-                            <% } %>
+                            <% if (orderDetail.orderStatus !== 'delivered' && orderDetail.orderStatus !== 'cancelled' &&orderDetail.orderStatus !== 'returned') { %>
+                              <div class="mb-3 d-flex justify-content-center">
+                                  <div class="col-2">
+                                    <a data-toggle="modal" href="#cancelOrderModal" class="btn btn-primary btn-lg btn-block">Cancel Order</a>
+                                  </div>
+                              </div>
+                          <% } else if(orderDetail.orderStatus == 'delivered') { %>
+                              <div class="mb-3 d-flex justify-content-center">
+                                  <div class="col-2">
+                                    <a data-toggle="modal" href="#returnOrderModal" class="btn btn-secondary btn-lg btn-block">Return Order</a>
+                                  </div>
+                              </div>
+                          <% } %>
+                          <input type="hidden" id="orderIdInput" value="<%= orderDetail.orderId %>">
+
                         </td>
                         
                     </div>
@@ -131,6 +160,163 @@
     </div>
 
 </main><!-- End .main -->
+
+
+
+
+
+
+
+
+
+
+<div class="modal fade" id="cancelOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-body">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true"><i class="icon-close"></i></span>
+                </button>
+
+                <div class="form-box">
+                    <div class="form-tab">
+                        <ul class="nav nav-pills nav-fill" role="tablist">
+                            <li class="nav-item">
+                                <a class="nav-link" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Reason For Cancel</a>
+                            </li>
+                        </ul>
+                        <div class="tab-content" id="tab-content-5">
+                            <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                                <form id="" action="/orderCancel/<%= orderDetail.orderId %>" method="post">
+                                    <div class="form-group">
+                                      
+                                        <input placeholder="Reason..." type="text" class="form-control" id="reason" name="reason" required>
+                                        <span id="nameError"></span>
+                                    </div><!-- End .form-group -->
+                
+                                    <div class="">
+                                        <button type="submit" id="addAddressButton" class="btn btn-outline-primary-2 w-100">
+                                            <span>Cancel Order</span>
+                                            <i class="icon-long-arrow-right"></i>
+                                        </button>
+                                    </div><!-- End .form-footer -->
+                                </form>
+                            </div><!-- .End .tab-pane -->
+                        </div><!-- End .tab-content -->
+                    </div><!-- End .form-tab -->
+                </div><!-- End .form-box -->
+                
+            </div><!-- End .modal-body -->
+        </div><!-- End .modal-content -->
+    </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  <!-- Return Order Modal -->
+<div class="modal fade" id="returnOrderModal" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+          <div class="modal-body">
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                  <span aria-hidden="true"><i class="icon-close"></i></span>
+              </button>
+
+              <div class="form-box">
+                  <div class="form-tab">
+                      <ul class="nav nav-pills nav-fill" role="tablist">
+                          <li class="nav-item">
+                              <a class="nav-link" id="signin-tab" data-toggle="tab" href="" role="tab" aria-controls="signin" aria-selected="true">Reason For Return</a>
+                          </li>
+                      </ul>
+                      <div class="tab-content" id="tab-content-5">
+                          <div class="tab-pane fade show active" id="signin" role="tabpanel" aria-labelledby="signin-tab">
+                              <form id="" action="/returnOrder/<%= orderDetail.orderId %>" method="post">
+                                  <div class="form-group">
+                                    
+                                      <input placeholder="Reason..." type="text" class="form-control" id="reason" name="reason" required>
+                                      <span id="nameError"></span>
+                                  </div><!-- End .form-group -->
+              
+                                  <div class="">
+                                      <button type="submit" id="addAddressButton" class="btn btn-outline-primary-2 w-100">
+                                          <span>Return Order</span>
+                                          <i class="icon-long-arrow-right"></i>
+                                      </button>
+                                  </div><!-- End .form-footer -->
+                              </form>
+                          </div><!-- .End .tab-pane -->
+                      </div><!-- End .tab-content -->
+                  </div><!-- End .form-tab -->
+              </div><!-- End .form-box -->
+              
+          </div><!-- End .modal-body -->
+      </div><!-- End .modal-content -->
+  </div><!-- End .modal-dialog -->
+</div><!-- End .modal -->
+
+
+
+
+
+
+
+
+  <script>
+
+    const cancel = '<%= cancel %>'
+    const Return = '<%= Return %>'
+
+    if (cancel) {
+      Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#c96; font-size: 24px;"><%= cancel %></span>',
+                    html: '<p style="color:#333; font-size: 16px;"></p>',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                })
+    }else if(Return){
+      
+      Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#c96; font-size: 24px;"><%= Return %></span>',
+                    html: '<p style="color:#333; font-size: 16px;"></p>',
+                    showConfirmButton: false,
+                    timer: 1000,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                })
+    }
+
+
+  </script>
+
+
+
+
 
 
 

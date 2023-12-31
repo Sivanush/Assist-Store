@@ -14,7 +14,7 @@ const orderSchema = mongoose.Schema({
     orderId:{
         type:String,
         default:function() {
-            return  Math.floor(100000 + Math.random() * 900000).toString();
+            return  Math.floor(100000 + Math.random() * 900000).toString()
         }
     },
     address:[{
@@ -69,9 +69,17 @@ const orderSchema = mongoose.Schema({
     },
     orderStatus:{
         type:String,
-        enum:['pending', 'shipped', 'delivered', 'cancelled'],
+        enum:['pending', 'shipped', 'delivered', 'cancelled','returned'],
         default:'pending',
         required:true
+    },
+    return:{
+        type:Boolean,
+        default:false
+    },
+    reason:{
+        type:String,
+        
     }
 
 },

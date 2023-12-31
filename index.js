@@ -12,9 +12,16 @@ const crypto = require('crypto')
 
 app.use(flash());
 
+
 //mongoose
 const mongoose = require('mongoose')
 mongoose.connect('mongodb+srv://sivanush:sivanush@ecommerce.vor4n5k.mongodb.net/Ecommerse')
+.then(() => {
+    console.log('Connected to MongoDB');
+  })
+  .catch((err) => {
+    console.error('Error connecting to MongoDB:', err);
+  });
 
 
 app.use(session({
@@ -22,6 +29,7 @@ app.use(session({
     resave:false,
     saveUninitialized:true
 }))
+
 
 
 //routes
@@ -54,7 +62,6 @@ app.use(express.static(path.join(__dirname,'public')))
 
 app.use('/',userRoute)
 app.use('/admin',adminRoute)
-
 
 
 

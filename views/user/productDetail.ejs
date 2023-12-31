@@ -1,4 +1,24 @@
 <%- include('./layouts/header') %>
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
             <div class="page-content">
@@ -76,14 +96,41 @@
 
                                     <div class="product-details-action">
 
-                                        <button id="addToCartBtn"  type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></button>
+                                        <% if (user) {%>
+                                            <button id="addToCartBtn"  type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></button>
+                                        <%  } else { %> 
+                                            <a href="/login"   type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></a>
+                                        <% } %>
 
                                         </form>
-                                        <div class="details-action-wrapper">
-                                            <a href="#" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
-                                                <!-- <a href="#" class="btn-product btn-compare" title="Compare"><span>Add to Compare</span></a> -->
-                                        </div><!-- End .details-action-wrapper -->
-                                    </div><!-- End .product-details-action -->
+
+
+
+
+                                        <form id="addToWishlistForm" action="/addToWishlist/<%= productDetail._id %>" method="post">
+                                            <!-- Add the size input -->
+                                            <input type="hidden" name="size" id="wishlistSize" value="XS">
+                                            
+                                            <div class="details-action-wrapper">
+                                                <% if (user) {%>
+                                                    <button id="" type="submit" class="btn btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></button>
+                                                <%  } else { %> 
+                                                    <a href="/login" class="btn-product btn-wishlist" title="Wishlist"><span>Add to Wishlist</span></a>
+                                                <% } %>
+    
+                                            </div>
+                                        </div>
+                                        </form>
+                                        
+
+
+                                        
+
+                                   
+
+
+
+
 
                                     <div class="product-details-footer">
                                         <div class="product-cat">
@@ -301,19 +348,85 @@
                     title: '<span style="color:#c96; font-size: 24px;">Product Added!</span>',
                     html: '<p style="color:#333; font-size: 16px;">Your selected product has been successfully added to the cart.</p>',
                     showConfirmButton: false,
-                    timer: 1000,
+                    timer: 2000,
                     background: '#fff',
                     customClass: {
                         title: 'custom-swal-title',
                         htmlContainer: 'custom-swal-html-container',
                         popup: 'custom-swal-popup'
                     }
-                });          
+                }).then((result)=>[
+                    window.location.reload()
+                ])         
             });
             </script>
             
-      <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script> <!-- Include SweetAlert library -->
+            <script>
+                 const message = '<%= message %>';
+             
+                document.getElementById('addToWishlistForm').addEventListener('submit', function () {
+
+                    if (message) {
+                        
+                        Swal.fire({
+                        icon: 'warning',
+                        title: '<span style="color:#c96; font-size: 24px;">Product Already Exist!</span>',
+                        html: '<p style="color:#333; font-size: 16px;"></p>',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        background: '#fff',
+                        customClass: {
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-html-container',
+                            popup: 'custom-swal-popup'
+                        }
+                    }).then((result) => [
+                            
+                                // Redirect or perform other actions after clicking OK
+                                window.location.reload()
+                           
+                    ]);
+                    } else{
+                        Swal.fire({
+                        icon: 'success',
+                        title: '<span style="color:#c96; font-size: 24px;">Product Added!</span>',
+                        html: '<p style="color:#333; font-size: 16px;">Your selected product has been successfully added to the Wishlist.</p>',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        background: '#fff',
+                        customClass: {
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-html-container',
+                            popup: 'custom-swal-popup'
+                        }
+                    }).then((result) => [
+                            
+                            // Redirect or perform other actions after clicking OK
+                            window.location.reload()
+                       
+                ]); 
+                    }      
+                })
+                </script>
    
+
+
+
+                <script>
+
+                    document.addEventListener('DOMContentLoaded',function () {
+                        let sizeSelect = document.getElementById('size')
+                        let wishlistSize = document.getElementById('wishlistSize')
+
+                        sizeSelect.addEventListener('change',function () {
+                            wishlistSize.value = sizeSelect.value
+                        })
+                    })
+
+                </script>
+
+
+
 
 
       <style>
@@ -332,8 +445,29 @@
         }
     </style>
     
-    
+    <style>
+        /* Add your styles here */
+        #modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            padding: 20px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            z-index: 1000;
+        }
 
+        .close-btn {
+            cursor: pointer;
+            color: #333;
+            font-weight: bold;
+            float: right;
+        }
+    </style>
 
 
 

@@ -48,12 +48,41 @@ const insertLogin = async(req,res)=>{
 
 const loadUsers = async(req,res)=>{
     try {
+       
         const page = req.query.page || 1
         const perPage = 5
 
-        const users = await User.find()
-        .skip((page-1)*perPage)
-        .limit(perPage)
+        let users
+
+        const userSearch = async (name) => {
+            try {
+                users = await User.find({$or: [
+                    { firstName: { $regex: new RegExp(name, 'i') } },
+                    { lastName: { $regex: new RegExp(name, 'i') } }
+                ] })
+              return users;
+            } catch (error) {
+              throw error;
+            }
+          }
+          
+        if (req.query.search) {
+       
+            users = await userSearch(req.query.search)
+            if (req.xhr) {
+                
+                return res.json({ users:users });
+                
+              }
+            
+        } else {
+            
+            users = await User.find()
+            .skip((page-1)*perPage)
+            .limit(perPage)
+        }
+        
+       
 
 
         const totalUser = await User.countDocuments()
@@ -63,8 +92,8 @@ const loadUsers = async(req,res)=>{
         res.render('admin/users',{
             users:users,
             totalPage,
-            currentPage:page
-
+            currentPage:page,
+            search: req.query.search || ''
         })
     } catch (error) {
         console.log(error.message);

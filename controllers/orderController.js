@@ -2,10 +2,25 @@ const Order = require('../models/orderModel')
 
 const loadOrder = async (req,res)=>{
     try {
+
+        
+        const page = req.query.page || 1
+        const perPage = 5
+
+
         const order = await Order.find()
+        .skip((page-1)*perPage)
+        .limit(perPage)
+        .exec()
+
+        const totalOrder = await Order.countDocuments()
+        
+        const totalPage = Math.ceil(totalOrder/perPage)
 
         res.render('admin/order',{
-            order
+            order,
+            totalPage,
+            currentPage:page
         })
     } catch (error) {
         console.log(error.message);

@@ -30,7 +30,11 @@
                 <div class="card-body">
                 <p class="card-text">
                     Order ID: <%= orderDetail.orderId %> <br>
-                    Payment Methods: <%= orderDetail.paymentMethod %>
+                    Payment Methods: <%= orderDetail.paymentMethod %> <br>
+                    Order Status: <%= orderDetail.orderStatus %> <br>
+                    <% if (orderDetail.orderStatus === 'cancelled') {%>
+                        Reason : <%= orderDetail.reason %>
+                   <% } %>
                 </p>
                 </div>
             </div>
@@ -58,19 +62,22 @@
 
 
     <form id="orderStatusForm" action="/admin/orderDetail/<%= orderDetail._id %>" method="post">
-
+        <% if (orderDetail.orderStatus === 'pending' || orderDetail.orderStatus === 'shipped' ) {%>
         <div class="d-flex justify-content-end">
             <div class="mt-2 mb-3">
                 <label for="orderStatusSelect" class="form-label">Select the Order Status</label>
                 <select name="status" id="orderStatusSelect" class="form-select form-select-lg" onchange="document.getElementById('orderStatusForm').submit()">
-                    <option value="pending" <% if (orderDetail.orderStatus === 'pending') { %> selected <% } %>>Pending</option>
-                    <option value="shipped" <% if (orderDetail.orderStatus === 'shipped') { %> selected <% } %>>Shipping</option>
-                    <option value="delivered" <% if (orderDetail.orderStatus === 'delivered') { %> selected <% } %>>Delivered</option>
-                    <option value="cancelled" <% if (orderDetail.orderStatus === 'cancelled') { %> selected <% } %>>Cancelled</option>
+                  
+                         <option value="pending" <% if (orderDetail.orderStatus === 'pending') { %> selected <% } %>>Pending</option>
+                        <option value="shipped" <% if (orderDetail.orderStatus === 'shipped') { %> selected <% } %>>Shipping</option>
+                        <option value="delivered" <% if (orderDetail.orderStatus === 'delivered') { %> selected <% } %>>Delivered</option>
+                        <option value="cancelled" <% if (orderDetail.orderStatus === 'cancelled') { %> selected <% } %>>Cancelled</option>
+                        <option value="returned" <% if (orderDetail.orderStatus === 'returned') { %> selected <% } %>>Returned</option>
+              
                 </select>
             </div>
         </div>
-        
+             <% } %>
     </form>
     
 

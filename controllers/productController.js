@@ -11,11 +11,31 @@ const loadProduct = async (req, res) => {
         const page = req.query.page || 1
         const perPage = 10 
 
+        let product
 
-        const product = await Product.find().populate('category','name')
-        .skip((page-1)*perPage)
-        .limit(perPage)
-        .exec()
+        const productSearch = async (name) => {
+            try {
+               let products = await Product.find({ name: { $regex: new RegExp(name, 'i') }}).populate('category','name')
+              return products;
+            } catch (error) {
+              throw error;
+            }
+          }
+
+            if (req.query.search) {
+                 product = await productSearch(req.query.search)
+                if (req.xhr) {
+                    
+                    return res.json({ products:product });
+                    
+                  }
+            } else {
+                
+             product = await Product.find().populate('category','name')
+            .skip((page-1)*perPage)
+            .limit(perPage)
+            .exec()
+            }
         
 
         const totalProduct = await Product.countDocuments()
@@ -55,9 +75,17 @@ const addProduct = async (req, res) => {
         }
 
 
-        let image = req.files.image.map(file => file.filename)
+    
+
        let mainImage = req.files.mainImage[0].filename
        let hoverImage = req.files.hoverImage[0].filename
+       const images = [
+        req.files.image1[0].filename,
+        req.files.image2[0].filename,
+        req.files.image3[0].filename,
+        req.files.image4[0].filename,
+    ];
+
 
         const foundCategory = await Category.findOne({ name: category });
 
@@ -74,7 +102,7 @@ const addProduct = async (req, res) => {
                 price,
                 totalStock,
                 isComing,
-                image:image,
+                image: images,
                 mainImage:mainImage,
                 hoverImage:hoverImage,
                 category:foundCategory._id,
@@ -130,7 +158,7 @@ const editProduct = async (req, res) => {
 
         isComing = Boolean(isComing);
 
-        console.log(isComing);
+
         
         const totalStock = {
             XS: req.body.totalStockXS,
@@ -141,13 +169,8 @@ const editProduct = async (req, res) => {
             XXL: req.body.totalStockXXL,
         };
 
-        const existName = await Product.findOne({ name, description, price, category,totalStock });
-        if (existName) {
-            return res.redirect('/admin');
-        } else {
-            const updatedProduct = await Product.findByIdAndUpdate(
-                id,
-                {
+      
+            const updatedProduct = await Product.findByIdAndUpdate(id,{
                     name,
                     description,
                     price,
@@ -159,10 +182,23 @@ const editProduct = async (req, res) => {
             },
                 { new: true }
             );
+           
 
-            if (req.files && req.files['image']) {
-                updatedProduct.image = req.files.image.map(file => file.filename);
+            if (req.files['image1']) {
+                updatedProduct.image[0] = req.files.image1[0].filename;
             }
+            if (req.files['image2']) {
+                updatedProduct.image[1] = req.files.image2[0].filename;
+            }
+            if (req.files['image3']) {
+                updatedProduct.image[2] = req.files.image3[0].filename;
+            }
+            if (req.files['image4']) {
+                updatedProduct.image[3] = req.files.image4[0].filename;
+            }
+
+
+
 
             if (req.files && req.files['mainImage']) {
                 updatedProduct.mainImage = req.files.mainImage[0].filename;
@@ -173,7 +209,7 @@ const editProduct = async (req, res) => {
             await updatedProduct.save();
             
             res.redirect('/admin/product');
-        }
+        
     } catch (error) {
         console.log(error.message);
     }

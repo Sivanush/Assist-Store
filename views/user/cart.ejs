@@ -1,16 +1,22 @@
 <%- include('./layouts/header') %>
 
-<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
-    <div class="container">
-        <h1 class="page-title">Shopping Cart<span>Shop</span></h1>
-    </div><!-- End .container -->
-</div><!-- End .page-header -->
+
+<% if (cart.products==0) { %>
+	
 
 
+<% }else{ %>
+
+	<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+		<div class="container">
+			<h1 class="page-title">Shopping Cart<span>Shop</span></h1>
+		</div><!-- End .container -->
+	</div><!-- End .page-header -->
+	<% } %>
 
 
 <% if (cart.products==0) { %>
-	<div class="d-flex justify-content-center align-items-center my-auto flex-column" style="height: 60vh;">
+	<div class="d-flex justify-content-center align-items-center my-auto flex-column" style="height: 65vh;">
 		
 		<div>
 			<img src="/userAssets/NewImage/cart.jpg" alt="" height="300px" width="300px">
@@ -28,6 +34,7 @@
 	                <div class="container">
 	                	<div class="row">
 	                		<div class="col-lg-9">
+								
 								<table class="table table-cart table-mobile">
 									<thead>
 									<tr>
@@ -82,10 +89,12 @@
 													</td>
 													
 													<form action="/removeCart/<%= product.productId._id %>" method="post">
-														<td class="remove-col"><button type="submit" class="btn-remove"><i class="icon-close"></i></button></td>
-												
+														<td class="remove-col">
+															<button type="button" onclick="removeProduct('/removeCart/<%= product.productId._id %>')" class="btn-remove">
+																<i class="icon-close"></i>
+															</button>
+														</td>
 													</form>
-												
 												
 											</tr>
 											
@@ -94,18 +103,19 @@
 								
 							</tbody>
 								</table><!-- End .table table-wishlist -->
-
+								
 	                			<div class="cart-bottom">
-			            			<!-- <div class="cart-discount">
-			            				<form action="#">
+			            			
+									<div class="cart-discount">
+			            				<form action="/applyCoupon" method="post">
 			            					<div class="input-group">
-				        						<input type="text" class="form-control" required placeholder="coupon code">
+				        						<input type="text" name="coupon" class="form-control" required placeholder="coupon code">
 				        						<div class="input-group-append">
 													<button class="btn btn-outline-primary-2" type="submit"><i class="icon-long-arrow-right"></i></button>
-												</div>
-			        						</div>
+												</div><!-- .End .input-group-append -->
+			        						</div><!-- End .input-group -->
 			            				</form>
-			            			</div> -->
+			            			</div><!-- End .cart-discount -->
 
 			            			<a href="/cart" class="btn btn-outline-dark-2"><span>UPDATE CART</span><i class="icon-refresh"></i></a>
 								
@@ -135,6 +145,17 @@
 	                							</td>
 	                							<td>$0.00</td>
 	                						</tr><!-- End .summary-shipping-row -->
+											<% if (cart.coupon) {%>
+												<tr class="summary-shipping-row">
+	                							<td>
+													<div class="">
+														
+														<label class="custom-control-label" for="free-shipping">Discount</label>
+													</div><!-- End .custom-control -->
+	                							</td>
+	                							<td><span>$</span><%= cart.coupon.discountAmount %><span>.00</span></td>
+	                						</tr>
+											<%} %>
 
 	                						
 
@@ -151,7 +172,7 @@
 
 	                				<a href="/checkout" class="btn btn-outline-primary-2 btn-order btn-block">PROCEED TO CHECKOUT</a>
 	                			</div><!-- End .summary -->
-
+								
 		            			<a href="/shop" class="btn btn-outline-dark-2 btn-block mb-3"><span>CONTINUE SHOPPING</span><i class="icon-refresh"></i></a>
 	                		
 							
@@ -174,9 +195,48 @@
 			
 		<% }) %>
 		
+		<script>
+			function removeProduct(removeUrl) {
+				Swal.fire({
+					icon: 'warning',
+					title: '<span style="color:#c96; font-size: 24px;">Remove Product?</span>',
+					html: '<p style="color:#333; font-size: 16px;">Are you sure you want to Remove this Product?</p>',
+					showCancelButton: true,
+					confirmButtonColor: '#d33',
+					cancelButtonColor: '#3085d6',
+					confirmButtonText: 'Yes, Remove it!',
+					cancelButtonText: 'No, keep it',
+					customClass: {
+						title: 'custom-swal-title',
+						htmlContainer: 'custom-swal-html-container',
+						popup: 'custom-swal-popup'
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// If the user clicks "Yes, remove it!", redirect to the remove product route
+						window.location.href = removeUrl;
+					}
+				});
+			}
+		</script>
+			
 
-	   
-
-
+			<style>
+				.custom-swal-title {
+					font-family: 'Arial', sans-serif;
+					font-weight: bold;
+					text-align: center;
+				}
+			
+				.custom-swal-html-container {
+					text-align: center;
+				}
+			
+				.custom-swal-popup {
+					border-radius: 10px;
+				}
+			</style>
+			
+  
 
         <%- include('./layouts/footer') %>

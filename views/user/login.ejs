@@ -94,27 +94,7 @@
                         </nav><!-- End .main-nav -->
                     </div><!-- End .header-left -->
 
-                    <div class="header-right">
-                        <div class="header-search">
-                            <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
-                                <div class="header-search-wrapper">
-                                    <label for="q" class="sr-only">Search</label>
-                                    <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                                </div><!-- End .header-search-wrapper -->
-                            </form>
-                        </div><!-- End .header-search -->
-                        
-
-                        <div class="dropdown cart-dropdown">
-                            <a href="#" class="dropdown-toggle" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
-                                <i class="icon-shopping-cart"></i>
-                                <span class="cart-count">2</span>
-                            </a>
-
-                            
-                        </div><!-- End .cart-dropdown -->
-                    </div><!-- End .header-right -->
+                    
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
         </header><!-- End .header -->
@@ -181,14 +161,18 @@
 								<span class="text-danger" id="emailError"></span>
 							</div>
 
-							<div class="">
-								<label class="form-label">Password</label>
-								<input class="form-control" id="password" placeholder="Password" type="password" value="sivanush123"
-									name="password" required>
-								<span class="text-danger" id="passwordError"></span>
-
-							</div>
-
+							<div class="password-container">
+                                <label class="form-label">Password</label>
+                                <input class="form-control" id="password" placeholder="Password" type="password" value="sivanush123" name="password" required>
+                                <span class="text-danger" id="passwordError"></span>
+                                <div class="show-password-container ">
+                                    <input style="transform: scale(1.1);" type="checkbox" id="showPassword">
+                                    <label for="showPassword" class="show-password-label">Show Password</label>
+                                </div>
+                            </div>
+                            
+                            
+                            
 							<div class="form-footer">
 
 
@@ -196,6 +180,7 @@
 							</div><!-- End .form-footer -->
 							<div>
 								<button type="submit" class="btn btn-outline-primary-2 btn-block">
+                                     
 									<span>LOG IN</span>
 									<i class="icon-long-arrow-right"></i>
 								</button>
@@ -311,7 +296,7 @@
 
     <div class="footer-bottom">
         <div class="container">
-            <p class="footer-copyright">Copyright © 2023 Assist Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+            <p class="footer-copyright">Copyright © 2024 Assist Store. All Rights Reserved.</p><!-- End .footer-copyright -->
             <figure class="footer-payments">
                 <img src="/userAssets/assets/images/payments.png" alt="Payment methods" width="272" height="20">
             </figure><!-- End .footer-payments -->
@@ -685,6 +670,11 @@
 
 	}
 
+  
+    document.getElementById('showPassword').addEventListener('change', function () {
+        var passwordInput = document.getElementById('password');
+        passwordInput.type = this.checked ? 'text' : 'password';
+    });
 
 
 </script>

@@ -2,6 +2,21 @@
 
             <div class="page-content">
                 <div class="container">
+
+
+
+                    <div class="header-search mt-2 mb-2 d-flex justify-content-end">
+                        <a href="#" class="search-toggle" role="button" title="Search"><i class="icon-search"></i></a>
+                        <form action="/shop" method="get" id="searchForm">
+                            <div class="header-search-wrapper">
+                                <label for="q" class="sr-only">Search</label>
+                                <input type="search" class="form-control" name="search" id="q" placeholder="Search in..." required>
+                            </div>
+                        </form>
+                    </div>
+
+
+                    
         			<div class="toolbox mt-1">
         				<div class="toolbox-left">
                             <a href="#" class="sidebar-toggler"><i class="icon-bars"></i>Filters</a>
@@ -35,7 +50,7 @@
         			</div><!-- End .toolbox -->
 
                     <div class="products">
-                        <div class="row">
+                        <div class="row" id="productContainer">
 
 
                             <% product.forEach((products) => { %>
@@ -86,6 +101,12 @@
 
                             <% }); %>
 
+                            <% if (product.length === 0) { %>
+                                <div class="text-center">
+                                    <p><h5>No products found.</h5></p>
+                                </div>
+                            <% } %>
+                            
 
 
 
@@ -174,14 +195,26 @@
 
 
 
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="cat-1">
-                                                    <label class="custom-control-label" for="cat-1">Dresses</label>
-                                                </div>
-                                                <span class="item-count">3</span>
-                                            </div>
-                                            
+                                            <form action="/shop" method="get" id="categoryFilterForm">
+                                                <% categories.forEach(category => { %>
+                                                    <div class="filter-item">
+                                                        <div class="custom-control custom-checkbox">
+                                                            <input type="checkbox" class="custom-control-input" id="cat-<%= category._id %>" name="category" value="<%= category._id %>" onchange="submitCategoryFilterForm()">
+                                                            <label class="custom-control-label" for="cat-<%= category._id %>"><%= category.name %></label>
+                                                        </div>
+                                                        <span class="item-count"><%= category.productCount %></span>
+                                                    </div>
+                                                <% }); %>
+                                            </form>
+
+
+                                      
+                                        <script>
+                                            function submitCategoryFilterForm() {
+                                                document.getElementById('categoryFilterForm').submit();
+                                            }
+                                        </script>
+
 
                                             
                                         </div><!-- End .filter-items -->
@@ -189,61 +222,7 @@
                                 </div><!-- End .collapse -->
                             </div><!-- End .widget -->
 
-                            <div class="widget widget-collapsible">
-                                <h3 class="widget-title">
-                                    <a data-toggle="collapse" href="#widget-2" role="button" aria-expanded="true" aria-controls="widget-2">
-                                        Size
-                                    </a>
-                                </h3><!-- End .widget-title -->
-
-                                <div class="collapse show" id="widget-2">
-                                    <div class="widget-body">
-                                        <div class="filter-items">
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-1">
-                                                    <label class="custom-control-label" for="size-1">XS</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div>
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-2">
-                                                    <label class="custom-control-label" for="size-2">S</label>
-                                                </div><!-- End .custom-checkbox -->
-                                            </div>
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" checked id="size-3">
-                                                    <label class="custom-control-label" for="size-3">M</label>
-                                                </div>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" checked id="size-4">
-                                                    <label class="custom-control-label" for="size-4">L</label>
-                                                </div>
-                                            </div><!-- End .filter-item -->
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-5">
-                                                    <label class="custom-control-label" for="size-5">XL</label>
-                                                </div>
-                                            </div>
-
-                                            <div class="filter-item">
-                                                <div class="custom-control custom-checkbox">
-                                                    <input type="checkbox" class="custom-control-input" id="size-6">
-                                                    <label class="custom-control-label" for="size-6">XXL</label>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                           
 
                             
 
@@ -338,12 +317,12 @@
 
 
                             
-                            <div class="widget widget-collapsible">
+                            <!-- <div class="widget widget-collapsible">
                                 <h3 class="widget-title">
                                     <a data-toggle="collapse" href="#widget-5" role="button" aria-expanded="true" aria-controls="widget-5">
                                         Price
                                     </a>
-                                </h3><!-- End .widget-title -->
+                                </h3>
 
                                 <div class="collapse show" id="widget-5">
                                     <div class="widget-body">
@@ -351,13 +330,16 @@
                                             <div class="filter-price-text">
                                                 Price Range:
                                                 <span id="filter-price-range"></span>
-                                            </div><!-- End .filter-price-text -->
+                                            </div>
 
-                                            <div id="price-slider"></div><!-- End #price-slider -->
-                                        </div><!-- End .filter-price -->
-                                    </div><!-- End .widget-body -->
-                                </div><!-- End .collapse -->
-                            </div><!-- End .widget -->
+                                            <div id="price-slider"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div> -->
+
+
+
                         </div><!-- End .sidebar-filter-wrapper -->
                     </aside><!-- End .sidebar-filter -->
                 </div><!-- End .container -->
@@ -365,8 +347,13 @@
 
 
 
-                <div class="d-flex justify-content-center mt-4">
-    
+
+
+                <% if (!category) { %>
+                    
+
+                                <div class="d-flex justify-content-center mt-4" id="pagination">
+                    
                     <ul class="pagination pagination-m">
 
 
@@ -376,14 +363,15 @@
                                 
                                     <a href="/shop?page=<%= i %>" class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
                                 
-                             <% } %>
+                            <% } %>
 
                             <a href="/shop/?page=<%= parseInt(currentPage)+1 %>" class="btn btn-link btn-link-dark"><i class="icon-long-arrow-right"></i></a>
 
                     </ul>
 
                 </div>
-                
+
+               <% } %>
 
 
 
@@ -399,3 +387,116 @@
             </div><!-- End .page-content -->
         </main><!-- End .main -->
         <%- include('./layouts/footer') %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+        <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+        <script>
+            
+            $(document).ready(function () {
+              $('#searchForm').submit(function (e) {
+                e.preventDefault()
+
+                $.ajax({
+                    type:'GET',
+                    url:'/shop',
+                    data:$(this).serialize(),
+                    success:function (response) {
+                        let product = response.product
+
+                        $('#productContainer').empty()
+                        $('#pagination').empty()
+
+                        if (product.length>0) {
+                            product.forEach(function (product) {
+                                var row = `
+                                <div class="col-6 col-md-4 col-lg-4 col-xl-3">
+                                <div class="product">
+                                <figure class="product-media">
+                            <a href="/product-detail/${product._id}">
+                                <img
+                                src="/uploads/${product.mainImage}"
+                                alt="Product image"
+                                class="product-image"
+                                />
+                                <img
+                                src="/uploads/${product.hoverImage}"
+                                alt="Product image"
+                                class="product-image-hover"
+                                />
+                            </a>
+
+                            <div class="product-action-vertical">
+                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"
+                                ><span>add to wishlist</span></a
+                                >
+                            </div>
+                            <div class="product-action action-icon-top">
+                                <a href="/product-detail/${ product._id }" class="btn-product btn-cart"
+                                ><span>add to cart</span></a
+                                >
+                            </div>
+                            </figure>
+
+                            <div class="product-body">
+                            <div class="product-cat">
+                                <a href="#"> ${product.category.name } </a>
+                            </div>
+                            <h3 class="product-title">
+                                <a href="/product-detail/${ product._id }"> ${ product.name } </a>
+                            </h3>
+                            <div class="product-price">
+                                <span>$</span>
+                                ${ product.price }
+                            </div>
+                            <div class="ratings-container">
+                                <div class="ratings">
+                                <div class="ratings-val" style="width: 90%"></div>
+                                </div>
+                                <span class="ratings-text">( 2 Reviews )</span>
+                            </div>
+                            </div>
+                        </div>
+                            </div>
+
+                                `;
+
+                                // Append the row to the table
+                                $('#productContainer').append(row);
+                              })
+                        } else {
+                            var noProduct = '<p class="text-center"><p colspan="6"><h5>No users found.</h5></p></p>';
+                              $('#productContainer').append(noProduct);
+                        }
+                    },
+                    error:function (error) {
+                            console.log(error.message);
+                          }
+                })
+              })
+            })
+
+
+
+
+
+
+
+
+
+
+
+
+
+        </script>

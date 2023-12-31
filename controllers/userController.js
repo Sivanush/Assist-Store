@@ -1,5 +1,4 @@
 const mongoose = require('mongoose')
-const User = require('../models/userModel')
 const otp = require('../helpers/otp')
 const forgetOtp = require('../helpers/forgetOtp')
 const pass = require('../helpers/spassword')
@@ -7,17 +6,35 @@ const crypto = require('crypto')
 const flash = require('connect-flash');
 require('dotenv').config();
 
-
+const User = require('../models/userModel')
 const Product = require('../models/productModel')
 const Category = require('../models/categoryModal')
 const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
+const Wallet = require('../models/walletModel')
 
 // To load the home page
 
 const homePage = async (req, res) => {
     try {
+
+        let userdata = null;  
+        let cartCount = null
+        if (req.session.user) {
+            const userId = req.session.user._id;
+            const cart = await Cart.findOne({ userId });
+            const cartCount = cart.products.length;
+
+            userdata = await User.findById(userId);
+
+            if (!userdata) {
+                console.log('User not found');
+            }
+        }
+
+
+
         // const category = await Category.findOne({category:})
         const productData = await Product.find({isPublish:true,isComing:false}).sort({ createdAt: -1 }).limit(6)
 
@@ -38,7 +55,9 @@ const homePage = async (req, res) => {
                 user:userData,
                 product:productData,
                 category:categoryData,
-                comingData:comingData  
+                comingData:comingData,
+                user:userdata,
+                cartCount:cartCount, 
             }) 
         }
              
@@ -122,7 +141,7 @@ const insertUser = async (req, res) => {
 
                 }).catch((err) => {
 
-                    res.render('user/signup', {message: 'error in otp'})
+                    res.render('user/signup', {message: 'error in otp or Server error please try again'})
                     console.log(err);
 
                 });
@@ -286,36 +305,84 @@ const loadShop = async(req,res)=>{
 
         const {sort} = req.query   
       
-        const user=req.session.user
-        const userId = req.session.user._id
+        const userId = req.session.user ? req.session.user._id : null;
+
         const cart = await Cart.findOne({userId})
-        const cartCount = cart.products.length
+        const cartCount = cart ? cart.products.length : 0;
 
-        let productSort = Product.find({isPublish: true, isComing: false }).populate('category', 'name')
-        
 
-        if (sort === 'lowToHigh') {
-            productSort = productSort.sort({price:1})
-        }else if(sort === 'highToLow'){
-            productSort = productSort.sort({price:-1})
+        let productSearch;
+        let product
+
+        const search = async(data)=>{
+            try {
+                
+                productSearch = await Product.find({
+                    name:{ $regex: new RegExp(data, 'i')}
+                }).populate('category', 'name')
+                return productSearch
+            } catch (error) {
+                console.log('error in the search');
+            }
         }
 
-        const product = await productSort
-        .skip((page-1)*perPage)
-        .limit(perPage)
+        if (req.query.search) {
+            
+            productSearch = await search(req.query.search)
+            if (req.xhr) {
+                
+                return res.json({ product:productSearch });
+                
+              }
+        }else if(req.query.category){
+
+
+        const selectedCategory = req.query.category;
+
+        productSearch = Product.find({
+            isPublish: true,
+            isComing: false,
+            category: selectedCategory,
+        }).populate('category', 'name');
+
+        product = await productSearch
+         
+
+
+
+
+
+
+        }else {
+              productSearch = Product.find({isPublish: true, isComing: false }).populate('category', 'name')
+              
+             product = await productSearch
+            .skip((page-1)*perPage)
+            .limit(perPage)
+        }
+
+
+        if (sort === 'lowToHigh') {
+            productSearch = productSearch.sort({price:1})
+        }else if(sort === 'highToLow'){
+            productSearch = productSearch.sort({price:-1})
+        }
+
         
-        
+        const categories = await Category.find()
         
         const totalProducts = await Product.countDocuments()
 
         const totalPage = Math.ceil(totalProducts/perPage)
         res.render('user/shop',{
             product:product,
-            user:user,
+            user:req.session.user,
             cartCount:cartCount,
             totalPage,
             currentPage:page,
-            sort
+            sort,
+            categories,
+            category:req.query.category
         })
         
     } catch (error) {
@@ -332,18 +399,27 @@ const loadDetailView = async(req,res)=>{
     try {
        
         const id = req.params.id
-        const user=req.session.user
-        const userId = req.session.user._id
+       
+
+        const userId = req.session.user ? req.session.user._id : null;
+
         const productData = await Product.findById(id).populate('category','name')
         const products = await Product.find({isPublish:true,isComing:false}).limit(6)
         const cart = await Cart.findOne({userId})
-        const cartCount = cart.products.length
+        const cartCount = cart ? cart.products.length : 0;
+
+
+        const message = (req.session.message) ? 'error' :''
+       console.log('////',message);
+        req.session.message = null
 
         res.render('user/productDetail',{
             productDetail:productData,
             products:products,
-            user:user,
-            cartCount:cartCount
+            user:req.session.user,
+            cartCount:cartCount,
+            message
+
         })
     } catch (error) {
         console.log(error.message);
@@ -500,7 +576,12 @@ const submitProfileEdit = async(req,res)=>{
         })
 
         await userData.save()
-        res.redirect('/profileEdit')
+        
+        setTimeout(() => {
+            res.redirect('/profileEdit')
+        }, 750);
+
+
     } catch (error) {
         console.log(error);
     }
@@ -534,6 +615,7 @@ const loadProfileAddress = async(req,res)=>{
 
 const addAddress = async(req,res)=>{
     try {
+        
         const {name,pincode,street,city,address,mobile} = req.body
         const {userId} = req.params
         
@@ -574,51 +656,100 @@ const addAddress = async(req,res)=>{
 
 const editAddress = async(req,res)=>{
     try {
-        const userId = req.session.user._id
+  
         const {addressId} = req.params
-        const {name,mobile,address,city,street,pincode} = req.body
+        const {name,mobile,address,city,street,pincode} =req.body
+      
+        const userAddress = await Address.findOne({userId:req.session.user._id})
+        
+        const addressIndex = userAddress.address.findIndex(addr => addr._id.toString() === addressId)
+        
+        if (addressIndex !== -1) {
+            console.log(addressIndex,'/////');
+            userAddress.address[addressIndex].name = name;
+            userAddress.address[addressIndex].mobile = mobile;
+            userAddress.address[addressIndex].address = address;
+            userAddress.address[addressIndex].city = city;
+            userAddress.address[addressIndex].street = street;
+            userAddress.address[addressIndex].pincode = pincode;
 
-        const updateAddress = await Address.findByIdAndUpdate({userId:userId,'address._id':addressId},{
-            $set:{
-                name:name,
-                mobile:mobile,
-                address:address,
-                city:city,
-                street:street,
-                pincode:pincode
-            }
-        },{new:true})
+            // Save the updated document
+            await userAddress.save();
+            res.redirect('back')
 
-        res.redirect('/profileAddress')
+        }else{
+            res.json('error')
+        }
 
+
+
+      
     } catch (error) {
         console.log(error);
     }
 }
 
+const deleteAddress = async(req,res)=>{
+    try {
+        const {addressId} = req.params
+      
+        const userAddress = await Address.findOne({userId:req.session.user._id})
+        
+        const addressIndex = userAddress.address.findIndex(addr => addr._id.toString() === addressId)
+        if (addressIndex !== -1) {
+            
 
+            userAddress.address.splice(addressIndex,1)
+            await userAddress.save()
+
+            res.redirect('back')
+        }
+
+        
+
+         
+    } catch (error) {
+        console.log(error.message);
+    }
+}
 
 
 
 const loadProfileOrder = async(req,res)=>{
     try {
+
+        const page = req.query.page || 1
+        const perPage = 3
+
+       
+        
+
         const userId = req.session.user._id
         const cart = await Cart.findOne({userId})
         const cartCount = cart.products.length
         const userData = await User.findById(userId)
 
-        const order = await Order.find({userId:userId}).populate({
+        const order = await Order.find({userId:userId})
+        .populate({
             path: 'products.product',
             model: 'product' 
-        });
+        })
+        .sort({ createdAt: -1 })
+        .skip((page-1)*perPage)
+        .limit(perPage)
+        
+
+        // await order.reverse()
         const orderCount = await Order.countDocuments()
 
-
+        const totalPage = Math.ceil(orderCount/perPage)
         res.render('user/profileOrder',{
             user:userData,
             cartCount:cartCount,
             order:order,
-            orderCount:orderCount
+            orderCount:orderCount,
+            totalPage,
+            currentPage:page,
         })
     } catch (error) {
         console.log(error.message);
@@ -631,21 +762,81 @@ const loadProfileOrder = async(req,res)=>{
 const cancelOrder = async(req,res)=>{
     try {
         const {orderId} = req.params
-console.log('/////////////////////////////////////');
-        console.log(orderId);
-
+        console.log('//////////////////////////////////');
+      
+        console.log(req.body.reason);
         const orderData = await Order.findOneAndUpdate({
-            orderId: orderId },{ $set: { orderStatus: 'cancelled' } }, 
+            orderId: orderId },{ $set: { orderStatus: 'cancelled' , reason: req.body.reason} }, 
             { new: true } 
         );
         if (orderData) {
+            if (orderData.paymentMethod === 'online') {
+                const user = await User.findById(orderData.userId);
+                if (user) {
+                    const userWallet = await Wallet.findOne({userId:req.session.user._id})
+
+                    userWallet.amount += orderData.cart.total;
+                    await userWallet.save();
+                }else{
+                    console.log('User Not Found');
+                }
+            }
             await orderData.save()
         }
+        req.flash('cancel','Order Cancelled!')
         res.redirect('back')
     } catch (error) {
         console.log(error.message);
     }
 }
+
+
+const returnOrder = async(req,res)=>{
+    try {
+        
+        const {orderId} = req.params
+
+        const orderData = await Order.findOne({orderId: orderId } )
+
+        const returnDeadLine = new Date(orderData.createdAt)
+        returnDeadLine.setDate(returnDeadLine.getDate()+7)
+
+        if (new Date() > returnDeadLine) {
+            req.session.invalidReturn = true
+            res.redirect('back')
+        }else{
+            orderData.return = true
+            orderData.orderStatus = 'returned',
+            orderData.reason = req.body.reason
+
+
+            if (orderData.paymentMethod === 'online') {
+                const user = await User.findById(orderData.userId);
+                if (user) {
+                    const userWallet = await Wallet.findOne({userId:req.session.user._id})
+
+                    userWallet.amount += orderData.cart.total;
+                    await userWallet.save();
+                }else{
+                    console.log('User Not Found');
+                }
+            }
+            await orderData.save()
+
+
+            await orderData.save()
+            req.flash('return','Order Return!')
+            res.redirect('back')
+        }
+        
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+
+
 
 module.exports = {
     homePage,
@@ -670,5 +861,7 @@ module.exports = {
     addAddress,
     editAddress,
     loadProfileOrder,
-    cancelOrder
+    cancelOrder,
+    returnOrder,
+    deleteAddress
 }
