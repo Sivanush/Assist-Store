@@ -292,6 +292,7 @@ const orderConfirm = async (req, res) => {
 
             await newOrder.save()
 
+            cart.coupon = undefined;
             cart.products = []
             await cart.save()
 

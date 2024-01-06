@@ -6,7 +6,7 @@ const loadCoupon = async(req,res)=>{
     try {
 
         const page = req.query.page || 1
-        const perPage = 1
+        const perPage = 5
 
         const coupon = await Coupon.find()
         .skip((page-1)*perPage)
@@ -28,6 +28,9 @@ const loadCoupon = async(req,res)=>{
     }
 }
 
+
+
+
 const addCoupon = async(req,res)=>{
     try {
         const {code,discount,date,minimumAmount} = req.body
@@ -42,10 +45,8 @@ const addCoupon = async(req,res)=>{
         const inputDate = new Date(date);
 
         if (inputDate <= new Date()) {
-            res.render('admin/coupon',{
-                coupons:coupon,
-                message:'The date is not valid'
-            })
+            req.flash('message','The data is not valid')
+            res.redirect('back')
         }
         const couponData = new Coupon({
             code,
@@ -79,8 +80,17 @@ const editCoupons = async (req, res) => {
             const existData = await Coupon.findOne({ code });
 
             if (existData) {
-                return res.json({ message: 'This Coupon Code is Already Exist' });
+                
+                req.flash('message','This Coupon Code is Already Exist')
+                return res.redirect('back')
             }
+        }
+
+        const inputDate = new Date(date);
+
+        if (inputDate <= new Date()) {
+            req.flash('message','The data is not valid')
+            return res.redirect('back')
         }
 
     

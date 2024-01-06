@@ -33,7 +33,7 @@
                                <%= orders.address[0].name %>
                             </td>
                             <td>
-                                <%= orders.address[0].city %>
+                                <%= orders.createdAt.toLocaleDateString('en-IN') %>
                             </td>
                             <td>
                                 <span>$</span><%= orders.cart.total %>

@@ -21,8 +21,8 @@ const insertCategory = async(req,res)=>{
         const image = req.file 
         const existName = await Category.findOne({name})
         if (existName) {
-            const cate = await Category.find();
-            // res.render('admin/category',{message:'The category already exist',cate:cate})
+          
+         
             req.flash('message','The category already exist')
             res.redirect('/admin/category')
         } else {

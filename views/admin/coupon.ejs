@@ -5,12 +5,7 @@
 <div class="container-xxl flex-grow-1 container-p-y">
     <h4 class="py-3 mb-4">Coupons List</h4>
 
-    <% if (typeof message !== 'undefined') { %>
-        <div class="alert alert-danger alert-dismissible text-center" role="alert">
-            <%= message %>
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-        <% } %>
+
     <div class="d-flex justify-content-end mb-3">
         <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addProductModal">
             Add Coupon
@@ -29,101 +24,96 @@
                         <th>Discount Amount</th>
                         <th>Expiry Date</th>
                         <th>Minimum Price</th>
-                        <th >Action</th>
+                        <th>Action</th>
                     </tr>
                 </thead>
                 <tbody class="table-border-bottom-0">
-                  
-                    <% coupons.forEach((coupon,index) => { %>
-                        <tr>
-                            <td>
-                             <%= index+1 %>
-                            </td>
-                            <td>
-                                <%= coupon.code %>
-                            </td>
-                            <td>
-                                <span>$</span><%= coupon.discountAmount %>
-                            </td>
-                            <td>
-                                <%= coupon.expireData.toLocaleDateString() %>
 
-                            </td>
-                            <td>
-                                <span>$</span><%= coupon.minimumOrder %>
-                            </td>   
-                            <td>
-                               <div>
-                                 
+                    <% coupons.forEach((coupon,index) => { %>
+                    <tr>
+                        <td>
+                            <%= index+1 %>
+                        </td>
+                        <td>
+                            <%= coupon.code %>
+                        </td>
+                        <td>
+                            <span>$</span><%= coupon.discountAmount %>
+                        </td>
+                        <td>
+                            <%= coupon.expireData.toLocaleDateString() %>
+
+                        </td>
+                        <td>
+                            <span>$</span><%= coupon.minimumOrder %>
+                        </td>
+                        <td>
+                            <div>
+
 
                                 <% if (coupon.isActive === true) { %>
-                                    <a href="#" onclick="unpublishCoupon('<%= coupon._id %>')" class="btn btn-success">Publish</a>
+                                <a href="#" onclick="unpublishCoupon('<%= coupon._id %>')"
+                                    class="btn btn-success">Publish</a>
                                 <% } else { %>
-                                    <a href="#" onclick="publishCoupon('<%= coupon._id %>')" class="btn btn-danger">Unpublish</a>
+                                <a href="#" onclick="publishCoupon('<%= coupon._id %>')"
+                                    class="btn btn-danger">Unpublish</a>
                                 <% } %>
-                                
-                          
 
 
-                                <button data-bs-toggle="modal" data-bs-target="#editCouponModal<%= coupon._id %>" class="btn btn-primary">Edit</button>
+
+
+                                <button data-bs-toggle="modal" data-bs-target="#editCouponModal<%= coupon._id %>"
+                                    class="btn btn-primary">Edit</button>
                             </div>
-                            </td>
-                        </tr>
+                        </td>
+                    </tr>
                     <% }); %>
                 </tbody>
-                </table>
-            </div>
+            </table>
         </div>
-                
-<div class="d-flex justify-content-center mt-4" id="pagination">
-    
-    <ul class="pagination pagination-m">
+    </div>
+
+    <div class="d-flex justify-content-center mt-4" id="pagination">
+
+        <ul class="pagination pagination-m">
 
 
-        <% if (currentPage>1) { %>
-            
-        
-        <li class="page-item prev">
-          <a class="page-link" href="/admin/coupon?page=<%= currentPage-1 %>"
-            ><i class="tf-icon bx bx-chevrons-left"></i
-          ></a>
-        </li>
+            <% if (currentPage>1) { %>
 
-        <% } %>
-        
-       <%  for(let i=1;i<=totalPage;i++){ %>
-            
 
-            
-             <li class="<%= currentPage == i ? 'active':''  %>">
-          <a class="page-link" href="/admin/coupon?page=<%= i %>"><%= i %></a>
+            <li class="page-item prev">
+                <a class="page-link" href="/admin/coupon?page=<%= currentPage-1 %>"><i
+                        class="tf-icon bx bx-chevrons-left"></i></a>
+            </li>
+
+            <% } %>
+
+            <%  for(let i=1;i<=totalPage;i++){ %>
+
+
+
+            <li class="<%= currentPage == i ? 'active':''  %>">
+                <a class="page-link" href="/admin/coupon?page=<%= i %>"><%= i %></a>
             </li>
 
 
-        <% }%>
+            <% }%>
 
 
 
 
-       <% if (currentPage<totalPage) { %>
-        
-        <li class="page-item next">
-            <a class="page-link" href="/admin/coupon?page=<%= parseInt(currentPage)+1 %>"
-              ><i class="tf-icon bx bx-chevrons-right"></i
-            ></a>
-          </li>
+            <% if (currentPage<totalPage) { %>
 
-        <% } %>
-        
-      </ul>
+            <li class="page-item next">
+                <a class="page-link" href="/admin/coupon?page=<%= parseInt(currentPage)+1 %>"><i
+                        class="tf-icon bx bx-chevrons-right"></i></a>
+            </li>
 
-</div>
+            <% } %>
 
+        </ul>
 
-
-
-              
-                
+    </div>
 
 
 
@@ -135,246 +125,330 @@
 
 
 
- 
-                <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="addProductModalLabel">Add Coupon</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/admin/coupon/add" method="post" onsubmit="return couponFormValidation()">
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="text" name="code" class="form-control" id="couponCode"
-                                                placeholder="Coupon Code" aria-describedby="couponCodeError" required />
-                                            <label for="couponCode">Coupon Code</label>
-                                            <span class="text-danger" id="couponCodeError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="number" name="discount" class="form-control" id="discountAmount"
-                                                placeholder="Discount Amount" aria-describedby="discountAmountError" required />
-                                            <label for="discountAmount">Discount Amount</label>
-                                            <span class="text-danger" id="discountAmountError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="date" name="date" class="form-control" id="expiryDate"
-                                                placeholder="Expiry Date" aria-describedby="expiryDateError" required />
-                                            <label for="expiryDate">Expiry Date</label>
-                                            <span class="text-danger" id="expiryDateError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="number" name="minimumAmount" class="form-control" id="minimumAmount"
-                                                placeholder="Minimum Amount" aria-describedby="minimumAmountError" required />
-                                            <label for="minimumAmount">Minimum Amount</label>
-                                            <span class="text-danger" id="minimumAmountError"></span>
-                                        </div>
-                                    </div>
-                
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">Add Coupon</button>
-                                    </div>
-                                </form>
+
+
+
+
+
+
+
+    <div class="modal fade" id="addProductModal" tabindex="-1" aria-labelledby="addProductModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="addProductModalLabel">Add Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/coupon/add" method="post" onsubmit="return couponFormValidation()">
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="text" name="code" class="form-control" id="couponCode"
+                                    placeholder="Coupon Code" aria-describedby="couponCodeError" required />
+                                <label for="couponCode">Coupon Code</label>
+                                <span class="text-danger" id="couponCodeError"></span>
                             </div>
                         </div>
-                    </div>
-                </div>
-
-
-
-                <% coupons.forEach((coupon) => { %>
-                    
-               
-
-                <div class="modal fade" id="editCouponModal<%= coupon._id %>" tabindex="-1" aria-labelledby="editCouponModalLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered">
-                        <div class="modal-content">
-                            <div class="modal-header">
-                                <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
-                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                            </div>
-                            <div class="modal-body">
-                                <form action="/admin/coupon/edit/<%= coupon._id %>" method="post" onsubmit="return editCouponFormValidation()">
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="text" name="code" class="form-control" id="editCouponCode"
-                                                placeholder="Coupons Code" aria-describedby="editCouponCodeError" required value="<%= coupon.code %>"/>
-                                            <label for="editCouponCode">Coupon Code</label>
-                                            <span class="text-danger" id="editCouponCodeError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="number" name="discount" class="form-control" id="editDiscountAmount"
-                                                placeholder="Discount Amount" aria-describedby="editDiscountAmountError" required value="<%= coupon.discountAmount %>"/>
-                                            <label for="editDiscountAmount">Discount Amount</label>
-                                            <span class="text-danger" id="editDiscountAmountError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="date" name="date" class="form-control" id="editExpiryDate"
-                                                placeholder="Expiry Date" aria-describedby="editExpiryDateError" required value="<%= coupon.expireData.toISOString().split('T')[0] %>"/>
-                                            <label for="editExpiryDate">Expiry Date</label>
-                                            <span class="text-danger" id="editExpiryDateError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="mb-3">
-                                        <div class="form-floating">
-                                            <input type="number" name="minimumAmount" class="form-control" id="editMinimumAmount"
-                                                placeholder="Minimum Amount" aria-describedby="editMinimumAmountError" required value="<%= coupon.minimumOrder %>"/>
-                                            <label for="editMinimumAmount">Minimum Amount</label>
-                                            <span class="text-danger" id="editMinimumAmountError"></span>
-                                        </div>
-                                    </div>
-            
-                                    <div class="modal-footer">
-                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-                                            Close
-                                        </button>
-                                        <button type="submit" class="btn btn-primary">Update Coupon</button>
-                                    </div>
-                                </form>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="number" name="discount" class="form-control" id="discountAmount"
+                                    placeholder="Discount Amount" aria-describedby="discountAmountError" required />
+                                <label for="discountAmount">Discount Amount</label>
+                                <span class="text-danger" id="discountAmountError"></span>
                             </div>
                         </div>
-                    </div>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="date" name="date" class="form-control" id="expiryDate"
+                                    placeholder="Expiry Date" aria-describedby="expiryDateError" required />
+                                <label for="expiryDate">Expiry Date</label>
+                                <span class="text-danger" id="expiryDateError"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="number" name="minimumAmount" class="form-control" id="minimumAmount"
+                                    placeholder="Minimum Amount" aria-describedby="minimumAmountError" required />
+                                <label for="minimumAmount">Minimum Amount</label>
+                                <span class="text-danger" id="minimumAmountError"></span>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">Add Coupon</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
+        </div>
+    </div>
 
 
 
-
-                <%}); %>
-
+    <% coupons.forEach((coupon) => { %>
 
 
 
+    <div class="modal fade" id="editCouponModal<%= coupon._id %>" tabindex="-1" aria-labelledby="editCouponModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="editCouponModalLabel">Edit Coupon</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/admin/coupon/edit/<%= coupon._id %>" method="post"
+                        onsubmit="return editCouponFormValidation()">
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="text" name="code" class="form-control" id="editCouponCode"
+                                    placeholder="Coupons Code" aria-describedby="editCouponCodeError" required
+                                    value="<%= coupon.code %>" />
+                                <label for="editCouponCode">Coupon Code</label>
+                                <span class="text-danger" id="editCouponCodeError"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="number" name="discount" class="form-control" id="editDiscountAmount"
+                                    placeholder="Discount Amount" aria-describedby="editDiscountAmountError" required
+                                    value="<%= coupon.discountAmount %>" />
+                                <label for="editDiscountAmount">Discount Amount</label>
+                                <span class="text-danger" id="editDiscountAmountError"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="date" name="date" class="form-control" id="editExpiryDate"
+                                    placeholder="Expiry Date" aria-describedby="editExpiryDateError" required
+                                    value="<%= coupon.expireData.toISOString().split('T')[0] %>" />
+                                <label for="editExpiryDate">Expiry Date</label>
+                                <span class="text-danger" id="editExpiryDateError"></span>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <div class="form-floating">
+                                <input type="number" name="minimumAmount" class="form-control" id="editMinimumAmount"
+                                    placeholder="Minimum Amount" aria-describedby="editMinimumAmountError" required
+                                    value="<%= coupon.minimumOrder %>" />
+                                <label for="editMinimumAmount">Minimum Amount</label>
+                                <span class="text-danger" id="editMinimumAmountError"></span>
+                            </div>
+                        </div>
 
-
-
-
-
-
-
-
-
-
-
-                <script>
-                    function couponFormValidation() {
-                        // Get all input fields
-                        const couponCodeInput = document.getElementById('couponCode').value;
-                        const discountAmountInput = document.getElementById('discountAmount').value;
-                        const expiryDateInput = document.getElementById('expiryDate').value;
-                        const minimumAmountInput = document.getElementById('minimumAmount').value;
-                
-                        // Get all validation messages
-                        const couponCodeError = document.getElementById('couponCodeError');
-                        const discountAmountError = document.getElementById('discountAmountError');
-                        const expiryDateError = document.getElementById('expiryDateError');
-                        const minimumAmountError = document.getElementById('minimumAmountError');
-                
-                        // Clear all validation messages
-                        couponCodeError.textContent = '';
-                        discountAmountError.textContent = '';
-                        expiryDateError.textContent = '';
-                        minimumAmountError.textContent = '';
-                
-                        // regex code for validation
-                        const couponCodeRegex = /^[a-zA-Z0-9]+$/;
-                        const discountAmountRegex = /^[0-9]+$/;
-                        const minimumAmountRegex = /^[0-9]+$/;
-                
-                        // Check if the data is valid
-                        let isValid = true;
-                
-                        if (!couponCodeInput.match(couponCodeRegex)) {
-                            couponCodeError.textContent = 'Invalid Coupon Code';
-                            isValid = false;
-                        }
-                
-                        if (!discountAmountInput.match(discountAmountRegex)) {
-                            discountAmountError.textContent = 'Invalid Discount Amount';
-                            isValid = false;
-                        }
-            
-                
-                        if (!minimumAmountInput.match(minimumAmountRegex)) {
-                            minimumAmountError.textContent = 'Invalid Minimum Amount';
-                            isValid = false;
-                        }
-                
-                        return isValid;
-                    }
-                </script>
-
-
-                <script>
-                    function editCouponFormValidation() {
-                        const couponCodeInput = document.getElementById('editCouponCode').value;
-                        const discountAmountInput = document.getElementById('editDiscountAmount').value;
-                        const expiryDateInput = document.getElementById('editExpiryDate').value;
-                        const minimumAmountInput = document.getElementById('editMinimumAmount').value;
-
-                        const couponCodeError = document.getElementById('editCouponCodeError');
-                        const discountAmountError = document.getElementById('editDiscountAmountError');
-                        const expiryDateError = document.getElementById('editExpiryDateError');
-                        const minimumAmountError = document.getElementById('editMinimumAmountError');
-
-                        couponCodeError.textContent = '';
-                        discountAmountError.textContent = '';
-                        expiryDateError.textContent = '';
-                        minimumAmountError.textContent = '';
-
-                        const couponCodeRegex = /^[a-zA-Z0-9]+$/;
-                        const discountAmountRegex = /^[0-9]+$/;
-                        const minimumAmountRegex = /^[0-9]+$/;
-
-                        let isValid = true;
-
-                        if (!couponCodeInput.match(couponCodeRegex)) {
-                            couponCodeError.textContent = 'Invalid Coupon Code';
-                            isValid = false;
-                        }
-
-                        if (!discountAmountInput.match(discountAmountRegex)) {
-                            discountAmountError.textContent = 'Invalid Discount Amount';
-                            isValid = false;
-                        }
-
-                        if (!minimumAmountInput.match(minimumAmountRegex)) {
-                            minimumAmountError.textContent = 'Invalid Minimum Amount';
-                            isValid = false;
-                        }
-
-                        return isValid;
-                    }
-                </script>
-
-
-
-<script>
-    function publishCoupon(id) {
-        window.location.href = '/admin/coupon/publish/' + id;
-    }
-
-    function unpublishCoupon(id) {
-        window.location.href = '/admin/coupon/upPublish/' + id;
-    }
-</script>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                Close
+                            </button>
+                            <button type="submit" class="btn btn-primary">Update Coupon</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 
 
 
-<%- include('./layouts/footer') %>
- 
+
+    <script>
+        function editCouponFormValidation() {
+            const couponCodeInput = document.getElementById('editCouponCode').value;
+            const discountAmountInput = document.getElementById('editDiscountAmount').value;
+            const expiryDateInput = document.getElementById('editExpiryDate').value;
+            const minimumAmountInput = document.getElementById('editMinimumAmount').value;
+
+            const couponCodeError = document.getElementById('editCouponCodeError');
+            const discountAmountError = document.getElementById('editDiscountAmountError');
+            const expiryDateError = document.getElementById('editExpiryDateError');
+            const minimumAmountError = document.getElementById('editMinimumAmountError');
+
+            couponCodeError.textContent = '';
+            discountAmountError.textContent = '';
+            expiryDateError.textContent = '';
+            minimumAmountError.textContent = '';
+
+            const couponCodeRegex = /^[A-Z0-9]+$/;
+            const discountAmountRegex = /^[0-9]+$/;
+            const minimumAmountRegex = /^[0-9]+$/;
+
+            let isValid = true;
+
+            if (!couponCodeInput.match(couponCodeRegex)) {
+                couponCodeError.textContent = 'Invalid Coupon Code';
+                isValid = false;
+            }
+
+            if (!discountAmountInput.match(discountAmountRegex)) {
+                discountAmountError.textContent = 'Invalid Discount Amount';
+                isValid = false;
+            }
+
+            if (!minimumAmountInput.match(minimumAmountRegex)) {
+                minimumAmountError.textContent = 'Invalid Minimum Amount';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+
+
+    <%}); %>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    <script>
+        function couponFormValidation() {
+            // Get all input fields
+            const couponCodeInput = document.getElementById('couponCode').value;
+            const discountAmountInput = document.getElementById('discountAmount').value;
+            const expiryDateInput = document.getElementById('expiryDate').value;
+            const minimumAmountInput = document.getElementById('minimumAmount').value;
+
+            // Get all validation messages
+            const couponCodeError = document.getElementById('couponCodeError');
+            const discountAmountError = document.getElementById('discountAmountError');
+            const expiryDateError = document.getElementById('expiryDateError');
+            const minimumAmountError = document.getElementById('minimumAmountError');
+
+            // Clear all validation messages
+            couponCodeError.textContent = '';
+            discountAmountError.textContent = '';
+            expiryDateError.textContent = '';
+            minimumAmountError.textContent = '';
+
+            // regex code for validation
+            const couponCodeRegex = /^[A-Z0-9]+$/;
+            const discountAmountRegex = /^[0-9]+$/;
+            const minimumAmountRegex = /^[0-9]+$/;
+
+            // Check if the data is valid
+            let isValid = true;
+
+            if (!couponCodeInput.match(couponCodeRegex)) {
+                couponCodeError.textContent = 'Invalid Coupon Code';
+                isValid = false;
+            }
+
+            if (!discountAmountInput.match(discountAmountRegex)) {
+                discountAmountError.textContent = 'Invalid Discount Amount';
+                isValid = false;
+            }
+
+
+            if (!minimumAmountInput.match(minimumAmountRegex)) {
+                minimumAmountError.textContent = 'Invalid Minimum Amount';
+                isValid = false;
+            }
+
+            return isValid;
+        }
+    </script>
+
+
+
+
+
+
+    <script>
+        function publishCoupon(id) {
+
+
+            Swal.fire({
+					icon: 'warning',
+					title: '<span style="color:#c96; font-size: 24px;">Publish Coupon?</span>',
+					html: '<p style="color:#333; font-size: 16px;">Are you sure you want to Publish this Coupon?</p>',
+					showCancelButton: true,
+					confirmButtonColor: '#d33',
+					cancelButtonColor: '#3085d6',
+					confirmButtonText: 'Yes, Publish it!',
+					cancelButtonText: 'No, keep it',
+					customClass: {
+						title: 'custom-swal-title',
+						htmlContainer: 'custom-swal-html-container',
+						popup: 'custom-swal-popup'
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// If the user clicks "Yes, remove it!", redirect to the remove product route
+                        window.location.href = '/admin/coupon/publish/' + id;
+					}
+				});
+
+
+          
+        }
+
+        function unpublishCoupon(id) {
+
+
+            Swal.fire({
+					icon: 'warning',
+					title: '<span style="color:#c96; font-size: 24px;">UnPublish Coupon?</span>',
+					html: '<p style="color:#333; font-size: 16px;">Are you sure you want to UnPublish this Product?</p>',
+					showCancelButton: true,
+					confirmButtonColor: '#d33',
+					cancelButtonColor: '#3085d6',
+					confirmButtonText: 'Yes, Unpublish it!',
+					cancelButtonText: 'No, keep it',
+					customClass: {
+						title: 'custom-swal-title',
+						htmlContainer: 'custom-swal-html-container',
+						popup: 'custom-swal-popup'
+					}
+				}).then((result) => {
+					if (result.isConfirmed) {
+						// If the user clicks "Yes, remove it!", redirect to the remove product route
+                        window.location.href = '/admin/coupon/upPublish/' + id;
+					}
+				});
+
+
+           
+        }
+    </script>
+
+
+    <script>
+        const Message = '<%= message %>'
+        console.log('//////'+Message);
+        if (Message) {
+            Swal.fire({
+                icon: 'warning',
+                title: '<span style="color:#c96; font-size: 24px;"><%= message %></span>',
+                html: '<p style="color:#333; font-size: 16px;"></p>',
+                showConfirmButton: false,
+                timer: 2000,
+                background: '#fff',
+                customClass: {
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html-container',
+                    popup: 'custom-swal-popup'
+                }
+            })
+        }
+    </script>
+
+
+
+    <%- include('./layouts/footer') %>

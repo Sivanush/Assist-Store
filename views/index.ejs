@@ -49,74 +49,82 @@
                     </div><!-- End .header-left -->
 
                     <div class="header-right">
-                        <nav class="main-nav">
-                            <ul class="menu sf-arrows">
-                                <li class="megamenu-container active ">
-                                    <a href="/" class="sf-with-ul">Home</a>
-                                </li>
-                                <li>
-                                    <a href="/shop" class="sf-with-ul">Shop</a>
-                                </li>
-                                <li>
-                                    <a href="product.html" class="sf-with-ul">Product</a>
-                                </li>
-                                <li>
-                                    <a href="#" class="sf-with-ul">Pages</a>
-                                </li>
-                                <li>
-                                    <a href="blog.html" class="sf-with-ul">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="elements-list.html" class="sf-with-ul">Elements</a>
-                                </li>
-                            </ul><!-- End .menu -->
-                        </nav><!-- End .main-nav -->
-             
-                        <div class="header-search">
-                            <!-- <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
-                            <form action="#" method="get">
-                                <div class="">
-                                   
-                                    <div class="header-search-wrapper" >
-                                        <label for="q" class="sr-only">Search</label>
-                                        <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
-                                    </div>
-                                </div>
-                            </form> -->
-                            <% if(user==null) {%>
-                                <div class="mb-3 mt-3 mr-3" >
-                                 <a href="/login" class="icon-user">
-                                 <span style="font-size: 15px;">Login</span></a>                                       
-                             </div> 
-                         <% }else{ %>
-                             <div class="mb-3 mt-3 mr-3 d-flex flex-row" >
-                                 <a href="/profile" class="icon-user">
-                                 <span style="font-size: 15px; margin-top: 4px;">Profile</span></a>       
-                                 <a href="/logout" class="icon-user">
-                                    <span style="font-size: 15px; margin-top: 4px;">Logout</span></a>                                   
-                             </div>
-                             
-                         <% } %>
-                            
-                        </div><!-- End .header-search -->
                         
-                        <a href="/wishlist" class="wishlist-link">
-                            <i class="icon-heart-o"></i>
-                           
-                        </a>
-                       <% if (user) { %>
-                        <div class="dropdown cart-dropdown">
-                            <a href="/cart" class="dropdown-toggle" role="button" >
-                                <i class="icon-shopping-cart"></i>
-        
-                                
-                            </a>
+                            <div class="me-5">
 
+                                <nav class="main-nav">
+                                    <ul class="menu sf-arrows">
+                                        <li class="megamenu-container active ">
+                                            <a href="/" class="sf-with-ul">Home</a>
+                                        </li>
+                                        <li>
+                                            <a href="/shop" class="sf-with-ul">Shop</a>
+                                        </li>
+                                        <!-- <li>
+                                            <a href="product.html" class="sf-with-ul">Product</a>
+                                        </li>
+                                        <li>
+                                            <a href="#" class="sf-with-ul">Pages</a>
+                                        </li>
+                                        <li>
+                                            <a href="blog.html" class="sf-with-ul">Blog</a>
+                                        </li>
+                                        <li>
+                                            <a href="elements-list.html" class="sf-with-ul">Elements</a>
+                                        </li> -->
+                                    </ul><!-- End .menu -->
+                                </nav><!-- End .main-nav -->
+
+                            </div>
+                       
+             
+                       <div class="d-flex align-content-end">
+                            <div class="header-search">
+                                <!-- <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
+                                <form action="#" method="get">
+                                    <div class="">
+                                    
+                                        <div class="header-search-wrapper" >
+                                            <label for="q" class="sr-only">Search</label>
+                                            <input type="search" class="form-control" name="q" id="q" placeholder="Search in..." required>
+                                        </div>
+                                    </div>
+                                </form> -->
+                                <% if(user==null) {%>
+                                    <div class="mb-3 mt-3 mr-3" >
+                                    <a href="/login" class="icon-user">
+                                    <span style="font-size: 15px;">Login</span></a>                                       
+                                </div> 
+                            <% }else{ %>
+                                <div class="mb-3 mt-3 mr-3 d-flex flex-row" >
+                                    <a href="/profile" class="icon-user">
+                                    <span style="font-size: 15px; margin-top: 4px;">Profile</span></a>       
+                                    <a href="/logout" class="icon-user">
+                                        <span style="font-size: 15px; margin-top: 4px;">Logout</span></a>                                   
+                                </div>
+                                
+                            <% } %>
+                                
+                            </div><!-- End .header-search -->
                             
-                        </div><!-- End .cart-dropdown -->
-                       <%  } else {%>
-                        
-                      <% } %>
+                            <a href="/wishlist" class="wishlist-link">
+                                <i class="icon-heart-o"></i>
+                            
+                            </a>
+                        <% if (user) { %>
+                            <div class="dropdown cart-dropdown">
+                                <a href="/cart" class="dropdown-toggle" role="button" >
+                                    <i class="icon-shopping-cart"></i>
+            
+                                    
+                                </a>
+
+                                
+                            </div><!-- End .cart-dropdown -->
+                        <%  } else {%>
+                            
+                        <% } %>
+                        </div>
                         
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
@@ -256,13 +264,13 @@
                                 </a>
 
                                 <div class="product-action-vertical">
-                                    <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
-                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a>
+                                    <!-- <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to wishlist</span></a>
+                                    <a href="popup/quickView.html" class="btn-product-icon btn-quickview" title="Quick view"><span>Quick view</span></a> -->
 
                                 </div><!-- End .product-action -->
 
                                 <div class="product-action">
-                                    <a href="#" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="/product-detail/<%= products._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
@@ -346,8 +354,8 @@
                                     </span>
 
                                     <div class="icon-box-content">
-                                        <h3 class="icon-box-title">Get 10% Off  Item</h3><!-- End .icon-box-title -->
-                                        <p>When you Buy two</p>
+                                        <h3 class="icon-box-title">Get 100$ Off  Item</h3><!-- End .icon-box-title -->
+                                        <p>When you use ASSIST 100</p>
                                     </div><!-- End .icon-box-content -->
                                 </div><!-- End .icon-box -->
                             </div><!-- End .col-sm-6 col-lg-3 -->

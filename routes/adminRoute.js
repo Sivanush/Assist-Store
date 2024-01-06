@@ -15,6 +15,8 @@ const couponController = require('../controllers/couponController')
 
 
 adminRoute.get('/',auth.isLogin,adminController.loadDashboad)
+adminRoute.get('/generatePdf',adminController.generatePdf)
+adminRoute.get('/generateExcel',adminController.generateExcel)
 
 adminRoute.get('/users',auth.isLogin,adminController.loadUsers)
 adminRoute.get('/users/:search',auth.isLogin,adminController.loadUsers)

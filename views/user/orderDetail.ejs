@@ -108,14 +108,15 @@
                                               <td class="text-center"><%= order.quantity %></td>
                                               <td class="text-center"><span>$</span><%= order.product.price * order.quantity %></td>
                                           </tr>
-                                          <% if (orderDetail.cart.coupon) {%>
-                                            <tr>
-                                            <th class="text-center" colspan="3"></th>
-                                            <td class="text-center"><strong>Coupon Discount: </strong></td>
-                                            <td class="text-center"><span>$</span><%= orderDetail.cart.coupon.discountAmount %></td>
-                                            </tr>
-                                         <%  } %>
+                                          
                                       <% }); %>
+                                      <% if (orderDetail.cart.coupon) {%>
+                                        <tr>
+                                        <th class="text-center" colspan="3"></th>
+                                        <td class="text-center"><strong>Coupon Discount: </strong></td>
+                                        <td class="text-center"><span>$</span><%= orderDetail.cart.coupon.discountAmount %></td>
+                                        </tr>
+                                     <%  } %>   
                                   </tbody>
                                   <tfoot>
                                       <tr>
@@ -150,6 +151,8 @@
                               </div>
                           <% } %>
                           <input type="hidden" id="orderIdInput" value="<%= orderDetail.orderId %>">
+
+                          <a href="/orderInvoicePdf/<%= orderDetail.orderId %>" type="button" class="btn btn-primary"> invoice</a>
 
                         </td>
                         

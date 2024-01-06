@@ -5,6 +5,7 @@ const pass = require('../helpers/spassword')
 const crypto = require('crypto')
 const flash = require('connect-flash');
 require('dotenv').config();
+const easyinvoice = require('easyinvoice');
 
 const User = require('../models/userModel')
 const Product = require('../models/productModel')
@@ -13,6 +14,7 @@ const Cart = require('../models/cartModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
 const Wallet = require('../models/walletModel')
+const res = require('express/lib/response')
 
 // To load the home page
 
@@ -835,7 +837,118 @@ const returnOrder = async(req,res)=>{
 }
 
 
+    const getOrderDetails = async (orderId) => {
+   
+    const order = await Order.findOne({orderId:orderId}).populate('products.product').populate({
+        path:'cart.coupon',
+        model:'coupon'
+    })
+         console.log('////////////'+order.cart.coupon.discountAmount);
+    if (!order) {
+        
+        return res.status(500).redirect('/404');
+    }
 
+    return {
+        clientName:order.address[0].name,
+        clientAddress: order.address[0].address,
+        clientStreet: order.address[0].street,
+        clientCity: order.address[0].city,
+        clientPlace: order.address[0].address,
+        clientZip: order.address[0].pincode,
+        invoiceNumber: orderId,
+        invoiceDate: new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+    
+        products: order.products.map(product => ({
+
+        "quantity": product.quantity,
+        "description": product.product.name,
+        "tax-rate" : order.cart.coupon.amount,
+        "price": product.product.price,
+        
+
+        })),
+           
+    
+        
+    };
+};
+
+
+const generateInvoice = async(orderId)=>{
+    try {
+        console.log(orderId);
+        const orderDetail = await getOrderDetails(orderId)
+
+
+        const data = {
+            "currency": "USD",
+            "marginTop": 25,
+            "marginRight": 25,
+            "marginLeft": 25,   
+            "marginBottom": 25,
+            "images": {
+                // The logo on top of your invoice
+                "logo": "https://public.budgetinvoice.com/img/logo_en_original.png",
+            },
+            "sender": {
+                "company": "Assist Store",
+                "address": "Madrid,Spain",
+                "zip": "123456",
+                "city": "Madrid",
+                "country": "Spain"
+            },
+            "client": {
+                "company": orderDetail.clientName,
+                "address": orderDetail.clientAddress,
+                "city": orderDetail.clientCity,
+                "country": orderDetail.clientStreet,
+                "zip": orderDetail.clientZip,
+            },
+            "information": {
+                "number": orderId,
+                "date": new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }),
+            },
+
+            "products": orderDetail.products,
+   
+            "bottom-notice": "Thanks for shopping from Assist Store",
+            
+        };
+ 
+        const result = await easyinvoice.createInvoice(data)
+        console.log(data);
+
+        const pdfBuffer = Buffer.from(result.pdf, 'base64')
+
+        return pdfBuffer;
+
+    } catch (error) {
+        console.log(error.message);
+    }
+}
+
+
+const orderInvoicePdf = async(req,res)=>{
+    try {
+        
+        const orderId = req.params.orderId; 
+        console.log(orderId);
+
+        const pdfBuffer = await generateInvoice(orderId);
+
+         // Send the PDF as a response
+        res.setHeader('Content-Type', 'application/pdf');
+        res.setHeader('Content-Disposition', 'attachment; filename=invoice'+orderId+'.pdf');
+        res.send(pdfBuffer);
+
+
+
+    } catch (error) {
+        console.log(error.message);
+        throw error
+    }
+}
 
 
 module.exports = {
@@ -863,5 +976,6 @@ module.exports = {
     loadProfileOrder,
     cancelOrder,
     returnOrder,
-    deleteAddress
+    deleteAddress,
+    orderInvoicePdf
 }

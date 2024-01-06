@@ -9,6 +9,7 @@ const loadOrder = async (req,res)=>{
 
 
         const order = await Order.find()
+        .sort({ createdAt: -1 })
         .skip((page-1)*perPage)
         .limit(perPage)
         .exec()
