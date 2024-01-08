@@ -1,4 +1,3 @@
-
 <%- include('./layouts/header') %>
 
 <div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
@@ -24,21 +23,22 @@
                 <aside class="col-md-4 col-lg-3">
                     <ul class="nav nav-dashboard flex-column mb-3 mb-md-0" role="tablist">
                         <li class="nav-item">
-                            <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="/profile" role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
+                            <a class="nav-link active" id="tab-dashboard-link" data-toggle="tab" href="/profile"
+                                role="tab" aria-controls="tab-dashboard" aria-selected="true">Dashboard</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="/profileEdit" >Edit Profile</a>
+                            <a class="nav-link" role="tab" href="/profileEdit">Edit Profile</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="/profileAddress" >Address</a>
+                            <a class="nav-link" role="tab" href="/profileAddress">Address</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="/profileOrder" >Orders</a>
+                            <a class="nav-link" role="tab" href="/profileOrder">Orders</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab"  href="/profileWallet" >Wallet</a>
+                            <a class="nav-link" role="tab" href="/profileWallet">Wallet</a>
                         </li>
-                       
+
                         <li class="nav-item">
                             <a class="nav-link" role="tab" href="/logout">Sign Out</a>
                         </li>
@@ -47,7 +47,8 @@
 
                 <div class="col-md-8 col-lg-9">
                     <div class="tab-content">
-                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel" aria-labelledby="tab-dashboard-link">
+                        <div class="tab-pane fade show active" id="tab-dashboard" role="tabpanel"
+                            aria-labelledby="tab-dashboard-link">
                             <div class="dashboard-info">
                                 <div class="row">
                                     <div class="col-md-12 mb-3">
@@ -69,17 +70,152 @@
                                                 <i class="icon-phone"></i>
                                                 <p><span>Mobile No:</span> <%= user.mobile %></p>
                                             </div>
+                                            <div class="contact-item">
+                                                <i class="icon-phone"></i>
+                                                <p><span>Referral Code:</span> <%= user.referralCode %></p>
+                                                <input hidden value="<%= user.referralCode %>" name="firstName" id="firstName" type="text" 
+                                                class="form-control" required disabled>
+                                                <a href=""" onclick="copyToClipboard(event)">Copy</a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
+
                             </div>
                         </div><!-- .End .tab-pane -->
                     </div>
-                </div><!-- End .col-lg-9 -->
-            </div><!-- End .row -->
-        </div><!-- End .container -->
-    </div><!-- End .dashboard -->
+
+
+              <% if (user.isReferral === false) {%>
+                    
+                <div class="d-flex justify-content-center">
+                    <div class="col-sm-8 justify-content-center">
+                        <div class="card card-dashboard">
+                            <div class="card-body">
+                                <form id="referralForm" method="post" action="/referral">
+                                    <div class="d-flex flex-column align-items-center">
+                                        <label style="margin-top: -20px;" class="mb-1" for="firstName">Referral Code</label>
+                                        <input name="referralCode" id="referralCode" type="text" placeholder="Enter Your Referral Code" class="form-control" required>
+                                        <span class="text-danger" id="errorSpan"></span>
+                                        <button hidden type="submit">submit</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+             <% } %>
+
+
+              
+                    
+
+
+
+
+
+            </div><!-- End .col-lg-9 -->
+        </div><!-- End .row -->
+    </div><!-- End .container -->
+</div><!-- End .dashboard -->
 </div><!-- End .page-content -->
 </main><!-- End .main -->
 
 <%- include('./layouts/footer') %>
+
+
+
+
+<script>
+    function copyToClipboard(event) {
+        // Prevent the default behavior of the link
+        event.preventDefault();
+
+        var inputField = document.getElementById("firstName");
+
+        // Create a temporary textarea element
+        var tempTextArea = document.createElement("textarea");
+        tempTextArea.value = inputField.value;
+
+        // Append the textarea to the DOM
+        document.body.appendChild(tempTextArea);
+
+        // Select and copy the text
+        tempTextArea.select();
+        document.execCommand("copy");
+
+        document.body.removeChild(tempTextArea);
+       
+        // Display a SweetAlert2 notification
+        showNotification("Text copied!");
+    }
+
+    function showNotification(message) {
+        // Use SweetAlert2 to display a notification
+        Swal.fire({
+            icon: 'success',
+            title: message,
+            showConfirmButton: false,
+            timer: 1000
+        });
+    }
+</script>
+
+
+
+<script>
+
+const message = '<%= message %>'
+const done = '<%= done %>'
+       if (message) {
+        Swal.fire({
+                    icon: 'warning',
+                    title: '<span style="color:#c96; font-size: 24px;">Warning</span>',
+                    html: '<p style="color:#333; font-size: 16px;"><%= message %></p>',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                }) 
+
+       }else if(done){
+        Swal.fire({
+                    icon: 'success',
+                    title: '<span style="color:#c96; font-size: 24px;"><%= done %></span>',
+                    html: '<p style="color:#333; font-size: 16px;"></p>',
+                    showConfirmButton: false,
+                    timer: 1500,
+                    background: '#fff',
+                    customClass: {
+                        title: 'custom-swal-title',
+                        htmlContainer: 'custom-swal-html-container',
+                        popup: 'custom-swal-popup'
+                    }
+                }) 
+       }
+
+
+
+</script>
+
+
+
+<style>
+    .custom-swal-title {
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-swal-html-container {
+        text-align: center;
+    }
+
+    .custom-swal-popup {
+        border-radius: 10px;
+    }
+</style>

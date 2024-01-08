@@ -37,6 +37,18 @@ const userSchema = new mongoose.Schema({
         type: Number,
         required:true,
         default:0
+    },
+    referralCode:{ 
+        type:String,
+        unique: true
+    },
+    referralBy:{
+        type: mongoose.Schema.Types.ObjectId, 
+        ref: 'user'
+    },
+    isReferral:{
+        type:Boolean,
+        default:false
     }
 }, {
     timestamps: true

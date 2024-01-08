@@ -51,6 +51,7 @@ userRoute.post('/resend',userController.resendOtp)
 
 
 userRoute.get('/profile',auth.isLogin,userController.loadProfile)
+userRoute.post('/referral',userController.referralPost)
 userRoute.get('/profileEdit',auth.isLogin,userController.loadProfileEdit)
 userRoute.post('/profileEdit/:userId',userController.submitProfileEdit)
 userRoute.get('/profileAddress',auth.isLogin,userController.loadProfileAddress)

@@ -67,7 +67,7 @@ const productSchema = mongoose.Schema({
         type:Number,
         default:0
     },
-    discount:{
+    categoryDiscount:{
         type:Number,
         default:0
     },

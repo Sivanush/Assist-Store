@@ -67,8 +67,8 @@
                                     </div> -->
 
                                     <div class="product-price">
-                                        <span>$</span><%= productDetail.price %>
-                                    </div><!-- End .product-price -->
+                                        <span>$</span><%= productDetail.mainPrice %>
+                                    </div><!-- End .product-mainPrice -->
 
 
                                     <form id="addToCartForm" action="/addToCart/<%= productDetail._id %>" method="post">
@@ -317,8 +317,8 @@
                                 </div><!-- End .product-cat -->
                                 <h3 class="product-title"><a href="product.html"><%= product.name %></a></h3><!-- End .product-title -->
                                 <div class="product-price">
-                                    <span class="out-price"><span>$</span><%= product.price %></span>
-                                </div><!-- End .product-price -->
+                                    <span class="price"><span>$</span><%= product.mainPrice %></span>
+                                </div><!-- End .product-mainPrice -->
                                 <!-- <div class="ratings-container">
                                     <div class="ratings">
                                         <div class="ratings-val" style="width: 90%;"></div>

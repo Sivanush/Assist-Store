@@ -18,6 +18,10 @@ const categorySchema = new mongoose.Schema({
         default:true,
 
     },
+    discount:{
+        type:Number,
+        default:0
+    }
 }, {
     timestamps: true
 })

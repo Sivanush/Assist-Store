@@ -14,7 +14,7 @@
     <div class="row mb-1">
         <div class="col-md-6 col-lg-4">
             <div class="card mb-4">
-                <div class="card-header">Customer Information</div>
+                <div class="card-header text-center">Customer Information</div>
                 <div class="card-body">
                 <p class="card-text">
                     Username: <%= orderDetail.address[0].name %> <br>
@@ -26,15 +26,24 @@
 
         <div class="col-md-6 col-lg-4">
             <div class="card mb-4">
-                <div class="card-header">Order Details</div>
+                <div class="card-header text-center">Order Details</div>
                 <div class="card-body">
                 <p class="card-text">
                     Order ID: <%= orderDetail.orderId %> <br>
-                    Payment Methods: <%= orderDetail.paymentMethod %> <br>
+                    <% if (orderDetail.paymentMethod === 'online') { %>
+                        Payment Method: Online Payment<br>
+                    <%  }else if(orderDetail.paymentMethod === 'cod'){ %>
+                        Payment Method: Cash on Delivery<br>
+                      <% } %>
                     Order Status: <%= orderDetail.orderStatus %> <br>
                     <% if (orderDetail.orderStatus === 'cancelled') {%>
                         Reason : <%= orderDetail.reason %>
                    <% } %>
+                   Ordered Date: <%= orderDetail.createdAt.toLocaleDateString('en-IN')  %> <br>
+                   <% if (orderDetail.orderStatus !== 'delivered'&& orderDetail.orderStatus !== 'returned') { %>
+                    Expected Date: <%= new Date(orderDetail.createdAt.getTime() + 2 * 24 * 60 * 60 * 1000).toLocaleDateString('en-IN') %>
+                 <%  } %>
+
                 </p>
                 </div>
             </div>
@@ -42,7 +51,7 @@
 
         <div class="col-md-6 col-lg-4">
             <div class="card mb-4">
-                <div class="card-header">Shipping Details</div>
+                <div class="card-header text-center">Shipping Details</div>
                 <div class="card-body">
                 <p class="card-text">
                     <%= orderDetail.address[0].address %><br>

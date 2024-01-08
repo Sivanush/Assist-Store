@@ -86,7 +86,7 @@
                                                     value="<%= category.name %>" required />
                                                 <label id="" for="name">Category Name</label>
                                                 <div id="editNameError" class="form-text">
-                                                    Edit the Description of the category
+                                                    Edit the Name of the category
                                                 </div>
                                             </div>
                                         </div>
@@ -100,9 +100,19 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <div class="mb-3">
+                                            <div class="form-floating">
+                                                <input type="number" name="discount" class="form-control" id="addCategory"
+                                                    placeholder="Discount Name" aria-describedby="floatingInputHelp" required  value="<%= category.discount %>"/>
+                                                <label for="floatingInput">Category Discount</label>
+                                                <div id="discountError" class="form-text">
+                                                    Enter the Discount of the category
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="mb-3 d-flex justify-content-between" >
                                             <div>
-                                                <span><img src="<%= category.image %>" width="200" height="200" class="m-4 ms-2"></span>
+                                                <span><img src="<%= category.image %>" width="120" height="160" class="m-4 ms-2"></span>
                                             </div>
                                             <div>
                                                 <label for="formFile" class="form-label">Upload the image</label>
@@ -157,6 +167,16 @@
                             <label for="floatingInput">Category Description</label>
                             <div id="descriptionError" class="form-text">
                                 Enter the Description of the category
+                            </div>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <div class="form-floating">
+                            <input type="number" name="discount" class="form-control" id="addCategory"
+                                placeholder="Discount Name" aria-describedby="floatingInputHelp" required />
+                            <label for="floatingInput">Category Discount</label>
+                            <div id="discountError" class="form-text">
+                                Enter the Discount of the category
                             </div>
                         </div>
                     </div>

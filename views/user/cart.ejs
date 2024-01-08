@@ -69,7 +69,7 @@
 															</h3><!-- End .product-title -->
 														</div><!-- End .product -->
 													</td>
-													<td class="price-col"><%= product.productId.price %></td>
+													<td class="price-col"><%= product.productId.mainPrice %></td>
 													<td class="total-col"><%= product.size %></td>
 													<form id="myForm<%= index %>" action="/changeQuantity/<%= product.productId._id  %>" method="post">
 													<td class="quantity-col">

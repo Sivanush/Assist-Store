@@ -26,52 +26,113 @@
 
 
 
-    <div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+<div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
+    <div class="container">
+        <h1 class="page-title">Checkout<span>Shop</span></h1>
+    </div><!-- End .container -->
+</div><!-- End .page-header -->
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
+    <div class="container">
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item"><a href="index.html">Home</a></li>
+            <li class="breadcrumb-item"><a href="#">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Checkout</li>
+        </ol>
+    </div><!-- End .container -->
+</nav><!-- End .breadcrumb-nav -->
+
+<div class="page-content">
+    <div class="checkout">
         <div class="container">
-            <h1 class="page-title">Checkout<span>Shop</span></h1>
-        </div><!-- End .container -->
-    </div><!-- End .page-header -->
-    <nav aria-label="breadcrumb" class="breadcrumb-nav">
-        <div class="container">
-            <ol class="breadcrumb">
-                <li class="breadcrumb-item"><a href="index.html">Home</a></li>
-                <li class="breadcrumb-item"><a href="#">Shop</a></li>
-                <li class="breadcrumb-item active" aria-current="page">Checkout</li>
-            </ol>
-        </div><!-- End .container -->
-    </nav><!-- End .breadcrumb-nav -->
-
-    <div class="page-content">
-        <div class="checkout">
-            <div class="container">
-                
-                
-               
-                
 
 
 
-                <form action="/checkout" method="post" id="paymentForm">
-                    <div class="row">
-                        <div class="col-lg-6">
-                            
 
+
+
+
+
+
+            <% console.log(address.length); %>
+            <% if (address.length == 0) {%>
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="col-lg-12">
+                <div class="card card-dashboard">
+                    <div class="card-body ">
+                        <form id="addAddressForm" action="/profileAddressAdd/<%= user._id %>" method="post"
+                            onsubmit="return formValidation(event)">
+                            <div class="form-group">
+                                <label for="singin-email">Full Name *</label>
+                                <input type="text" class="form-control" id="name" name="name" required>
+                                <span id="nameError"></span>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group">
+                                <label for="singin-password">Phone No *</label>
+                                <input type="tel" class="form-control" id="mobile" name="mobile" required>
+                                <span id="mobileError"></span>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group">
+                                <label for="singin-password">Address *</label>
+                                <input type="text" class="form-control" id="address" name="address" required>
+                                <span id="addressError"></span>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group">
+                                <label for="singin-password">City *</label>
+                                <input type="text" class="form-control" id="city" name="city" required>
+                                <span id="cityError"></span>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group">
+                                <label for="singin-password">Street *</label>
+                                <input type="text" class="form-control" id="street" name="street" required>
+                                <span id="streetError"></span>
+                            </div><!-- End .form-group -->
+
+                            <div class="form-group mb-3">
+                                <label for="singin-password">Pincode *</label>
+                                <input type="tel" class="form-control" id="pincode" name="pincode" required>
+                                <span id="pincodeError"></span>
+                            </div><!-- End .form-group -->
+
+
+                            <div class="form-footer">
+                                <button type="submit" id="addAddressButton" class="btn btn-outline-primary-2 w-100 "
+                                    style="margin-right: 0px;">
+                                    <span>ADD ADDRESS</span>
+                                    <i class="icon-long-arrow-right"></i>
+                                </button>
+                            </div><!-- End .form-footer -->
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <%} else {%>
+
+            <form action="/checkout" method="post" id="paymentForm">
+                <div class="row">
+                    <div class="col-lg-6">
                         <% address.forEach((userAddress,index) => { %>
-                            
-                      
-                            
-                            <div class="col-lg-12">
-                                <div class="card card-dashboard">
-                                    <div class="card-body ">
-                                        <div class="d-inline">
+
+
+
+                        <div class="col-lg-12">
+                            <div class="card card-dashboard">
+                                <div class="card-body ">
+                                    <div class="d-inline">
                                         <span class="d-flex justify-content-end">
-                                            <input required style="height: 20px;width: 20px;" class="form-check-input" type="radio" value="<%= userAddress._id %>"  name="addressInput" <%= userAddress.isDefault===true?'checked':'' %> > 
-                                        </span>                       
-                                            <h3 class="card-title ">
+                                            <input required style="height: 20px;width: 20px;" class="form-check-input"
+                                                type="radio" value="<%= userAddress._id %>" name="addressInput"
+                                                <%= userAddress.isDefault===true?'checked':'' %>>
+                                        </span>
+                                        <h3 class="card-title ">
                                             Address No. <%= index+1 %>
                                         </h3>
-                                        </div>
-                                        <p><%= userAddress.name %><br>
+                                    </div>
+                                    <p><%= userAddress.name %><br>
                                         <%= userAddress.mobile %><br>
                                         <%= userAddress.street %><br>
                                         <%= userAddress.city %><br>
@@ -79,97 +140,100 @@
                                         <%= userAddress.pincode %><br>
                                         <!-- <a href="#">Edit <i class="icon-edit"></i></a></p> -->
 
-                                    </div><!-- End .card-body -->
-                                </div><!-- End .card-dashboard -->
-                            </div><!-- End .col-lg-6 -->
+                                </div><!-- End .card-body -->
+                            </div><!-- End .card-dashboard -->
+                        </div><!-- End .col-lg-6 -->
 
 
-                            <% }); %>
+                        <% }); %>
+                        <% } %>
 
-                        </div><!-- End .col-lg-9 -->
-                        <aside class="col-lg-6">
-                            <div class="summary">
-                                <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
+                    </div><!-- End .col-lg-9 -->
+                    <aside class="col-lg-6">
+                        <div class="summary">
+                            <h3 class="summary-title">Your Order</h3><!-- End .summary-title -->
 
-                                <table class="table table-summary">
-                                    <thead>
-                                        <tr>
-                                            <th>Image</th>
-                                            <th>Product</th>
-                                            <th>Total</th>
-                                        </tr>
-                                    </thead>
+                            <table class="table table-summary">
+                                <thead>
+                                    <tr>
+                                        <th>Image</th>
+                                        <th>Product</th>
+                                        <th>Total</th>
+                                    </tr>
+                                </thead>
 
-                                    <tbody>
-                                        <% cartItems.forEach((items) => { %>
-                                            
-                                       
-                                        <tr>
-                                            <td><img src="/uploads/<%= items.productId.mainImage %>" alt="" height="50px" width="50px" style="border: 1px solid grey;"></td>
-                                            <td><a href=""><%= items.productId.name %></a></td>
-                                            <td><span>$</span><%= items.productId.price*items.quantity %></td>
-                                        </tr>
+                                <tbody>
+                                    <% cartItems.forEach((items) => { %>
 
-                                       <% }); %>
-                                        
 
-                                       
-                                        <tr class="summary-subtotal">
-                                            <td>Subtotal:</td>
-                                            <td></td>
-                                            <td><span>$</span><%= cart.total %></td>
-                                        </tr><!-- End .summary-subtotal -->
+                                    <tr>
+                                        <td><img src="/uploads/<%= items.productId.mainImage %>" alt="" height="50px"
+                                                width="50px" style="border: 1px solid grey;"></td>
+                                        <td><a href=""><%= items.productId.name %></a></td>
+                                        <td><span>$</span><%= items.productId.price*items.quantity %></td>
+                                    </tr>
 
-                                        
+                                    <% }); %>
 
-                                        <tr>
-                                            <td>Shipping:</td>
-                                            <td></td>
-                                            <td>Free shipping</td>
-                                        </tr>
-                                        <tr class="summary-total">
-                                            <td>Total:</td>
-                                            <td></td>
-                                            <td><span>$</span><%= cart.total %></td>
-                                        </tr><!-- End .summary-total -->
-                                    </tbody>
-                                </table><!-- End .table table-summary -->
 
-                                <div class="accordion-summary" id="accordion-payment">
-                                    <div class="card mb-1">
-                                        <div class="card-header" id="heading-1">
-                                            <h2 class="card-title">
-                                                <label>
-                                                    <input type="radio" name="paymentMethod" value="cod"  required>
-                                                    Cash on Delivery
-                                                </label>
-                                            </h2>
-                                        </div><!-- End .card-header -->
-                                    </div><!-- End .card -->
 
-                                    <div class="card mb-1">
-                                        <div class="card-header" id="heading-1">
-                                            <h2 class="card-title">
-                                                <label>
-                                                    <input type="radio" name="paymentMethod" value="online"  required>
-                                                    Online Payment
-                                                </label>
-                                            </h2>
-                                        </div><!-- End .card-header -->
-                                    </div><!-- End .card -->
-                                </div><!-- End .accordion -->
+                                    <tr class="summary-subtotal">
+                                        <td>Subtotal:</td>
+                                        <td></td>
+                                        <td><span>$</span><%= cart.total %></td>
+                                    </tr><!-- End .summary-subtotal -->
 
-                                <button id="paymentButton" type="submit" class="btn btn-outline-primary-2 btn-order btn-block">
-                                    <span class="btn-text">Place Order</span>
-                                    <span class="btn-hover-text">Proceed to Checkout</span>
-                                </button>
-                            </div><!-- End .summary -->
-                        </aside><!-- End .col-lg-3 -->
-                    </div><!-- End .row -->
-                </form>
-            </div><!-- End .container -->
-        </div><!-- End .checkout -->
-    </div><!-- End .page-content -->
+
+
+                                    <tr>
+                                        <td>Shipping:</td>
+                                        <td></td>
+                                        <td>Free shipping</td>
+                                    </tr>
+                                    <tr class="summary-total">
+                                        <td>Total:</td>
+                                        <td></td>
+                                        <td><span>$</span><%= cart.total %></td>
+                                    </tr><!-- End .summary-total -->
+                                </tbody>
+                            </table><!-- End .table table-summary -->
+
+                            <div class="accordion-summary" id="accordion-payment">
+                                <div class="card mb-1">
+                                    <div class="card-header" id="heading-1">
+                                        <h2 class="card-title">
+                                            <label>
+                                                <input type="radio" name="paymentMethod" value="cod" required>
+                                                Cash on Delivery
+                                            </label>
+                                        </h2>
+                                    </div><!-- End .card-header -->
+                                </div><!-- End .card -->
+
+                                <div class="card mb-1">
+                                    <div class="card-header" id="heading-1">
+                                        <h2 class="card-title">
+                                            <label>
+                                                <input type="radio" name="paymentMethod" value="online" required>
+                                                Online Payment
+                                            </label>
+                                        </h2>
+                                    </div><!-- End .card-header -->
+                                </div><!-- End .card -->
+                            </div><!-- End .accordion -->
+
+                            <button id="paymentButton" type="submit"
+                                class="btn btn-outline-primary-2 btn-order btn-block">
+                                <span class="btn-text">Place Order</span>
+                                <span class="btn-hover-text">Proceed to Checkout</span>
+                            </button>
+                        </div><!-- End .summary -->
+                    </aside><!-- End .col-lg-3 -->
+                </div><!-- End .row -->
+            </form>
+        </div><!-- End .container -->
+    </div><!-- End .checkout -->
+</div><!-- End .page-content -->
 </main><!-- End .main -->
 
 
@@ -181,32 +245,25 @@
 
 
 <script>
-
-
-
-
-
-
-
     document.getElementById('paymentForm').addEventListener('submit', function (e) {
         e.preventDefault();
-    
+
         var paymentMethod = document.querySelector('input[name="paymentMethod"]:checked').value;
-    
+
         if (paymentMethod === 'online') {
-           
+
 
             var options = {
-                
+
                 key: "rzp_test_LFeXM6Qd4jOycy",
                 amount: "<%= cart.total * 100 %>",
                 currency: "INR",
                 name: "Assist Store",
-                order_id: function() {
-                            return  Math.floor(100000 + Math.random() * 900000).toString();
-                        },
+                order_id: function () {
+                    return Math.floor(100000 + Math.random() * 900000).toString();
+                },
                 handler: function (response) {
-                   
+
                     if (response.razorpay_payment_id) {
                         // Payment successful, show success SweetAlert
                         Swal.fire({
@@ -231,23 +288,23 @@
                     "name": "<%= address.name %>",
                     "email": "smtwinkle@gmail.com"
                 },
-                
+
                 theme: {
                     "color": "#2300a3"
                 }
-                
+
             };
-            
+
             var razorpayObject = new Razorpay(options);
-    
+
             razorpayObject.on('payment.failed', function (response) {
                 console.log(response);
             });
-    
+
             razorpayObject.open();
-            
+
         } else {
-            
+
             Swal.fire({
                 icon: 'success',
                 title: 'Order Placed!',
@@ -258,12 +315,143 @@
             });
         }
     });
-    </script>
-    
+</script>
+
+
+<script>
+    function formValidation(event) {
+
+
+        const nameInput = document.getElementById('name').value.trim()
+        const mobileInput = document.getElementById('mobile').value.trim()
+        const addressInput = document.getElementById('address').value.trim()
+        const cityInput = document.getElementById('city').value.trim()
+        const streetInput = document.getElementById('street').value.trim()
+        const pincodeInput = document.getElementById('pincode').value.trim()
+
+        // Get all validation messages
+
+        const nameMessage = document.getElementById('nameError')
+        const mobileMessage = document.getElementById('mobileError')
+        const addressMessage = document.getElementById('addressError')
+        const cityMessage = document.getElementById('cityError')
+        const streetMessage = document.getElementById('streetError')
+        const pincodeMessage = document.getElementById('pincodeError')
+
+
+        nameMessage.textContent = ''
+        mobileMessage.textContent = ''
+        addressMessage.textContent = ''
+        cityMessage.textContent = ''
+        streetMessage.textContent = ''
+        pincodeMessage.textContent = ''
 
 
 
 
+        const nameCode = /^[a-zA-Z]+(([',. -][a-zA-Z ])?[a-zA-Z]*)*$/
+        const mobileCode = /^[0-9]{10}$/
+        const addressCode = /^[a-zA-Z0-9\s,'-]*$/
+        const cityCode = /^[a-zA-Z\s'-]+$/
+        const streetCode = /^[a-zA-Z0-9\s',-]+$/
+        const pincodeCode = /^\d{6}$/
+
+
+        let isValid = true
+
+        if (!nameInput.match(nameCode)) {
+            nameMessage.textContent = 'Invalid Name'
+            nameMessage.style.color = 'red'
+            isValid = false
+        }
+
+        if (!mobileInput.match(mobileCode)) {
+            mobileMessage.textContent = 'Invalid Phone Number'
+            mobileMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!addressInput.match(addressCode)) {
+            addressMessage.textContent = 'Invalid Address'
+            addressMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!cityInput.match(cityCode)) {
+            cityMessage.textContent = 'Invalid City Name'
+            cityMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!streetInput.match(streetCode)) {
+            streetMessage.textContent = 'Invalid Street Name'
+            streetMessage.style.color = 'red'
+            isValid = false
+        }
+        if (!pincodeInput.match(pincodeCode)) {
+            pincodeMessage.textContent = 'Invalid Pincode'
+            pincodeMessage.style.color = 'red'
+            isValid = false
+        }
+
+
+        return isValid
+
+
+
+
+    }
+
+
+
+
+
+
+    document.getElementById('addAddressForm').addEventListener('submit', function (event) {
+        // Prevent the default form submission behavior
+        event.preventDefault();
+
+        // Perform form validation
+        if (formValidation()) {
+            // Submit the form manually
+            this.submit();
+
+            Swal.fire({
+                icon: 'success',
+                title: '<span style="color:#c96; font-size: 24px;">Address Added!</span>',
+                html: '<p style="color:#333; font-size: 16px;"></p>',
+                showConfirmButton: false,
+                timer: 1000,
+                background: '#fff',
+                customClass: {
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html-container',
+                    popup: 'custom-swal-popup'
+                },
+                didClose: () => {
+
+                    document.getElementById('addAddressForm').submit();
+                }
+            });
+
+
+
+        }
+    });
+</script>
+
+<style>
+    .custom-swal-title {
+        font-family: 'Arial', sans-serif;
+        font-weight: bold;
+        text-align: center;
+    }
+
+    .custom-swal-html-container {
+        text-align: center;
+    }
+
+    .custom-swal-popup {
+        border-radius: 10px;
+    }
+</style>
 
 
 

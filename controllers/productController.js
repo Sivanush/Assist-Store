@@ -107,7 +107,7 @@ const addProduct = async (req, res) => {
                 hoverImage:hoverImage,
                 category:foundCategory._id,
                 discount,
-                mainPrice:Math.floor(parseInt(req.body.price) - (parseInt(req.body.price) * (parseInt(req.body.discount)/100)))
+                mainPrice:parseInt(req.body.price) - parseInt(req.body.discount)
             })
 
             await newProduct.save()
@@ -178,10 +178,14 @@ const editProduct = async (req, res) => {
                     category: category,
                     isComing:isComing,
                     discount,
-                    mainPrice:Math.floor(parseInt(req.body.price) - (parseInt(req.body.price) * (parseInt(req.body.discount)/100)))
+                    mainPrice:parseInt(req.body.price) - parseInt(req.body.discount)
             },
                 { new: true }
             );
+            
+            if (updatedProduct.categoryDiscount>0) {
+                updatedProduct.mainPrice  = updatedProduct.mainPrice - updatedProduct.categoryDiscount
+            }
            
 
             if (req.files['image1']) {
