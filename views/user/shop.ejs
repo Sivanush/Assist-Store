@@ -394,27 +394,7 @@
 
         <% if (search) {%>
 
-        <div class="d-flex justify-content-center mt-4" id="pagination">
-
-            <ul class="pagination pagination-m">
-
-
-                <a href="/shop?page=<%= currentPage-1 %>" class="btn btn-link btn-link-dark"><i
-                        class="icon-long-arrow-left"></i></a>
-
-                <% for (let i = 1; i <= totalSearchPage; i++) { %>
-
-                <a href="/shop?page=<%= i %>"
-                    class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
-
-                <% } %>
-
-                <a href="/shop/?page=<%= parseInt(currentPage)+1 %>" class="btn btn-link btn-link-dark"><i
-                        class="icon-long-arrow-right"></i></a>
-
-            </ul>
-
-        </div>
+       
         <% }else if(categoryCounts){%>
         <div class="d-flex justify-content-center mt-4" id="pagination">
             <ul class="pagination pagination-m">
@@ -499,8 +479,12 @@
                     url: '/shop',
                     data: $(this).serialize(),
                     success: function (response) {
-                        let product = response.product
+                        let product = response.product;
+                        let currentPage = response.currentPage;
+                        alert(perPage)
+                        let totalSearchPage = Math.ceil(response.totalSearchProducts / perPage); // Correctly calculate totalSearchPage
 
+                        alert(totalSearchPage)
                         $('#productContainer').empty()
                         $('#pagination').empty()
 
@@ -559,17 +543,18 @@
                             })
 
                             var pagination = `
-                            <ul class="pagination pagination-m">
-                                <a href="/shop?page=${currentPage - 1}" class="btn btn-link btn-link-dark"><i class="icon-long-arrow-left"></i></a>
-                                <% for (let i = 1; i <= totalSearchPage; i++) { %>
-                                    <a href="/shop?page=<%= i %>"
-                                        class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
-
-                                    <% } %>
-                                <a href="/shop?page=${parseInt(currentPage) + 1}" class="btn btn-link btn-link-dark"><i class="icon-long-arrow-right"></i></a>
-                            </ul>
+                        <ul class="pagination pagination-m">
+                            <a href="/shop?page=${currentPage - 1}" class="btn btn-link btn-link-dark"><i
+                                    class="icon-long-arrow-left"></i></a>
+                            <% for (let i = 1; i <= totalSearchPage; i++) { %>
+                            <a href="/shop?page=<%= i %>"
+                                class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
+                            <% } %>
+                            <a href="/shop?page=${parseInt(currentPage) + 1}" class="btn btn-link btn-link-dark"><i
+                                    class="icon-long-arrow-right"></i></a>
+                        </ul>
                         `;
-                        $('#pagination').append(pagination);
+                    $('#pagination').append(pagination);
 
 
 

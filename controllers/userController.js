@@ -398,7 +398,7 @@ const loadShop = async (req, res) => {
 
         let productSearch;
         let product
-        let totalCount = 0
+        let totalSearchProducts = 0
 
         const search = async (data) => {
             try {
@@ -428,15 +428,21 @@ const loadShop = async (req, res) => {
 
 
         if (req.query.search) {
+            
             const {
-                products: productSearch,
+                
+                products: productSearch, 
                 totalCount: totalSearchProducts
             } = await search(req.query.search, page, perPage);
+            console.log('////////////////////',totalCount);
             if (req.xhr) {
+                console.log(productSearch.totalCount);
                 return res.json({
-                    product: productSearch,
-                    totalSearchProducts
+                    product: productSearch.products, // Ensure to use the correct property from the search result
+                    totalSearchProducts: productSearch.totalCount, // Correctly set totalSearchProducts
+                    currentPage: page
                 });
+                
             }
         } else if (req.query.categories) {
 
@@ -502,18 +508,16 @@ const loadShop = async (req, res) => {
         const categories = await Category.find()
 
         const totalProducts = await Product.countDocuments()
-        // console.log(categoryCounts);
+    
         const totalPage = Math.ceil(totalProducts / perPage)
 
 
-        const totalSearchPage = Math.ceil(totalCount / perPage);
+        const totalSearchPage = Math.ceil(totalSearchProducts / perPage);
 
-
+        console.log(totalSearchPage);
 
         const selectedCategory = req.query.categories;
-        //console.log('//////////');
-        // console.log(selectedCategory);
-        //console.log(req.query.search);
+       
         res.render('user/shop', {
             product: product,
             user: req.session.user,
