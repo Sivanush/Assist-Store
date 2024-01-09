@@ -79,6 +79,6 @@ adminRoute.get('/coupon/upPublish/:id',auth.isLogin,couponController.unPublish)
 
 
 
-adminRoute.get('/logout',auth.isLogout,adminController.adminLogout)
+adminRoute.get('/logout',adminController.adminLogout)
 
 module.exports = adminRoute 

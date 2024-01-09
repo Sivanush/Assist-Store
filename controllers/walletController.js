@@ -52,8 +52,8 @@ const addMoney = async(req,res)=>{
         const userId = req.session.user._id
 
         const razorpayInstance = new Razorpay({
-            key_id: 'rzp_test_LFeXM6Qd4jOycy',
-             key_secret: 'HsFF3owMaEaLg4jyZundUTb7',
+            key_id: process.env.key_id,
+             key_secret: process.env.key_secret,
         });
 
         let options = {

@@ -897,7 +897,10 @@ const generatePdf = async(req,res)=>{
 
 const adminLogout = async(req,res)=>{
     try {
-        
+    
+        req.session.admin = null
+        res.redirect('/admin/login')
+
     } catch (error) {
         console.log(error.message);
     }

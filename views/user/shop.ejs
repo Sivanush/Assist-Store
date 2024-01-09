@@ -394,45 +394,80 @@
 
         <% if (search) {%>
 
-       
-        <% }else if(categoryCounts){%>
+
+        <% }else if(k==1){%>
+         
         <div class="d-flex justify-content-center mt-4" id="pagination">
             <ul class="pagination pagination-m">
-                <a href="/shop?sort=<%= sort %>&page=<%= currentPage - 1 %>" class="btn btn-link btn-link-dark">
+                <% if (currentPage>1) { %>
+
+
+                <a href="/shop?page=<%= currentPage - 1 %>&categories=<%= selectedCategory %>"
+                    class="btn btn-link btn-link-dark">
                     <i class="icon-long-arrow-left"></i>
                 </a>
-
-                <% for (let i = 1; i <= totalPage; i++) { %>
-                <a href="/shop?sort=<%= sort %>&page=<%= i %>"
-                    class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
                 <% } %>
-
-                <a href="/shop?sort=<%= sort %>&page=<%= parseInt(currentPage) + 1 %>"
+                <% console.log('llllllllll',totalPage); %>     
+                <% for (let i=1; i <=totalPage; i++) { %>
+                <a href="/shop?page=<%= i %>&categories=<%= selectedCategory %>"
+                    class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>">
+                    <%= i %>
+                </a>
+                <% } %>
+                <% if (currentPage<totalPage) { %>
+                <a href="/shop?page=<%= parseInt(currentPage) + 1 %>&categories=<%= selectedCategory %>"
                     class="btn btn-link btn-link-dark">
                     <i class="icon-long-arrow-right"></i>
                 </a>
+                <% } %>
+
             </ul>
         </div>
-        <%  } else {%>
+
+        <%  }else if(k==2){%>
+            
+            <div class="d-flex justify-content-center mt-4" id="pagination">
+                <ul class="pagination pagination-m">
+                    <% if (currentPage>1) { %>
+                    <a href="/shop?sort=<%= sort %>&page=<%= currentPage - 1 %>" class="btn btn-link btn-link-dark">
+                        <i class="icon-long-arrow-left"></i>
+                    </a>
+                    <% } %>
+                    <% for (let i = 1; i <= totalPage; i++) { %>
+                    <a href="/shop?sort=<%= sort %>&page=<%= i %>"
+                        class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
+                    <% } %>
+                    <% if (currentPage<totalPage) { %>
+                    <a href="/shop?sort=<%= sort %>&page=<%= parseInt(currentPage) + 1 %>"
+                        class="btn btn-link btn-link-dark">
+                        <i class="icon-long-arrow-right"></i>
+                    </a>
+                    <% } %>
+                </ul>
+            </div>
+
+      <%  } else {%>
 
         <div class="d-flex justify-content-center mt-4" id="pagination">
 
             <ul class="pagination pagination-m">
 
+                <% if (currentPage>1) { %>
 
                 <a href="/shop?page=<%= currentPage-1 %>" class="btn btn-link btn-link-dark"><i
                         class="icon-long-arrow-left"></i></a>
-
+                <% }
+                 %>
                 <% for (let i = 1; i <= totalPage; i++) { %>
 
                 <a href="/shop?page=<%= i %>"
                     class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
 
                 <% } %>
-
+                <% if (currentPage<totalPage) { %>
                 <a href="/shop/?page=<%= parseInt(currentPage)+1 %>" class="btn btn-link btn-link-dark"><i
                         class="icon-long-arrow-right"></i></a>
-
+                    <% } %>
             </ul>
 
         </div>
@@ -480,11 +515,9 @@
                     data: $(this).serialize(),
                     success: function (response) {
                         let product = response.product;
-                        let currentPage = response.currentPage;
-                        alert(perPage)
-                        let totalSearchPage = Math.ceil(response.totalSearchProducts / perPage); // Correctly calculate totalSearchPage
 
-                        alert(totalSearchPage)
+
+
                         $('#productContainer').empty()
                         $('#pagination').empty()
 
@@ -542,20 +575,6 @@
                                 $('#productContainer').append(row);
                             })
 
-                            var pagination = `
-                        <ul class="pagination pagination-m">
-                            <a href="/shop?page=${currentPage - 1}" class="btn btn-link btn-link-dark"><i
-                                    class="icon-long-arrow-left"></i></a>
-                            <% for (let i = 1; i <= totalSearchPage; i++) { %>
-                            <a href="/shop?page=<%= i %>"
-                                class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>"><%= i %></a>
-                            <% } %>
-                            <a href="/shop?page=${parseInt(currentPage) + 1}" class="btn btn-link btn-link-dark"><i
-                                    class="icon-long-arrow-right"></i></a>
-                        </ul>
-                        `;
-                    $('#pagination').append(pagination);
-
 
 
                         } else {
@@ -569,6 +588,7 @@
                     }
                 })
             })
+
         })
     </script>
 

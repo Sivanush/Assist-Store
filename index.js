@@ -15,7 +15,7 @@ app.use(flash());
 
 //mongoose
 const mongoose = require('mongoose')
-mongoose.connect('mongodb+srv://sivanush:sivanush@ecommerce.vor4n5k.mongodb.net/Ecommerse')
+mongoose.connect(process.env.MONGODB)
 .then(() => {
     console.log('Connected to MongoDB');
   })
@@ -47,7 +47,7 @@ app.set('view engine','ejs')
 app.use(nocache());
 
 
-//morgan
+// morgan
 // app.use(morgan('dev'))
 
 

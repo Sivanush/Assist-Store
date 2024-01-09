@@ -272,8 +272,8 @@ const orderConfirm = async (req, res) => {
         if (req.body.paymentMethod === 'online') {
 
             const razorpayInstance = new Razorpay({
-                key_id: 'rzp_test_LFeXM6Qd4jOycy',
-                key_secret: 'HsFF3owMaEaLg4jyZundUTb7',
+                key_id: process.env.key_id,
+                key_secret: process.env.key_secret,
             });
 
             let options = {

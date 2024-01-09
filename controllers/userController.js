@@ -383,9 +383,7 @@ const loadShop = async (req, res) => {
         const page = req.query.page || 1
         const perPage = 12
 
-        const {
-            sort
-        } = req.query
+        const {sort} = req.query
 
         const userId = req.session.user ? req.session.user._id : null;
 
@@ -394,78 +392,85 @@ const loadShop = async (req, res) => {
         })
         const cartCount = cart ? cart.products.length : 0;
 
-
-
+        let totalPage
+        let k
         let productSearch;
         let product
-        let totalSearchProducts = 0
-
+       
         const search = async (data) => {
             try {
-                const skip = (page - 1) * perPage;
                 const products = await Product.find({
-                        name: {
-                            $regex: new RegExp(data, 'i')
-                        }
-                    }).populate('category', 'name')
-                    .skip(skip)
-                    .limit(perPage);
-                const totalCount = await Product.countDocuments({
-                    name: {
-                        $regex: new RegExp(data, 'i')
-                    }
-                });
-                return {
-                    products,
-                    totalCount
-                };
+                    name: { $regex: new RegExp(data, 'i') }
+                }).populate('category', 'name')
+                   
+        
+                return products;
             } catch (error) {
                 console.log('error in the search');
+                throw error;
             }
-        }
+        };
 
         let categoryCounts = {}
 
 
         if (req.query.search) {
-            
-            const {
-                
-                products: productSearch, 
-                totalCount: totalSearchProducts
-            } = await search(req.query.search, page, perPage);
-            console.log('////////////////////',totalCount);
+            productSearch= await search(req.query.search);
+            console.log('........');
             if (req.xhr) {
-                console.log(productSearch.totalCount);
+               console.log(productSearch.length);
                 return res.json({
-                    product: productSearch.products, // Ensure to use the correct property from the search result
-                    totalSearchProducts: productSearch.totalCount, // Correctly set totalSearchProducts
-                    currentPage: page
+                    product: productSearch, 
+                   
                 });
                 
             }
         } else if (req.query.categories) {
 
 
-            const selectedCategories = Array.isArray(req.query.categories) ? req.query.categories : [req.query.categories];
+            // const selectedCategories = Array.isArray(req.query.categories) ? req.query.categories : [req.query.categories];
 
-            // console.log(selectedCategories);
+            // // console.log(selectedCategories);
+
+            // productSearch = Product.find({
+            //     isPublish: true,
+            //     isComing: false,
+            //     category: {
+            //         $in: selectedCategories
+            //     },
+            // }).populate('category', 'name');
+
+            // product = await productSearch
+            //     .skip((page - 1) * perPage)
+            //     .limit(perPage)
+
+            k=1
+
+            // const selectedCategories = Array.isArray(req.query.categories) ? req.query.categories : [req.query.categories];
+            const selectedCategories = Array.isArray(req.query.categories)
+    ? req.query.categories
+    : req.query.categories.split(',');
 
             productSearch = Product.find({
                 isPublish: true,
                 isComing: false,
-                category: {
-                    $in: selectedCategories
-                },
+                category: { $in: selectedCategories }
             }).populate('category', 'name');
 
             product = await productSearch
                 .skip((page - 1) * perPage)
-                .limit(perPage)
+                .limit(perPage);
 
 
+                const productCount = await Product.countDocuments({
+                    isPublish: true,
+                    isComing: false,
+                    category: { $in: selectedCategories }
+                });
 
 
+                totalPage = Math.ceil(productCount / perPage)
+                
 
 
 
@@ -476,10 +481,12 @@ const loadShop = async (req, res) => {
             }).populate('category', 'name')
 
             if (sort === 'lowToHigh') {
+                k=2
                 productSearch = productSearch.sort({
                     mainPrice: 1
                 })
             } else if (sort === 'highToLow') {
+                k=2
                 productSearch = productSearch.sort({
                     mainPrice: -1
                 })
@@ -488,6 +495,10 @@ const loadShop = async (req, res) => {
             product = await productSearch
                 .skip((page - 1) * perPage)
                 .limit(perPage)
+
+
+                const totalProducts = await Product.countDocuments()
+                totalPage = Math.ceil(totalProducts / perPage)
         }
 
 
@@ -507,14 +518,12 @@ const loadShop = async (req, res) => {
 
         const categories = await Category.find()
 
-        const totalProducts = await Product.countDocuments()
+        
     
-        const totalPage = Math.ceil(totalProducts / perPage)
+        
 
 
-        const totalSearchPage = Math.ceil(totalSearchProducts / perPage);
-
-        console.log(totalSearchPage);
+      
 
         const selectedCategory = req.query.categories;
        
@@ -523,14 +532,14 @@ const loadShop = async (req, res) => {
             user: req.session.user,
             cartCount: cartCount,
             totalPage,
-            totalSearchPage,
             currentPage: page,
             sort,
             categories,
             categoryCounts,
             category: req.query.category,
             search: req.query.search,
-            selectedCategory
+            selectedCategory,
+            k
         })
 
     } catch (error) {

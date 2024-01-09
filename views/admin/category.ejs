@@ -263,7 +263,8 @@
 
 
                 nameCode = /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/
-                descriptionCode = /^(.|\s)*[a-zA-Z]+(.|\s)*$/
+                descriptionCode =  /^[a-zA-Z0-9\-/]+$/;
+
 
                 let isValid = true
 
@@ -310,7 +311,7 @@
 
 
                 nameCode = /^(([A-Za-z]+[\-\']?)*([A-Za-z]+)?\s)+([A-Za-z]+[\-\']?)*([A-Za-z]+)?$/
-                descriptionCode = /^(.|\s)*[a-zA-Z]+(.|\s)*$/
+                descriptionCode =  /^[a-zA-Z0-9\-/]+$/;
 
                 let isValid = true
 
@@ -328,6 +329,18 @@
                 return isValid
 
 
+    }
+</script>
+
+<script>
+    const error = '<%= error %>'
+
+    if (error) {
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: '<%= error %>',
+        });
     }
 </script>
 

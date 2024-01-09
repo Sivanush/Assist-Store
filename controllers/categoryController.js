@@ -6,7 +6,7 @@ const Product = require('../models/productModel')
 const loadCategory = async (req, res) => {
     try {
         const cate = await Category.find();
-        res.render('admin/category', { cate }); 
+        res.render('admin/category', { cate ,error:req.flash('message')}); 
     } catch (error) {
         console.log(error.message);
     }
@@ -19,7 +19,7 @@ const insertCategory = async(req,res)=>{
     try {
         const {name,description,discount} = req.body
         const image = req.file 
-        const existName = await Category.findOne({name})
+        const existName = await Category.findOne({ name: { $regex: new RegExp("^" + name.toLowerCase(), "i") } })
         if (existName) {
           
          
@@ -90,6 +90,7 @@ const unListCategory = async(req,res)=>{
 
 const editCategory = async(req,res)=>{
     try {
+        console.log('fghjk');
         const id = req.params.id;
         const { name, description, discount} = req.body;
         const data = await Category.findById(id)
