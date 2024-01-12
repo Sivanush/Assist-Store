@@ -2304,6 +2304,8 @@ function formValidationEdit(productId) {
     const Linput = document.getElementById(`editL${productId}`).value.trim();
     const XLinput = document.getElementById(`editXL${productId}`).value.trim();
     const XXLinput = document.getElementById(`editXXL${productId}`).value.trim();
+    const discountInput = document.getElementById(`editDiscount${productId}`).value.trim();
+
 
     // Get all validation messages
     const nameMessage = document.getElementById(`nameErrorEdit${productId}`);
@@ -2316,6 +2318,8 @@ function formValidationEdit(productId) {
     const Lmessage = document.getElementById(`LerrorEdit${productId}`);
     const XLmessage = document.getElementById(`XlerrorEdit${productId}`);
     const XXLmessage = document.getElementById(`XXlerrorEdit${productId}`);
+    const discountMessage = document.getElementById(`discountErrorEdit${productId}`);
+
 
     // Clear all validation messages
     nameMessage.textContent = '';
@@ -2328,6 +2332,7 @@ function formValidationEdit(productId) {
     Lmessage.textContent = '';
     XLmessage.textContent = '';
     XXLmessage.textContent = '';
+    discountMessage.textContent = '';
 
     // Validation regex patterns
     const nameCode = /^[A-Z][a-zA-Z0-9\s/\\-]*[^*$]+$/;
@@ -2335,7 +2340,7 @@ function formValidationEdit(productId) {
     const priceCode = /^\d+$/;
     const categoryCode = /^[a-zA-Z0-9\s\(\)\-\_]+$/;
     const sizeCode = /^\d+$/
-
+    const discountCode = /^\d+(\.\d{1,2})?$/;
 
     let isValid = true;
 
@@ -2426,7 +2431,21 @@ function formValidationEdit(productId) {
         isValid = false;
     }
 
-    
+    if (!discountInput.match(discountCode)) {
+        discountMessage.textContent = 'Invalid Discount Format';
+        discountMessage.style.color = 'red';
+        isValid = false;
+    } else {
+        // Check if discount is greater than the price
+        const price = parseFloat(priceInput);
+        const discount = parseFloat(discountInput);
+
+        if (discount > price) {
+            discountMessage.textContent = 'Discount cannot be greater than the price';
+            discountMessage.style.color = 'red';
+            isValid = false;
+        }
+    }
 
 
     return isValid 
@@ -2448,7 +2467,8 @@ function formValidationAdd(){
                 const XXLinput = document.getElementById('addXXL').value.trim()
                 const mainImageInput = document.getElementById('mainImage');
                 const hoverImageInput = document.getElementById('hoverImage');
-             
+                const discountInput = document.getElementById('addDiscount').value.trim();
+                const originalPriceInput = document.getElementById('addPrice').value.trim();
 
 
                 // Get all validation messages
@@ -2465,6 +2485,7 @@ function formValidationAdd(){
                 const XXLmessage = document.getElementById('XXlerror')
                 const mainImageMessage = document.getElementById('mainImageError');
                 const hoverImageMessage = document.getElementById('hoverImageError');
+                const discountMessage = document.getElementById('discountError');
 
                 // Clear all validation messages
     
@@ -2480,6 +2501,7 @@ function formValidationAdd(){
                 XXLmessage.textContent = ''
                 mainImageMessage.textContent = '';
                 hoverImageMessage.textContent = ''; 
+                discountMessage.textContent = '';
 
 
                 nameCode = /^[A-Z][a-zA-Z0-9\s/\\-]*[^*$]+$/
@@ -2492,6 +2514,8 @@ function formValidationAdd(){
                 Lcode= /^\d+$/
                 XLcode= /^\d+$/
                 XXLcode = /^\d+$/
+                const discountCode = /^\d+(\.\d{1,2})?$/;
+
                 const allowedImageTypes = ['image/jpeg', 'image/png', 'image/webp'];
 
                 const isValidFileType = (file, allowedTypes) => {
@@ -2563,6 +2587,22 @@ function formValidationAdd(){
                     hoverImageMessage.style.color = 'red';
                     isValid = false;
                 }
+
+                if (!discountInput.match(discountCode)) {
+                discountMessage.textContent = 'Invalid Discount Format';
+                discountMessage.style.color = 'red';
+                isValid = false;
+            } else {
+                // Check if discount is greater than the original price
+                const discount = parseFloat(discountInput);
+                const originalPrice = parseFloat(originalPriceInput);
+
+                if (discount > originalPrice) {
+                    discountMessage.textContent = 'Discount cannot be greater than the original price';
+                    discountMessage.style.color = 'red';
+                    isValid = false;
+                }
+            }
                 
 
                 return isValid === true

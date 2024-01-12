@@ -50,7 +50,7 @@ const homePage = async (req, res) => {
 
         const categoryData = await Category.find({
             isListed: true
-        })
+        }).limit(3)
 
         const comingData = await Product.find({
             isComing: true

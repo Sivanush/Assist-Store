@@ -66,9 +66,23 @@
                                         <a class="ratings-text" href="#product-review-link" id="review-link">( 2 Reviews )</a>
                                     </div> -->
 
-                                    <div class="product-price">
-                                        <span>$</span><%= productDetail.mainPrice %>
-                                    </div><!-- End .product-mainPrice -->
+                                    <div class="d-flex justify-content-start">
+                                        <div class="product-price" style="margin-right: 10px;">
+                                            <div class="me-5">
+                                             <span>$</span><%= productDetail.mainPrice %> 
+                                            </div>
+                                         </div>
+                                             <% if (productDetail.discount !==0) {%>
+                                                 
+                                         <div class="product-price">
+                                                 <div class="ms-5">
+                                                   <small><small><div class="color-grey" style="text-decoration: line-through;">
+                                                     <span>$</span><%= productDetail.price %>
+                                                 </div></small></small>
+                                                 </div>
+                                         <% } %>
+                                         </div><!-- End .product-mainPrice -->
+                                    </div>
 
 
                                     <form id="addToCartForm" action="/addToCart/<%= productDetail._id %>" method="post">
@@ -96,11 +110,14 @@
 
                                     <div class="product-details-action">
 
+                                        <div class="col-5">
+                                            
                                         <% if (user) {%>
                                             <button id="addToCartBtn"  type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></button>
                                         <%  } else { %> 
                                             <a href="/login"   type="submit" class="btn-product btn-cart w-100"><span>add to cart</span></a>
                                         <% } %>
+                                        </div>
 
                                         </form>
 
