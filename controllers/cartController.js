@@ -56,7 +56,7 @@ const loadCart = async (req, res) => {
             cart: cart,
             user,
             cartCount: cartCount,
-
+            message:req.flash('message')
         })
 
     } catch (error) {
@@ -269,7 +269,7 @@ const orderConfirm = async (req, res) => {
             cart.coupon = undefined;
             cart.products = []
             await cart.save()
-            req.flash('success','Order Placed')
+           
             res.redirect('/profileOrder')
         }
 
@@ -300,7 +300,7 @@ const orderConfirm = async (req, res) => {
             cart.products = []
             await cart.save()
 
-            req.flash('success','Order Placed')
+            
             res.redirect('/profileOrder')
         }if(req.body.paymentMethod === 'wallet'){
             
@@ -415,26 +415,23 @@ const applyCoupon = async (req, res) => {
             })
         }
         if (couponCode.expireData < Date.now()) {
-            return res.json({
-                message: 'Coupon is Expired'
-            })
+            req.flash('message', 'Coupon is Expired')
+            res.redirect('back')
         }
         const cart = await Cart.findOne({
             userId: req.session.user._id
         })
         if (cart.total < couponCode.minimumOrder) {
-            return res.json({
-                message: 'Minimum order amount not met'
-            });
+            req.flash('message', 'Minimum order amount not met')
+            res.redirect('back')
         }
         console.log(cart.total - couponCode.discountAmount);
         cart.coupon = couponCode._id
         cart.total = cart.total - couponCode.discountAmount
         await cart.save();
 
-        return res.json({
-            message: 'Coupon applied successfully'
-        });
+        req.flash('message', 'Coupon applied successfully')
+        res.redirect('back')
     } catch (error) {
         console.log(error.message);
     }

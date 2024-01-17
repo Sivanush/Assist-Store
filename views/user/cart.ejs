@@ -237,6 +237,26 @@
 				}
 			</style>
 			
-  
+	    <script>
+
+			const message = '<%= message %>'
+
+			if (message) {
+				Swal.fire({
+                        icon: 'warning',
+                        title: '<span style="color:#c96; font-size: 24px;"><%= message %></span>',
+                        html: '<p style="color:#333; font-size: 16px;"></p>',
+                        showConfirmButton: false,
+                        timer: 1000,
+                        background: '#fff',
+                        customClass: {
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-html-container',
+                            popup: 'custom-swal-popup'
+                        }
+                    })
+			}
+
+		</script>
 
         <%- include('./layouts/footer') %>

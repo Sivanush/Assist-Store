@@ -942,7 +942,7 @@ const loadProfileOrder = async (req, res) => {
     try {
 
         const page = req.query.page || 1
-        const perPage = 3
+        const perPage = 8
 
 
 
