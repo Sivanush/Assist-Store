@@ -18,7 +18,7 @@ const Wishlist = require('../models/wishlistModel')
 const res = require('express/lib/response')
 
 // To load the home page
-
+ 
 const homePage = async (req, res) => {
     try {
         console.log('homePage/////');
