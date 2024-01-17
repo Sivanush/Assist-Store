@@ -24,7 +24,7 @@ const sendOtp = (email, token) => {
             to: email,
             subject: 'Forget password for Assist Store',
             text:'Please click on the following link, or paste this into your browser to complete the process:\n\n' +
-            'http://' + 'localhost:3000' + '/password/' + token + '\n\n',
+            'https://' + 'assiststore.online' + '/password/' + token + '\n\n',
             
 
         }
