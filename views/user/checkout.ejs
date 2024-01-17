@@ -326,36 +326,6 @@
             });
         }else if(paymentMethod === 'wallet') {
             document.getElementById('paymentForm').submit();
-            const error = '<%= error %>'
-            // if (error) {
-            //     Swal.fire({
-            //     icon: 'success',
-            //     title: '<span style="color:#c96; font-size: 24px;"><%= error %></span>',
-            //     html: '<p style="color:#333; font-size: 16px;"></p>',
-            //     showConfirmButton: false,
-            //     timer: 1000,
-            //     background: '#fff',
-            //     customClass: {
-            //         title: 'custom-swal-title',
-            //         htmlContainer: 'custom-swal-html-container',
-            //         popup: 'custom-swal-popup'
-            //     },
-            //     didClose: () => {
-
-                   
-            //     }
-            // });
-            // }else{
-                
-            // Swal.fire({
-            //     icon: 'success',
-            //     title: 'Order Placed!',
-            //     text: 'Your order has been placed successfully.',
-            // }).then(() => {
-            //     // Submit the form after the SweetAlert is closed
-            //     document.getElementById('paymentForm').submit();
-            // });
-            // }
         }
     });
 </script>

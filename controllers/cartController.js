@@ -319,17 +319,18 @@ const orderConfirm = async (req, res) => {
                     date: new Date(),
                 })
                 await userWallet.save() 
+                await newOrder.save()
+
+                cart.coupon = undefined;
+                cart.products = []
+                await cart.save()
+    
+                req.flash('success','Order Placed')
+                res.redirect('/profileOrder')
             }
 
 
-            await newOrder.save()
-
-            cart.coupon = undefined;
-            cart.products = []
-            await cart.save()
-
-            req.flash('success','Order Placed')
-            res.redirect('/profileOrder')
+          
         }
 
     } catch (error) {

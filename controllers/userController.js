@@ -21,7 +21,7 @@ const res = require('express/lib/response')
 
 const homePage = async (req, res) => {
     try {
-
+        console.log('homePage/////');
         let userdata = null;
         let cartCount = null
         if (req.session.user) {
@@ -979,7 +979,7 @@ const loadProfileOrder = async (req, res) => {
             orderCount: orderCount,
             totalPage,
             currentPage: page,
-          
+            wallet:req.flash('success')
         })
     } catch (error) {
         console.log(error.message);

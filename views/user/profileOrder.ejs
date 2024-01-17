@@ -183,6 +183,15 @@
 
 
 
-
+<script>
+    const wallet = '<%= wallet %>'
+    if (wallet) {
+        Swal.fire({
+                icon: 'success',
+                title: 'Order Placed!',
+                text: 'Your order has been placed successfully.',
+            })
+    }
+</script>
 
 <%- include('./layouts/footer') %>
