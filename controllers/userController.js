@@ -979,6 +979,7 @@ const loadProfileOrder = async (req, res) => {
             orderCount: orderCount,
             totalPage,
             currentPage: page,
+          
         })
     } catch (error) {
         console.log(error.message);

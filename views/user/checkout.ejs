@@ -220,7 +220,18 @@
                                         </h2>
                                     </div><!-- End .card-header -->
                                 </div><!-- End .card -->
+                                <div class="card mb-1">
+                                    <div class="card-header" id="heading-1">
+                                        <h2 class="card-title">
+                                            <label>
+                                                <input type="radio" name="paymentMethod" value="wallet" required>
+                                               Wallet
+                                            </label>
+                                        </h2>
+                                    </div><!-- End .card-header -->
+                                </div><!-- End .card -->
                             </div><!-- End .accordion -->
+                           
 
                             <button id="paymentButton" type="submit"
                                 class="btn btn-outline-primary-2 btn-order btn-block">
@@ -303,7 +314,7 @@
 
             razorpayObject.open();
 
-        } else {
+        } else if(paymentMethod === 'cod') {
 
             Swal.fire({
                 icon: 'success',
@@ -313,6 +324,38 @@
                 // Submit the form after the SweetAlert is closed
                 document.getElementById('paymentForm').submit();
             });
+        }else if(paymentMethod === 'wallet') {
+            document.getElementById('paymentForm').submit();
+            const error = '<%= error %>'
+            // if (error) {
+            //     Swal.fire({
+            //     icon: 'success',
+            //     title: '<span style="color:#c96; font-size: 24px;"><%= error %></span>',
+            //     html: '<p style="color:#333; font-size: 16px;"></p>',
+            //     showConfirmButton: false,
+            //     timer: 1000,
+            //     background: '#fff',
+            //     customClass: {
+            //         title: 'custom-swal-title',
+            //         htmlContainer: 'custom-swal-html-container',
+            //         popup: 'custom-swal-popup'
+            //     },
+            //     didClose: () => {
+
+                   
+            //     }
+            // });
+            // }else{
+                
+            // Swal.fire({
+            //     icon: 'success',
+            //     title: 'Order Placed!',
+            //     text: 'Your order has been placed successfully.',
+            // }).then(() => {
+            //     // Submit the form after the SweetAlert is closed
+            //     document.getElementById('paymentForm').submit();
+            // });
+            // }
         }
     });
 </script>
@@ -403,7 +446,10 @@
 
 
 
+const success = '<%= success %>'
 
+if (success) {
+    
     document.getElementById('addAddressForm').addEventListener('submit', function (event) {
         // Prevent the default form submission behavior
         event.preventDefault();
@@ -435,6 +481,12 @@
 
         }
     });
+}
+
+
+
+   
+
 </script>
 
 <style>
@@ -453,6 +505,24 @@
     }
 </style>
 
+<script>
+    const error = '<%= error %>'
 
+    if (error) {
+        Swal.fire({
+                icon: 'error',
+                title: '<span style="color:#c96; font-size: 24px;"><%= error %></span>',
+                html: '<p style="color:#333; font-size: 16px;"></p>',
+                showConfirmButton: false,
+                timer: 1000,
+                background: '#fff',
+                customClass: {
+                    title: 'custom-swal-title',
+                    htmlContainer: 'custom-swal-html-container',
+                    popup: 'custom-swal-popup'
+                },
+            });
+    }
+</script>
 
 <%- include('./layouts/footer') %>

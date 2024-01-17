@@ -72,7 +72,9 @@
                                   <strong>Payment Method:</strong> Online Payment<br>
                               <%  }else if(orderDetail.paymentMethod === 'cod'){ %>
                                   <strong>Payment Method:</strong> Cash on Delivery<br>
-                                <% } %>
+                                  <%  }else if(orderDetail.paymentMethod === 'wallet'){ %>
+                                    <strong>Payment Method:</strong> Wallet<br>
+                                  <% } %>
                                 <strong>Delivery Address:</strong><br>
                                 <%= orderDetail.address[0].address %><br>
                                 <%= orderDetail.address[0].city %><br>

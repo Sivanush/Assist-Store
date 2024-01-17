@@ -2,6 +2,7 @@ const mongoose = require('mongoose')
 
 
 const Cart = require('../models/cartModel')
+const Wallet = require('../models/walletModel')
 const Product = require('../models/productModel')
 const Address = require('../models/addressModel')
 const Order = require('../models/orderModel')
@@ -202,7 +203,9 @@ const loadCheckout = async (req, res) => {
             cartCount,
             address,
             cartItems,
-            cart
+            cart,
+            error:req.flash('error'),
+            success:req.flash('success'),
         })
     } catch (error) {
         console.log(error);
@@ -212,6 +215,7 @@ const loadCheckout = async (req, res) => {
 
 const orderConfirm = async (req, res) => {
     try {
+       
         const {
             paymentMethod
         } = req.body
@@ -265,7 +269,7 @@ const orderConfirm = async (req, res) => {
             cart.coupon = undefined;
             cart.products = []
             await cart.save()
-
+            req.flash('success','Order Placed')
             res.redirect('/profileOrder')
         }
 
@@ -296,7 +300,35 @@ const orderConfirm = async (req, res) => {
             cart.products = []
             await cart.save()
 
+            req.flash('success','Order Placed')
+            res.redirect('/profileOrder')
+        }if(req.body.paymentMethod === 'wallet'){
+            
+            const userWallet = await Wallet.findOne({userId:req.session.user._id})
+            
+            if (cart.total>userWallet.amount) {
+                req.flash('error','Insufficient Money in the Wallet')
+                res.redirect('back')
+            }else{
+                // userWallet.amount = userWallet.amount - cart.total
 
+                userWallet.amount -= parseInt(cart.total) 
+                userWallet.history.push({
+                    type: 'debit',
+                    amount: parseInt(cart.total),
+                    date: new Date(),
+                })
+                await userWallet.save() 
+            }
+
+
+            await newOrder.save()
+
+            cart.coupon = undefined;
+            cart.products = []
+            await cart.save()
+
+            req.flash('success','Order Placed')
             res.redirect('/profileOrder')
         }
 
