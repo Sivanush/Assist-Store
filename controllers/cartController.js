@@ -249,19 +249,19 @@ const orderConfirm = async (req, res) => {
 
 
 
-        const newOrder = await Order.create({
-            cart: cart,
-            userId: userId,
-            address: [foundAddress],
-            paymentMethod: paymentMethod,
-            products: product,
-            paymentMethod: paymentMethod,
-        });
+     
 
 
         if (req.body.paymentMethod === 'cod') {
 
-
+            const newOrder = await Order.create({
+                cart: cart,
+                userId: userId,
+                address: [foundAddress],
+                paymentMethod: paymentMethod,
+                products: product,
+                paymentMethod: paymentMethod,
+            });
 
 
             await newOrder.save()
@@ -294,6 +294,17 @@ const orderConfirm = async (req, res) => {
                 }
             });
 
+
+            const newOrder = await Order.create({
+                cart: cart,
+                userId: userId,
+                address: [foundAddress],
+                paymentMethod: paymentMethod,
+                products: product,
+                paymentMethod: paymentMethod,
+            });
+
+
             await newOrder.save()
 
             cart.coupon = undefined;
@@ -319,6 +330,18 @@ const orderConfirm = async (req, res) => {
                     date: new Date(),
                 })
                 await userWallet.save() 
+
+
+                const newOrder = await Order.create({
+                    cart: cart,
+                    userId: userId,
+                    address: [foundAddress],
+                    paymentMethod: paymentMethod,
+                    products: product,
+                    paymentMethod: paymentMethod,
+                });
+
+
                 await newOrder.save()
 
                 cart.coupon = undefined;

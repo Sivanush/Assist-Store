@@ -969,7 +969,7 @@ const loadProfileOrder = async (req, res) => {
 
 
         // await order.reverse()
-        const orderCount = await Order.countDocuments()
+        const orderCount = await order.length
 
         const totalPage = Math.ceil(orderCount / perPage)
         res.render('user/profileOrder', {
