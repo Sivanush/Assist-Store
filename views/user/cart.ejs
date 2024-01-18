@@ -14,6 +14,15 @@
 	</div><!-- End .page-header -->
 	<% } %>
 
+	<nav aria-label="breadcrumb" class="breadcrumb-nav">
+        <div class="container">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="/">Home</a></li>
+                <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
+                <li class="breadcrumb-item active" aria-current="page">Cart</li>
+            </ol>
+        </div><!-- End .container -->
+    </nav><!-- End .breadcrumb-nav -->
 
 <% if (cart.products==0) { %>
 	<div class="d-flex justify-content-center align-items-center my-auto flex-column" style="height: 65vh;">
@@ -42,8 +51,8 @@
 										<th>Price</th>
 										<th>Size</th>
 										<th>Quantity</th>
-										<th>Total Price</th>
-										<th>Action</th>
+										<th>Total</th>
+										<th>&nbsp&nbsp&nbsp&nbsp&nbsp</th>
 									</tr>
 									</thead>
 									<tbody>

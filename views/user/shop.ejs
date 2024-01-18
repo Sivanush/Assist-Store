@@ -24,7 +24,7 @@
 
             <div class="toolbox-center">
                 <div class="toolbox-info">
-                    Showing <span>12 of 56</span> Products
+                    <!-- Showing <span>12 of 56</span> Products -->
                 </div><!-- End .toolbox-info -->
             </div><!-- End .toolbox-center -->
 
@@ -67,17 +67,15 @@
                                 <img src="/uploads/<%= products.hoverImage %>" alt="Product image"
                                     class="product-image-hover">
                             </a>
-
-                            <div class="product-action-vertical">
-                                <a href="#" class="btn-product-icon btn-wishlist btn-expandable"><span>add to
-                                        wishlist</span></a>
-                            </div><!-- End .product-action -->
+                            
+                          
+                               
+                       
 
                             <div class="product-action action-icon-top">
-                                <a href="/product-detail/<%= products._id %>" class="btn-product btn-cart"><span>add to
-                                        cart</span></a>
-                                <!-- <a href="popup/quickView.html" class="btn-product btn-quickview" title="Quick view"><span>quick view</span></a> -->
-                            </div><!-- End .product-action -->
+                                <a href="/product-detail/<%= products._id %>" class="btn-product btn-cart"><span>View More</span></a>
+                              
+                            </div>
                         </figure><!-- End .product-media -->
 
                         <div class="product-body">
@@ -232,17 +230,17 @@
                                                         <label class="custom-control-label"
                                                             for="cat-<%= category._id %>"><%= category.name %></label>
                                                     </div>
-                                                    <span class="item-count">
+                                                    <!-- <span class="item-count">
                                                         <% if (categoryCounts && categoryCounts[category._id]) { %>
                                                         <%= categoryCounts[category._id] %>
                                                         <% } else { %>
                                                         0
                                                         <% } %>
-                                                    </span>
+                                                    </span> -->
                                                 </div>
 
                                                 <% }); %>
-                                                <button class="mt-10 btn btn-primary w-100" type="submit">Apply
+                                                <button class="mt-5 btn btn-primary w-100" type="submit">Apply
                                                     Filters</button>
                                             </form>
 
@@ -407,7 +405,7 @@
                     <i class="icon-long-arrow-left"></i>
                 </a>
                 <% } %>
-                <% console.log('llllllllll',totalPage); %>     
+         
                 <% for (let i=1; i <=totalPage; i++) { %>
                 <a href="/shop?page=<%= i %>&categories=<%= selectedCategory %>"
                     class="btn btn-link btn-link-dark <%= currentPage == i ? 'font-weight-bold' : '' %>">
@@ -564,7 +562,7 @@
                                 ${ product.mainPrice }
                             </div>
                             </div>
-                        </div>
+                           </div>
                             </div>
 
 
@@ -606,3 +604,6 @@
             document.getElementById('categoryFilterForm').submit();
         }
     </script>
+
+
+    

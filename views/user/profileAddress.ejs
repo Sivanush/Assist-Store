@@ -3,22 +3,29 @@
 
 <div class="page-header text-center" style="background-image: url('/userAssets/assets/images/page-header-bg.jpg')">
     <div class="container">
-        <h1 class="page-title">My Account<span>Shop</span></h1>
+        <h1 class="page-title">My Account<span>Address</span></h1>
     </div><!-- End .container -->
 </div><!-- End .page-header -->
-<nav aria-label="breadcrumb" class="breadcrumb-nav mb-3">
+
+<% if (typeof message !== 'undefined') { %>
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        <%= message %> 
+    </div>
+<% } %>
+
+<nav aria-label="breadcrumb" class="breadcrumb-nav">
     <div class="container">
         <ol class="breadcrumb">
-
-            <li class="breadcrumb-item active" aria-current="page">My Account</li>
-            <% if (typeof message !== 'undefined') { %>
-                <div class="alert alert-danger alert-dismissible fade show" role="alert">
-                    <%= message %> 
-                </div>
-            <% } %>
+            <li class="breadcrumb-item"><a href="/">Home</a></li>
+            <li class="breadcrumb-item"><a href="/shop">Shop</a></li>
+            <li class="breadcrumb-item active" aria-current="page">Profile</li>
         </ol>
     </div><!-- End .container -->
 </nav><!-- End .breadcrumb-nav -->
+
+
+
+
 
 
 
@@ -46,7 +53,7 @@
                             <a class="nav-link" role="tab" href="/profileWallet">Wallet</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" role="tab" href="/logout">Sign Out</a>
+                            <a class="nav-link" id="signout" role="tab" href="/logout">Sign Out</a>
                         </li>
                     </ul>
                 </aside>
@@ -452,6 +459,63 @@ document.querySelectorAll('.delete-address').forEach(deleteButton => {
         border-radius: 10px;
     }
 </style>
+
+
+
+
+
+
+
+
+
+
+
+
+<script>
+
+    document.addEventListener('DOMContentLoaded', function() {
+        var signoutButton = document.getElementById('signout');
+    
+        if (signoutButton) {
+            signoutButton.addEventListener('click', function(event) {
+                event.preventDefault()
+    
+                Swal.fire({
+                        icon: 'warning',
+                        title: '<span style="color:#c96; font-size: 24px;">Sign Out?</span>',
+                        html: '<p style="color:#333; font-size: 16px;"></p>',
+                        showCancelButton: true,
+                        confirmButtonColor: '#d33',
+                        cancelButtonColor: '#3085d6',
+                        confirmButtonText: 'Yes, Sign Out!',
+                        cancelButtonText: 'No, keep Sign in',
+                        customClass: {
+                            title: 'custom-swal-title',
+                            htmlContainer: 'custom-swal-html-container',
+                            popup: 'custom-swal-popup'
+                        }
+                    }).then((result) => {   
+                        if (result.isConfirmed) {
+                            // If the user clicks "Yes, remove it!", redirect to the remove product route
+                            window.location.href = '/logout';
+                        }
+                    });
+            });
+        }
+    });
+    
+    
+    
+    
+    
+    </script>
+
+
+
+
+
+
+
 
 
 <%- include('./layouts/footer') %>
