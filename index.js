@@ -5,9 +5,8 @@ const path = require('path')
 const morgan = require('morgan')
 const session = require('express-session')
 const nocache = require('nocache');
-const multer = require('multer');
 const flash = require('connect-flash');
-const crypto = require('crypto')
+
 
 
 app.use(flash());
@@ -62,19 +61,6 @@ app.use(express.static(path.join(__dirname,'public')))
 
 app.use('/',userRoute)
 app.use('/admin',adminRoute)
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 app.use('*',(req,res)=>{

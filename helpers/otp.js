@@ -34,7 +34,7 @@ const sendOtp = (email, otp) => {
             to: email,
             subject: 'OTP for your e-commerce website',
             text: 
-            `${otp}is your Assist Account verification code.`
+            `${otp} is your Assist Account verification code.`
 
         }
 
