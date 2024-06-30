@@ -3,6 +3,7 @@
 
 
 <!-- molla/index-12.html  22 Nov 2019 09:58:43 GMT -->
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -30,6 +31,11 @@
     <!-- Main CSS File -->
     <link rel="stylesheet" href="/userAssets/assets/css/style.css">
     <link rel="stylesheet" href="/userAssets/assets/css/demos/demo-12.css">
+    <style>
+        body::-webkit-scrollbar {
+            display: none;
+        }
+    </style>
 </head>
 
 <body>
@@ -42,25 +48,25 @@
                             <span class="sr-only">Toggle mobile menu</span>
                             <i class="icon-bars"></i>
                         </button>
-                        
+
                         <a href="/" class="logo">
-                            <img src="/userAssets/NewImage/3.png"  alt="Assist Logo" width="150" height="150">
+                            <img src="/userAssets/NewImage/3.png" alt="Assist Logo" width="150" height="150">
                         </a>
                     </div><!-- End .header-left -->
 
-                    <div class="header-right me-5"  style="margin-left: 150px;">
-                        
-                            <div class="me-5 ">
+                    <div class="header-right me-5" style="margin-left: 150px;">
 
-                                <nav class="main-nav">
-                                    <ul class="menu sf-arrows">
-                                        <li class="megamenu-container active ">
-                                            <a href="/" class="sf-with-ul">Home</a>
-                                        </li>
-                                        <li>
-                                            <a href="/shop" class="sf-with-ul">Shop</a>
-                                        </li>
-                                        <!-- <li>
+                        <div class="me-5 ">
+
+                            <nav class="main-nav">
+                                <ul class="menu sf-arrows">
+                                    <li class="megamenu-container active ">
+                                        <a href="/" class="sf-with-ul">Home</a>
+                                    </li>
+                                    <li>
+                                        <a href="/shop" class="sf-with-ul">Shop</a>
+                                    </li>
+                                    <!-- <li>
                                             <a href="product.html" class="sf-with-ul">Product</a>
                                         </li>
                                         <li>
@@ -72,13 +78,13 @@
                                         <li>
                                             <a href="elements-list.html" class="sf-with-ul">Elements</a>
                                         </li> -->
-                                    </ul><!-- End .menu -->
-                                </nav><!-- End .main-nav -->
+                                </ul><!-- End .menu -->
+                            </nav><!-- End .main-nav -->
 
-                            </div>
-                       
-             
-                       <div class="d-flex align-content-end" style="margin-left: 600px;">
+                        </div>
+
+
+                        <div class="d-flex align-content-end" style="margin-left: 600px;">
                             <div class="header-search">
                                 <!-- <a href="#" class="search-toggle" role="button"><i class="icon-search"></i></a>
                                 <form action="#" method="get">
@@ -91,41 +97,41 @@
                                     </div>
                                 </form> -->
                                 <% if(user==null) {%>
-                                    <div class="mb-3 mt-3 mr-3" >
+                                <div class="mb-3 mt-3 mr-3">
                                     <a href="/login" class="icon-user">
-                                    <span style="font-size: 15px;">Login</span></a>                                       
-                                </div> 
-                            <% }else{ %>
-                                <div class="mb-3 mt-3  d-flex flex-row" >
+                                        <span style="font-size: 15px;">Login</span></a>
+                                </div>
+                                <% }else{ %>
+                                <div class="mb-3 mt-3  d-flex flex-row">
                                     <a href="/profile" class="icon-user w-100">
-                                    <span style="font-size: 15px; margin-top: 4px;"></span></a>       
+                                        <span style="font-size: 15px; margin-top: 4px;"></span></a>
                                     <!-- <a href="/logout" class="icon-user">
                                         <span style="font-size: 15px; margin-top: 4px;">Logout</span></a>                                    -->
                                 </div>
-                                
-                            <% } %>
-                                
+
+                                <% } %>
+
                             </div><!-- End .header-search -->
-                            
+
                             <a href="/wishlist" class="wishlist-link">
                                 <i class="icon-heart-o"></i>
-                            
+
                             </a>
-                        <% if (user) { %>
+                            <% if (user) { %>
                             <div class="dropdown cart-dropdown">
-                                <a href="/cart" class="dropdown-toggle" role="button" >
+                                <a href="/cart" class="dropdown-toggle" role="button">
                                     <i class="icon-shopping-cart"></i>
-            
-                                    
+
+
                                 </a>
 
-                                
+
                             </div><!-- End .cart-dropdown -->
-                        <%  } else {%>
-                            
-                        <% } %>
+                            <%  } else {%>
+
+                            <% } %>
                         </div>
-                        
+
                     </div><!-- End .header-right -->
                 </div><!-- End .container -->
             </div><!-- End .header-middle -->
@@ -133,9 +139,11 @@
 
         <main class="main">
             <div class="intro-slider-container mb-3 mb-lg-5">
-                <div class="intro-slider owl-carousel owl-simple owl-nav-inside owl-light" data-toggle="owl" data-owl-options='{"nav":false, "dots": false, "loop": false}'>
-                    <div class="intro-slide" style="background-image: url(/userAssets/NewImage/background.jpg); background-position: top;">
-                        <div class="container intro-content text-center mt-15"> 
+                <div class="intro-slider owl-carousel owl-simple owl-nav-inside owl-light" data-toggle="owl"
+                    data-owl-options='{"nav":false, "dots": false, "loop": false}'>
+                    <div class="intro-slide"
+                        style="background-image: url(/userAssets/NewImage/background.jpg); background-position: top;">
+                        <div class="container intro-content text-center mt-15">
                             <h3 class="intro-subtitle text-white">SEASONAL PICKS</h3><!-- End .h3 intro-subtitle -->
                             <h1 class="intro-title text-white">Get All The Good Stuff</h1><!-- End .intro-title -->
 
@@ -149,33 +157,34 @@
 
                 <span class="slider-loader text-white"></span><!-- End .slider-loader -->
             </div><!-- End .intro-slider-container -->
-            
-            
+
+
             <div class="container">
                 <div class="heading text-center mb-4">
                     <h2 class="title">Upcoming Jerseys</h2><!-- End .title -->
                     <p class="title-desc">Retro Jerseys</p><!-- End .title-desc -->
                 </div><!-- End .heading -->
-            
+
                 <div class="row">
                     <% comingData.forEach((comingProducts) => { %>
-                        <div class="col-sm-6 col-lg-4">
-                            <div class="banner banner-display banner-link-anim">
-                                <a href="#">
-                                    <img src="/uploads/<%= comingProducts.mainImage %>" alt="Banner">
-                                </a>
-            
-                                <div class="banner-content banner-content-center">
-                                    <h3 class="banner-title text-white"><a href=""><%= comingProducts.name %></a></h3><!-- End .banner-title -->
-                                    <h4 class="banner-subtitle text-white"><a href=""></a></h4><!-- End .banner-subtitle -->
-                                    
-                                </div><!-- End .banner-content -->
-                            </div><!-- End .banner -->
-                        </div><!-- End .col-sm-6 -->
+                    <div class="col-sm-6 col-lg-4">
+                        <div class="banner banner-display banner-link-anim">
+                            <a href="#">
+                                <img src="/uploads/<%= comingProducts.mainImage %>" alt="Banner">
+                            </a>
+
+                            <div class="banner-content banner-content-center">
+                                <h3 class="banner-title text-white"><a href=""><%= comingProducts.name %></a></h3>
+                                <!-- End .banner-title -->
+                                <h4 class="banner-subtitle text-white"><a href=""></a></h4><!-- End .banner-subtitle -->
+
+                            </div><!-- End .banner-content -->
+                        </div><!-- End .banner -->
+                    </div><!-- End .col-sm-6 -->
                     <% }); %>
                 </div><!-- End .row -->
             </div><!-- End .container -->
-            
+
             <!-- <div class="container">
                 <div class="row">
                     <div class="col-md-6">
@@ -186,9 +195,9 @@
 
                             <div class="banner-content banner-content-center">
                                 <h3 class="banner-title text-white"><a href="#">This Week's Most Wanted</a></h3><!-- End .banner-title -->
-                                <!-- <a href="#" class="btn btn-outline-white banner-link">Shop Now</a>
+            <!-- <a href="#" class="btn btn-outline-white banner-link">Shop Now</a>
                             </div><!-- End .banner-content -->
-                        <!-- </div>
+            <!-- </div>
                     </div>
 
                     <div class="col-md-6">
@@ -213,13 +222,13 @@
                             </div><
                         </div>
                     </div> -->
-                <!-- </div>
+            <!-- </div>
 
                 <div class="mb-3"></div>
             </div>  -->
 
 
-            
+
 
             <div class="bg-lighter pt-5 pb-5 mb-5">
                 <div class="container">
@@ -228,8 +237,7 @@
                         <p class="title-desc">Authentic Jerseys</p><!-- End .title-desc -->
                     </div><!-- End .heading -->
 
-                    <div class="owl-carousel owl-simple" data-toggle="owl" 
-                        data-owl-options='{
+                    <div class="owl-carousel owl-simple" data-toggle="owl" data-owl-options='{
                             "nav": false, 
                             "dots": true,
                             "margin": 20,
@@ -254,13 +262,15 @@
                             }
                         }'>
                         <% product.forEach((products) => { %>
-                            
-                        
+
+
                         <div class="product product-4">
                             <figure class="product-media">
                                 <a href="/product-detail/<%= products._id %>">
-                                    <img src=" /uploads/<%=products.mainImage %>" alt="Product image" class="product-image">
-                                    <img src="/uploads/<%= products.hoverImage %>" alt="Product image" class="product-image-hover">
+                                    <img src=" /uploads/<%=products.mainImage %>" alt="Product image"
+                                        class="product-image">
+                                    <img src="/uploads/<%= products.hoverImage %>" alt="Product image"
+                                        class="product-image-hover">
                                 </a>
 
                                 <div class="product-action-vertical">
@@ -270,7 +280,8 @@
                                 </div><!-- End .product-action -->
 
                                 <div class="product-action">
-                                    <a href="/product-detail/<%= products._id %>" class="btn-product btn-cart"><span>add to cart</span></a>
+                                    <a href="/product-detail/<%= products._id %>" class="btn-product btn-cart"><span>add
+                                            to cart</span></a>
                                 </div><!-- End .product-action -->
                             </figure><!-- End .product-media -->
 
@@ -278,7 +289,8 @@
                                 <div class="product-cat">
                                     <a href="#">Clothing</a>
                                 </div><!-- End .product-cat -->
-                                <h3 class="product-title"><a href="product.html"><%= products.name %></a></h3><!-- End .product-title -->
+                                <h3 class="product-title"><a href="product.html"><%= products.name %></a></h3>
+                                <!-- End .product-title -->
                                 <div class="product-price">
                                     <div style="display: flex; justify-content: start;">
                                         <span>$</span>
@@ -288,13 +300,13 @@
                                 <!-- End .product-nav -->
                             </div><!-- End .product-body -->
                         </div><!-- End .product -->
-                     <% }) %>
+                        <% }) %>
                     </div><!-- End .owl-carousel -->
                 </div><!-- End .container -->
             </div><!-- End .bg-lighter pt-5 pb-5 -->
-            
-                
-           
+
+
+
             <div class="container">
                 <div class="heading text-center mb-4">
                     <h2 class="title">Popular Categories</h2><!-- End .title -->
@@ -310,15 +322,17 @@
                             </a>
 
                             <div class="banner-content banner-content-center">
-                                <h3 class="banner-title text-white"><a href="#"><%= categories.name %></a></h3><!-- End .banner-title -->
-                                <h4 class="banner-subtitle text-white"><a href="#"><%= categories.description %></a></h4><!-- End .banner-subtitle -->
+                                <h3 class="banner-title text-white"><a href="#"><%= categories.name %></a></h3>
+                                <!-- End .banner-title -->
+                                <h4 class="banner-subtitle text-white"><a href="#"><%= categories.description %></a>
+                                </h4><!-- End .banner-subtitle -->
                                 <a href="/shop" class="btn btn-outline-white banner-link">Shop Now</a>
                             </div><!-- End .banner-content -->
                         </div><!-- End .banner -->
                     </div><!-- End .col-sm-6 -->
                     <% }) %>
                 </div><!-- End .row -->
-                
+
                 <div class="icon-boxes-container bg-transparent">
                     <div class="container">
                         <div class="row">
@@ -354,7 +368,7 @@
                                     </span>
 
                                     <div class="icon-box-content">
-                                        <h3 class="icon-box-title">Get 100$ Off  Item</h3><!-- End .icon-box-title -->
+                                        <h3 class="icon-box-title">Get 100$ Off Item</h3><!-- End .icon-box-title -->
                                         <p>When you use ASSIST 100</p>
                                     </div><!-- End .icon-box-content -->
                                 </div><!-- End .icon-box -->
@@ -381,18 +395,24 @@
         <footer class="footer footer-2">
             <div class="footer-bottom">
                 <div class="container">
-                    <p class="footer-copyright">Copyright © 2024 Assist Store. All Rights Reserved.</p><!-- End .footer-copyright -->
+                    <p class="footer-copyright">Copyright © 2024 Assist Store. All Rights Reserved.</p>
+                    <!-- End .footer-copyright -->
                     <!-- <ul class="footer-menu">
                         <li><a href="#">Terms Of Use</a></li>
                         <li><a href="#">Privacy Policy</a></li>
                     </ul>End .footer-menu -->
 
                     <div class="social-icons social-icons-color">
-                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i class="icon-facebook-f"></i></a>
-                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i class="icon-twitter"></i></a>
-                        <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i class="icon-instagram"></i></a>
-                        <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i class="icon-youtube"></i></a>
-                        <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i class="icon-pinterest"></i></a>
+                        <a href="#" class="social-icon social-facebook" title="Facebook" target="_blank"><i
+                                class="icon-facebook-f"></i></a>
+                        <a href="#" class="social-icon social-twitter" title="Twitter" target="_blank"><i
+                                class="icon-twitter"></i></a>
+                        <a href="#" class="social-icon social-instagram" title="Instagram" target="_blank"><i
+                                class="icon-instagram"></i></a>
+                        <a href="#" class="social-icon social-youtube" title="Youtube" target="_blank"><i
+                                class="icon-youtube"></i></a>
+                        <a href="#" class="social-icon social-pinterest" title="Pinterest" target="_blank"><i
+                                class="icon-pinterest"></i></a>
                     </div><!-- End .soial-icons -->
                 </div><!-- End .container -->
             </div><!-- End .footer-bottom -->
@@ -409,10 +429,11 @@
 
             <form action="#" method="get" class="mobile-search">
                 <label for="mobile-search" class="sr-only">Search</label>
-                <input type="search" class="form-control" name="mobile-search" id="mobile-search" placeholder="Search in..." required>
+                <input type="search" class="form-control" name="mobile-search" id="mobile-search"
+                    placeholder="Search in..." required>
                 <button class="btn btn-primary" type="submit"><i class="icon-search"></i></button>
             </form>
-            
+
             <nav class="mobile-nav">
                 <ul class="mobile-menu">
                     <li class="active">
@@ -492,7 +513,7 @@
     <script src="/userAssets/assets/js/owl.carousel.min.js"></script>
     <script src="/userAssets/assets/js/bootstrap-input-spinner.js"></script>
     <script src="/userAssets/assets/js/jquery.magnific-popup.min.js"></script>
-    
+
     <!-- Main JS File -->
     <script src="/userAssets/assets/js/main.js"></script>
     <script src="/userAssets/assets/js/demos/demo-12.js"></script>
@@ -501,24 +522,27 @@
     <style>
         .icon-user {
             color: white;
-            font-size: 30px; /* Set the initial size */
-            transition: color 0.3s, font-size 0.3s; 
+            font-size: 30px;
+            /* Set the initial size */
+            transition: color 0.3s, font-size 0.3s;
             display: flex;
             align-items: center;
             justify-content: center;
             text-align: center;
             color: white;
             transition: color 0.3s, font-size 0.3s;
-            text-decoration: none; /* Remove underlines from the link */
+            text-decoration: none;
+            /* Remove underlines from the link */
         }
-      
+
         .icon-user:hover {
-          color: #c96;
-          
+            color: #c96;
+
         }
-      </style>
+    </style>
 </body>
 
 
 <!-- molla/index-12.html  22 Nov 2019 09:58:58 GMT -->
+
 </html>
